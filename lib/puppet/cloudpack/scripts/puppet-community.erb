@@ -1,0 +1,147 @@
+#-------------------------------------------------------------------------
+# Copyright 2013 Microsoft Open Technologies, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#--------------------------------------------------------------------------
+
+#!/bin/bash
+# This script is intended to be used with the install puppet-client
+
+set -u
+#set -e
+
+function rpm_install(){
+  # Setup the yum Puppet repository
+  cat >/etc/yum.repos.d/puppet.repo <<'EOFYUMREPO'
+[puppetlabs]
+name = Puppetlbas
+baseurl = http://yum.puppetlabs.com/el/$releasever/products/$basearch/
+gpgcheck = 1
+enabled = 1
+gpgkey = http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
+EOFYUMREPO
+
+  # Install Puppet from yum.puppetlabs.com
+  rpm -Uvh http://yum.puppetlabs.com/el/6/products/x86_64/puppetlabs-release-6-6.noarch.rpm
+  yum install -y puppet
+}
+
+function suse_install(){
+  zypper ar --refresh http://download.opensuse.org/repositories/home:/eclipseagent:/puppet/SLE_11/ repo-puppet  
+  zypper --non-interactive --gpg-auto-import-keys ref
+  zypper install -y puppet
+}
+
+function apt_install() {
+  # Download and install the puppetlabs apt public
+  apt-key adv --recv-key --keyserver pool.sks-keyservers.net 4BD6EC30
+
+  # We need to grab the distro and release in order to populate
+  # the apt repo details. We are assuming that the lsb_release command
+  # will be available as even puppet evens has it (lsb_base) package as
+  # dependancy.
+
+  # Since puppet requires lsb-release I believe this is ok to use for
+  # the purpose of distro and release discovery.
+  apt-get update
+  apt-get -y install lsb-release 
+  release=$(lsb_release -c | cut -f 2)
+
+  # Setup the apt Puppet repository
+  cat > /etc/apt/sources.list.d/puppetlabs.list <<EOFAPTREPO
+deb http://apt.puppetlabs.com/ ${release} main dependencies
+EOFAPTREPO
+  apt-get update
+  # Install Puppet from Debian repositories
+  apt-get -y install puppet
+}
+
+function install_puppet() {
+  case ${breed} in
+    "redhat")
+      rpm_install ;;
+    "debian")
+      apt_install ;;
+    "suse")
+      suse_install ;;
+  esac
+}
+
+function configure_puppet() {
+  cat >/etc/puppet/puppet.conf <<'EOFPUPPETCONF'
+[main]
+  logdir = /var/log/puppet
+  rundir = /var/run/puppet
+  vardir = /var/lib/puppet
+  ssldir = $vardir/ssl
+  pluginsync = true
+  report = true
+  runinterval = 120
+  server = puppet
+  environment = <%= options[:environment] %>
+  <% if options[:puppetagent_certname] %>
+  certname = <%= options[:puppetagent_certname] %>
+  <% end %>
+EOFPUPPETCONF
+
+  if [ -f /etc/default/puppet ]; then
+    cat > /etc/default/puppet <<EOFPUPPETDEFAULT
+# Defaults for puppet - sourced by /etc/init.d/puppet
+
+# Start puppet on boot?
+START=yes
+
+# Startup options
+DAEMON_OPTS=""
+EOFPUPPETDEFAULT
+  fi
+}
+
+function start_puppet() {
+  /etc/init.d/puppet restart
+}
+
+
+function update_hosts(){
+  #Remove lines which contain puppet keyword in hosts file.
+  sed --in-place '/puppet/d' /etc/hosts
+  host=<%= options[:puppet_master_ip] %>
+  if ( echo "$host" | egrep -q "[a-zA-Z]" ); then
+   IP=$(host "$host" | grep "has address" | head -1 | awk '{print $NF}')
+  else
+   IP="$host"
+  fi
+  echo "$IP  puppet" >> /etc/hosts
+  echo 'DNS or host is added in /etc/hosts'
+}
+
+function provision_puppet() {
+  if [ -f /etc/redhat-release ]; then
+    export breed='redhat'
+  elif [ -f /etc/debian_version ]; then
+    export breed='debian'
+  elif [ -f /etc/SuSE-release ]; then
+    export breed='suse'
+  else
+    echo "This OS is not supported by Puppet Cloud Provisioner"
+    exit 1
+  fi
+
+  install_puppet
+  configure_puppet
+  update_hosts
+  start_puppet
+  echo "Puppet installation finished!"
+  exit 0
+}
+
+provision_puppet
