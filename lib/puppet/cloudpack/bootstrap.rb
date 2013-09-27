@@ -28,7 +28,11 @@ module Puppet
           puts
           login =  params[:vm_user]
           ssh_opts = { }
-          ssh_opts[:password] = params[:password]
+          if params[:password]
+            ssh_opts[:password] = params[:password]
+          else
+            ssh_opts[:keys] = [params[:private_key_file]]
+          end
           ssh_opts[:paranoid] = false
           ssh_opts[:port] = params[:ssh_port] || 22
           options = {:environment=>'production',:puppet_master_ip => params[:puppet_master_ip]}

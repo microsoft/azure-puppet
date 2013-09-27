@@ -1,0 +1,7 @@
+<%="Listing Firewall".bold%><%index=1%>
+<%firewalls.each do |firewall|%>
+  <%="Firewall: #{index}".bold%>
+    <%="Rule name".fix(20)%>: <%=firewall[:rule] %>
+    <%="Start IP address".fix(20)%>: <%=firewall[:start_ip_address]%>
+    <%="End Ip Address".fix(20)%>: <%=firewall[:end_ip_address] %>   <%index+=1%>
+<%end%>

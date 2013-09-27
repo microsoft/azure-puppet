@@ -21,9 +21,9 @@ module Puppet::CloudAzurePack
 
   class << self
     def initialize_env_variable(options)
-      ENV['azure_publish_settings_file'.upcase] = options[:publish_settings_file]
+      ENV['azure_management_certificate'.upcase] = options[:management_certificate]
       ENV['azure_subscription_id'.upcase] = options[:azure_subscription_id]
-      ENV['azure_api_url'.upcase] = options[:api_url]
+      ENV['azure_management_endpoint'.upcase] = options[:management_endpoint]
       require 'azure'
     end
 
@@ -32,14 +32,14 @@ module Puppet::CloudAzurePack
     end
 
     def merge_default_options(options)
-      default_options = { "publish-settings-file" => true }
+      default_options = { "management-certificate" => true, "subscription-id" => true, "management-endpoint" => true }
       default_options.merge(options)
     end
 
     def add_default_options(action)
-      add_api_url_option(action)
-      add_publish_settings_file_option(action)
+      add_management_certificate_option(action)
       add_subscription_id_option(action)
+      add_management_endpoint_option(action)
     end
 
     def add_shutdown_options(action)
@@ -59,8 +59,7 @@ module Puppet::CloudAzurePack
     end
 
     def add_bootstrap_options(action)
-      add_publish_settings_file_option(action)
-      add_subscription_id_option(action)
+      add_default_options(action)
       add_vm_user_option(action,false)
       add_node_ipaddress_options(action,false)
       add_password_option(action)
@@ -109,29 +108,31 @@ module Puppet::CloudAzurePack
       end
     end
 
-    def add_publish_settings_file_option(action)
-      action.option '--publish-settings-file=' do
+    def add_management_certificate_option(action)
+      action.option '--management-certificate=' do
         summary 'The subscription identifier for the Windows Azure portal.'
         description <<-EOT
           The subscription identifier for the Windows Azure portal.
         EOT
         required
         before_action do |action, args, options|
-          options = Puppet::CloudAzurePack.merge_default_options(options)
-          if options[:publish_settings_file].empty?
+          if options[:management_certificate].empty?
             raise ArgumentError, "Publish Settings File Id is required"
           end
-          unless test 'f', options[:publish_settings_file]
-            raise ArgumentError, "Could not find file '#{options[:publish_settings_file]}'"
+          unless test 'f', options[:management_certificate]
+            raise ArgumentError, "Could not find file '#{options[:management_certificate]}'"
           end
-          unless test 'r', options[:publish_settings_file]
-            raise ArgumentError, "Could not read from file '#{options[:publish_settings_file]}'"
+          unless test 'r', options[:management_certificate]
+            raise ArgumentError, "Could not read from file '#{options[:management_certificate]}'"
+          end
+          unless(options[:management_certificate] =~ /(pem|pfx)$/)
+            raise RuntimeError, "Management certificate expects a .pem or .pfx file."
           end
         end
       end
     end
 
-    def add_vm_name_option(action,optional=true)
+    def add_vm_name_option(action, optional=true)
       action.option '--vm-name=' do
         summary 'The name of the virtual machine.'
         description <<-EOT
@@ -175,6 +176,12 @@ module Puppet::CloudAzurePack
         description <<-EOT
           The subscription identifier for the Windows Azure portal.
         EOT
+        required
+        before_action do |action, args, options|
+          if options[:azure_subscription_id].empty?
+            raise ArgumentError, "Subscription id is required."
+          end
+        end
       end
     end
 
@@ -187,7 +194,7 @@ module Puppet::CloudAzurePack
       end
     end
 
-    def add_cloud_service_name_option(action,optional=true)
+    def add_cloud_service_name_option(action, optional=true)
       action.option '--cloud-service-name=' do
         summary 'The name of the cloud service.'
         description <<-EOT
@@ -203,7 +210,7 @@ module Puppet::CloudAzurePack
       end
     end
 
-    def add_vm_user_option(action,optional=true)
+    def add_vm_user_option(action, optional=true)
       action.option '--vm-user=' do
         summary 'The VM user name.'
         description <<-EOT
@@ -219,7 +226,7 @@ module Puppet::CloudAzurePack
       end
     end
 
-    def add_puppet_master_ip_option(action,optional=true)
+    def add_puppet_master_ip_option(action, optional=true)
       action.option '--puppet-master-ip=' do
         summary 'The puppet master ip address.'
         description <<-EOT
@@ -235,7 +242,7 @@ module Puppet::CloudAzurePack
       end
     end
 
-    def add_deployment_name_option(action,optional=true)
+    def add_deployment_name_option(action, optional=true)
       action.option '--deployment-name=' do
         summary 'The vm instance deployment name.'
         description <<-EOT
@@ -276,7 +283,7 @@ module Puppet::CloudAzurePack
       end
     end
 
-    def add_node_ipaddress_options(action,optional=true)
+    def add_node_ipaddress_options(action, optional=true)
       action.option '--node-ipaddress=' do
         summary 'Node Ip address. '
         description <<-EOT
@@ -292,12 +299,18 @@ module Puppet::CloudAzurePack
       end
     end
 
-    def add_api_url_option(action)
-      action.option '--api-url=' do
-        summary 'Windows Azure API url.'
+    def add_management_endpoint_option(action)
+      action.option '--management-endpoint=' do
+        summary 'The management endpoint for the Windows Azure portal.'
         description <<-EOT
-          Windows Azure API url.
+          The management endpoint for the Windows Azure portal.
         EOT
+        required
+        before_action do |action, args, options|
+          if options[:management_endpoint].empty?
+            raise ArgumentError, "Management endpoint is required."
+          end
+        end
       end
     end
 

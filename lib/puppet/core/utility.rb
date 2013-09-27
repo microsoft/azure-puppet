@@ -35,6 +35,7 @@ module Puppet
           puts "Require atleast 1 captial letter and digit."
           options[:password] = ask("\nPASSWORD?  ") { |pass| pass.echo ="*"; pass.validate = regex }
         end
+
         options
       end
 
