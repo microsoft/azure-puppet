@@ -28,7 +28,7 @@ Puppet::Face.define :node_azure, '0.0.1' do
 
     when_invoked do |options|
       Puppet::CloudAzurePack.initialize_env_variable(options)
-      virtual_machine_image_service = Azure::VirtualMachineImageService.new
+      virtual_machine_image_service = Azure::VirtualMachineImageManagementService.new
       images = virtual_machine_image_service.list_virtual_machine_images
       puts Tilt.new(Puppet::CloudAzurePack.views('images.erb'), 1, :trim => '%').render(nil, :images => images)
     end

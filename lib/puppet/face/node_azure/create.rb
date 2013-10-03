@@ -28,7 +28,7 @@ Puppet::Face.define :node_azure, '0.0.1' do
 
     when_invoked do |options|
       options = ask_for_password(options, @os_type)
-      virtual_machine_service = Azure::VirtualMachineService.new
+      virtual_machine_service = Azure::VirtualMachineManagementService.new
       params = {
         :vm_name=> options[:vm_name],
         :vm_user=> options[:vm_user],

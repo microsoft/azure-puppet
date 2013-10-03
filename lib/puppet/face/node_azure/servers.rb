@@ -29,7 +29,7 @@ Puppet::Face.define :node_azure, '0.0.1' do
 
     when_invoked do |options|
       Puppet::CloudAzurePack.initialize_env_variable(options)
-      virtual_machine_service = Azure::VirtualMachineService.new
+      virtual_machine_service = Azure::VirtualMachineManagementService.new
       servers = virtual_machine_service.list_virtual_machines
       puts Tilt.new(Puppet::CloudAzurePack.views('servers.erb'), 1, :trim => '%').render(nil, :roles => servers)
     end

@@ -117,7 +117,7 @@ module Puppet::CloudAzurePack
         required
         before_action do |action, args, options|
           if options[:management_certificate].empty?
-            raise ArgumentError, "Publish Settings File Id is required"
+            raise ArgumentError, "Management certificate file is required"
           end
           unless test 'f', options[:management_certificate]
             raise ArgumentError, "Could not find file '#{options[:management_certificate]}'"
@@ -161,7 +161,7 @@ module Puppet::CloudAzurePack
             raise ArgumentError, "Source image name is required"
           else
             Puppet::CloudAzurePack.initialize_env_variable(options)
-            image_service = Azure::VirtualMachineImageService.new
+            image_service = Azure::VirtualMachineImageManagementService.new
             os_image = image_service.list_virtual_machine_images.select{|x| x.name == options[:image]}.first
             raise ArgumentError, "Source image name is invalid" unless os_image
             @os_type = os_image.os_type
