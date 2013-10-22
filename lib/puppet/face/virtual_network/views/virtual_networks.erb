@@ -9,5 +9,5 @@
            		 <%end%>
     <%="Dns Servers"%>:         <%="Name".fix.bold%><%="Ip Address".fix.bold%>
                          <%vnet.dns_servers.each do |endpoint|%><%=endpoint[:name].fix%><%=endpoint[:ip_address].to_s.fix%>
-           		 <%end%>
+           		 <%end%>   <%index+=1%>
 <%end%>
