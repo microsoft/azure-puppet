@@ -26,7 +26,7 @@ Puppet::Face.define :virtual_network, '0.0.1' do
     when_invoked do |options|
       Puppet::VirtualNetwork.initialize_env_variable(options)
       virtual_network_service = Azure::VirtualNetworkManagementService.new
-      virtual_network_service.create_virtual_network(options[:xml_schema_file])
+      virtual_network_service.set_network_configuration(options[:xml_schema_file])
       nil
     end
 

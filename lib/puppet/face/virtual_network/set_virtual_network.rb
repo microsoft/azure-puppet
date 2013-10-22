@@ -46,7 +46,7 @@ Puppet::Face.define :virtual_network, '0.0.1' do
         end
         optional[:dns] = dns
       end
-      virtual_network_service.create_virtual_network(options[:virtual_network_name], options[:affinity_group_name], address_space, optional)
+      virtual_network_service.set_network_configuration(options[:virtual_network_name], options[:affinity_group_name], address_space, optional)
       nil
     end
 
