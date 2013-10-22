@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #--------------------------------------------------------------------------
-require 'puppet/face/node_azure'
+require 'tilt'
 
 Puppet::Face.define :database_server, '0.0.1' do
   action :list do
@@ -24,14 +24,14 @@ Puppet::Face.define :database_server, '0.0.1' do
       displays them on the console output.
     EOT
 
-    Puppet::DatabasePack.add_default_options(self)
+    Puppet::SqlDatabase.add_default_options(self)
 
     when_invoked do |options|
-      Puppet::DatabasePack.initialize_env_variable(options)
-      db_server = Azure::Database::DatabaseService.new
+      Puppet::SqlDatabase.initialize_env_variable(options)
+      db_server = Azure::SqlDatabaseManagementService.new
 
       servers = db_server.list_servers
-      puts Tilt.new(Puppet::DatabasePack.views('servers.erb'), 1, :trim => '%').render(nil, :db_servers => servers)
+      puts Tilt.new(Puppet::SqlDatabase.views('servers.erb'), 1, :trim => '%').render(nil, :db_servers => servers)
     end
 
     returns 'Array of database server objets.'

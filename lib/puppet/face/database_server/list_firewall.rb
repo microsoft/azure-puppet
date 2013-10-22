@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #--------------------------------------------------------------------------
-require 'puppet/face/node_azure'
+require 'tilt'
 
 Puppet::Face.define :database_server, '0.0.1' do
   action :list_firewall do
@@ -24,14 +24,14 @@ Puppet::Face.define :database_server, '0.0.1' do
       SQL Database server that belongs to a subscription.
     EOT
 
-    Puppet::DatabasePack.add_delete_options(self)
+    Puppet::SqlDatabase.add_delete_options(self)
 
     when_invoked do |options|
-      Puppet::DatabasePack.initialize_env_variable(options)
-      db_server = Azure::Database::DatabaseService.new
+      Puppet::SqlDatabase.initialize_env_variable(options)
+      db_server = Azure::SqlDatabaseManagementService.new
 
       firewalls = db_server.list_sql_server_firewall_rules(options[:server_name])
-      puts Tilt.new(Puppet::DatabasePack.views('server_firewalls.erb'), 1, :trim => '%').render(nil, :firewalls => firewalls)
+      puts Tilt.new(Puppet::SqlDatabase.views('server_firewalls.erb'), 1, :trim => '%').render(nil, :firewalls => firewalls)
     end
 
     examples <<-'EOT'

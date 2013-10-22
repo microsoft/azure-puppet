@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #--------------------------------------------------------------------------
-require 'puppet/face/node_azure'
-require 'puppet/cloudpack/bootstrap'
 
 Puppet::Face.define :node_azure, '0.0.1' do
   action :create do
@@ -24,7 +22,7 @@ Puppet::Face.define :node_azure, '0.0.1' do
       The create action create a storage account, cloud service and vm.
     EOT
 
-    Puppet::CloudAzurePack.add_create_options(self)
+    Puppet::VirtualMachine.add_create_options(self)
 
     when_invoked do |options|
       options = ask_for_password(options, @os_type)

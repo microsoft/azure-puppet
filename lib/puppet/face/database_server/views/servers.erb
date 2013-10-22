@@ -1,4 +1,4 @@
-<%if db_servers.class == Azure::Database::DatabaseServer%>
+<%if db_servers.class == Azure::SqlDatabaseManagement::SqlDatabase%>
  <%="Server Name".fix(20)%>: <%=db_servers.name %>
  <%="Administrator login".fix(20)%>: <%=db_servers.administrator_login%>
  <%="Location".fix(20)%>: <%=db_servers.location %>

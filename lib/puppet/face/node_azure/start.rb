@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #--------------------------------------------------------------------------
-require 'puppet/face/node_azure'
 
 Puppet::Face.define :node_azure, '0.0.1' do
   action :start do
@@ -23,10 +22,10 @@ Puppet::Face.define :node_azure, '0.0.1' do
       The start action starts windows azure node instances.
     EOT
 
-    Puppet::CloudAzurePack.add_shutdown_options(self)
+    Puppet::VirtualMachine.add_shutdown_options(self)
 
     when_invoked do |options|
-      Puppet::CloudAzurePack.initialize_env_variable(options)
+      Puppet::VirtualMachine.initialize_env_variable(options)
       virtual_machine_service = Azure::VirtualMachineManagementService.new
       virtual_machine_service.start_virtual_machine(options[:vm_name], options[:cloud_service_name])
       nil
