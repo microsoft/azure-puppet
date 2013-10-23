@@ -42,7 +42,10 @@ Puppet::Face.define :node_azure, '0.0.1' do
         :private_key_file => options[:private_key_file] ,
         :certificate_file => options[:certificate_file],
         :ssh_port => options[:ssh_port],
-        :vm_size => options[:vm_size]
+        :vm_size => options[:vm_size],
+        :vitual_network_name => options[:virtual_network_name],
+        :subnet_name => options[:virtual_network_subnet],
+        :affinity_group_name => options[:affinity_group_name]
       }
       others.merge!(:winrm_transport => options[:winrm_transport]) unless options[:winrm_transport].nil?
       server = virtual_machine_service.create_virtual_machine(params, others)

@@ -67,6 +67,9 @@ module Puppet::VirtualMachine
       add_certificate_file_option(action)
       add_private_key_file_option(action)
       add_winrm_transport_option(action)
+      add_virtual_network_option(action)
+      add_subnet_option(action)
+      add_affinity_group_option(action)
     end
 
     def add_location_option(action)
@@ -312,6 +315,36 @@ module Puppet::VirtualMachine
             raise ArgumentError, "The vm-size is not valid. Valid choices are valid choice are ExtraSmall, Small, Medium, Large, ExtraLarge"
           end
         end
+      end
+    end
+
+    def add_virtual_network_option(action)
+      action.option '--virtual-network-name=' do
+        summary 'The virtual network name.'
+        description <<-EOT
+          The name of virtual network.
+        EOT
+
+      end
+    end
+
+    def add_subnet_option(action)
+      action.option '--virtual-network-subnet=' do
+        summary 'The virtual network subnet.'
+        description <<-EOT
+          The subnet of virtual network.
+        EOT
+
+      end
+    end
+
+    def add_affinity_group_option(action)
+       action.option '--affinity-group-name=' do
+        summary 'The affinity group name.'
+        description <<-EOT
+          The name of affinity group.
+        EOT
+
       end
     end
 
