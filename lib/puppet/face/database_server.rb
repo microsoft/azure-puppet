@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #--------------------------------------------------------------------------
-require 'puppet/databasepack'
-require 'puppet/face'
+require 'puppet/sql_database'
 
 Puppet::Face.define(:database_server, '0.0.1') do
   copyright "Windows Azure", 2013

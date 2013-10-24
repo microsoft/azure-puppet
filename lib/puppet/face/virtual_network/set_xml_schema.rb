@@ -13,31 +13,29 @@
 # limitations under the License.
 #--------------------------------------------------------------------------
 
-Puppet::Face.define :database_server, '0.0.1' do
-  action :delete_firewall do
+Puppet::Face.define :virtual_network, '0.0.1' do
+  action :set_xml_schema do
 
-    summary 'Delete Windows Azure sql database server firewall'
-
+    summary 'set_xml_schema Network configures the virtual network using xml schema'
     description <<-'EOT'
-      The delete action delete windows azure sql server firewall.
+      The set_xml_schema Network Configuration operation asynchronously configures the virtual network.
     EOT
 
-    Puppet::SqlDatabase.add_delete_firewall_options(self)
+    Puppet::VirtualNetwork.add_set_xml_schema_options(self)
 
     when_invoked do |options|
-      Puppet::SqlDatabase.initialize_env_variable(options)
-      db = Azure::SqlDatabaseManagementService.new
-      db.delete_sql_server_firewall_rule(options[:server_name], options[:rule_name])
+      Puppet::VirtualNetwork.initialize_env_variable(options)
+      virtual_network_service = Azure::VirtualNetworkManagementService.new
+      virtual_network_service.set_network_configuration(options[:xml_schema_file])
       nil
     end
 
-    returns 'NONE'
+    returns 'None '
 
     examples <<-'EOT'
-      $  puppet database_server delete --management-certificate ~/exp/azuremanagement.pem\
-         puppet database_server delete_firewall --management-certificate ~/exp/azuremanagement.pem\
-         --azure-subscription-id=ID --management-endpoint=https://management.database.windows.net:8443/\
-         --server-name=xlykw0su08 --rule-name rule1
+      $ puppet virtual_network set --management-certificate ~/exp/azuremanagement.pem\
+        --azure-subscription-id=368a3-dcd0-4cd3 --management-endpoint=https://management.database.windows.net:8443/
+
     EOT
   end
 end

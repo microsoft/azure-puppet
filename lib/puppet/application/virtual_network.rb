@@ -12,27 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #--------------------------------------------------------------------------
-require 'puppet/cloudpack/bootstrap'
+require 'puppet/application/face_base'
 
-Puppet::Face.define :node_azure, '0.0.1' do
-  action :bootstrap do
-
-    summary 'Install puppet node on  Windows Azure VM'
-    
-    description <<-'EOT'
-      Install puppet node on Windows Azure Virtual Machine.
-    EOT
-
-    Puppet::VirtualMachine.add_bootstrap_options(self)
-
-    when_invoked do |options|
-      Puppet::CloudPack::BootStrap.start(options)
-    end
-
-    examples <<-'EOT'
-      $ puppet node_azure bootstrap --publish-settings-file=azuremanagement_pfx.publishsettings \
-       --vm-user=username --puppet-master-ip=152.56.161.48 --password=Abcd123 \
-       --node-ip-address=domain.cloudapp.net
-    EOT
-  end
+class Puppet::Application::VirtualNetwork < Puppet::Application::FaceBase
 end

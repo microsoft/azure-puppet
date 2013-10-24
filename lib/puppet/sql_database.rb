@@ -13,32 +13,23 @@
 # limitations under the License.
 #--------------------------------------------------------------------------
 require 'puppet/core/utility'
-require 'rubygems'
-require 'tilt'
+require 'puppet/application_config'
+include Puppet::ApplicationConfig
 
-module Puppet::DatabasePack
+module Puppet::SqlDatabase
 
   class << self
+
     def initialize_env_variable(options)
+      options[:management_endpoint] ||= 'https://management.database.windows.net:8443/'
       ENV['azure_management_certificate'.upcase] = options[:management_certificate]
       ENV['azure_subscription_id'.upcase] = options[:azure_subscription_id]
       ENV['azure_management_endpoint'.upcase] = options[:management_endpoint]
       require 'azure'
     end
-
+    
     def views(name)
       File.join(File.dirname(__FILE__), 'face/database_server/views', name)
-    end
-
-    def merge_default_options(options)
-      default_options = { "management-certificate" => true, "subscription-id" => true, "management-endpoint" => true }
-      default_options.merge(options)
-    end
-
-    def add_default_options(action)
-      add_management_certificate_option(action)
-      add_subscription_id_option(action)
-      add_management_endpoint_option(action)
     end
 
     def add_create_options(action)
@@ -128,60 +119,6 @@ module Puppet::DatabasePack
         before_action do |action, args, options|
           if options[:server_name].empty?
             raise ArgumentError, "Server name is required."
-          end
-        end
-      end
-    end
-
-    def add_management_endpoint_option(action)
-      action.option '--management-endpoint=' do
-        summary 'The management endpoint for the Windows Azure portal.'
-        description <<-EOT
-          The management endpoint for the Windows Azure portal.
-        EOT
-        required
-        before_action do |action, args, options|
-          if options[:management_endpoint].empty?
-            raise ArgumentError, "Management endpoint is required."
-          end
-        end
-      end
-    end
-
-    def add_subscription_id_option(action)
-      action.option '--azure-subscription-id=' do
-        summary 'The subscription identifier for the Windows Azure portal.'
-        description <<-EOT
-          The subscription identifier for the Windows Azure portal.
-        EOT
-        required
-        before_action do |action, args, options|
-          if options[:azure_subscription_id].empty?
-            raise ArgumentError, "Subscription id is required."
-          end
-        end
-      end
-    end
-
-    def add_management_certificate_option(action)
-      action.option '--management-certificate=' do
-        summary 'The subscription identifier for the Windows Azure portal.'
-        description <<-EOT
-          The subscription identifier for the Windows Azure portal.
-        EOT
-        required
-        before_action do |action, args, options|
-          if options[:management_certificate].empty?
-            raise ArgumentError, "Publish Settings File Id is required"
-          end
-          unless test 'f', options[:management_certificate]
-            raise ArgumentError, "Could not find file '#{options[:management-certificate]}'"
-          end
-          unless test 'r', options[:management_certificate]
-            raise ArgumentError, "Could not read from file '#{options[:management-certificate]}'"
-          end
-          unless(options[:management_certificate] =~ /(pem|pfx)$/)
-            raise RuntimeError, "Management certificate expects a .pem or .pfx file."
           end
         end
       end

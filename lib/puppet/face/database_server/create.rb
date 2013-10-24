@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #--------------------------------------------------------------------------
-require 'puppet/face/node_azure'
-require 'puppet/cloudpack/bootstrap'
 
 Puppet::Face.define :database_server, '0.0.1' do
   action :create do
@@ -24,13 +22,13 @@ Puppet::Face.define :database_server, '0.0.1' do
       The create action create a SQL database server.
     EOT
 
-    Puppet::DatabasePack.add_create_options(self)
+    Puppet::SqlDatabase.add_create_options(self)
 
     when_invoked do |options|
-      Puppet::DatabasePack.initialize_env_variable(options)
-      db = Azure::Database::DatabaseService.new
+      Puppet::SqlDatabase.initialize_env_variable(options)
+      db = Azure::SqlDatabaseManagementService.new
       servers = db.create_server(options[:login], options[:password], options[:location])
-      puts Tilt.new(Puppet::DatabasePack.views('servers.erb'), 1, :trim => '%').render(nil, :db_servers => servers) if servers
+      puts Tilt.new(Puppet::SqlDatabase.views('servers.erb'), 1, :trim => '%').render(nil, :db_servers => servers) if servers
     end
 
     examples <<-'EOT'

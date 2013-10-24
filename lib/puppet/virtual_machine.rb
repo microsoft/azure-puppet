@@ -12,34 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #--------------------------------------------------------------------------
-require 'rubygems'
-require 'net/ssh'
-require 'tilt'
-require 'highline/import'
+require 'puppet/application_config'
+include Puppet::ApplicationConfig
 
-module Puppet::CloudAzurePack
+module Puppet::VirtualMachine
 
   class << self
-    def initialize_env_variable(options)
-      ENV['azure_management_certificate'.upcase] = options[:management_certificate]
-      ENV['azure_subscription_id'.upcase] = options[:azure_subscription_id]
-      ENV['azure_management_endpoint'.upcase] = options[:management_endpoint]
-      require 'azure'
-    end
-
+    
     def views(name)
       File.join(File.dirname(__FILE__), 'face/node_azure/views', name)
-    end
-
-    def merge_default_options(options)
-      default_options = { "management-certificate" => true, "subscription-id" => true, "management-endpoint" => true }
-      default_options.merge(options)
-    end
-
-    def add_default_options(action)
-      add_management_certificate_option(action)
-      add_subscription_id_option(action)
-      add_management_endpoint_option(action)
     end
 
     def add_shutdown_options(action)
@@ -86,6 +67,9 @@ module Puppet::CloudAzurePack
       add_certificate_file_option(action)
       add_private_key_file_option(action)
       add_winrm_transport_option(action)
+      add_virtual_network_option(action)
+      add_subnet_option(action)
+      add_affinity_group_option(action)
     end
 
     def add_location_option(action)
@@ -108,30 +92,6 @@ module Puppet::CloudAzurePack
       end
     end
 
-    def add_management_certificate_option(action)
-      action.option '--management-certificate=' do
-        summary 'The subscription identifier for the Windows Azure portal.'
-        description <<-EOT
-          The subscription identifier for the Windows Azure portal.
-        EOT
-        required
-        before_action do |action, args, options|
-          if options[:management_certificate].empty?
-            raise ArgumentError, "Management certificate file is required"
-          end
-          unless test 'f', options[:management_certificate]
-            raise ArgumentError, "Could not find file '#{options[:management_certificate]}'"
-          end
-          unless test 'r', options[:management_certificate]
-            raise ArgumentError, "Could not read from file '#{options[:management_certificate]}'"
-          end
-          unless(options[:management_certificate] =~ /(pem|pfx)$/)
-            raise RuntimeError, "Management certificate expects a .pem or .pfx file."
-          end
-        end
-      end
-    end
-
     def add_vm_name_option(action, optional=true)
       action.option '--vm-name=' do
         summary 'The name of the virtual machine.'
@@ -140,7 +100,7 @@ module Puppet::CloudAzurePack
         EOT
         required unless optional
         before_action do |action, args, options|
-          options = Puppet::CloudAzurePack.merge_default_options(options)
+          options = Puppet::VirtualMachine.merge_default_options(options)
           if options[:vm_name].empty?
             raise ArgumentError, "VM Name is required."
           end
@@ -156,30 +116,15 @@ module Puppet::CloudAzurePack
         EOT
         required
         before_action do |action, args, options|
-          options = Puppet::CloudAzurePack.merge_default_options(options)
+          options = Puppet::VirtualMachine.merge_default_options(options)
           if options[:image].empty?
             raise ArgumentError, "Source image name is required"
           else
-            Puppet::CloudAzurePack.initialize_env_variable(options)
+            Puppet::VirtualMachine.initialize_env_variable(options)
             image_service = Azure::VirtualMachineImageManagementService.new
             os_image = image_service.list_virtual_machine_images.select{|x| x.name == options[:image]}.first
             raise ArgumentError, "Source image name is invalid" unless os_image
             @os_type = os_image.os_type
-          end
-        end
-      end
-    end
-
-    def add_subscription_id_option(action)
-      action.option '--azure-subscription-id=' do
-        summary 'The subscription identifier for the Windows Azure portal.'
-        description <<-EOT
-          The subscription identifier for the Windows Azure portal.
-        EOT
-        required
-        before_action do |action, args, options|
-          if options[:azure_subscription_id].empty?
-            raise ArgumentError, "Subscription id is required."
           end
         end
       end
@@ -202,7 +147,7 @@ module Puppet::CloudAzurePack
         EOT
         required unless optional
         before_action do |action, args, options|
-          options = Puppet::CloudAzurePack.merge_default_options(options)
+          options = Puppet::VirtualMachine.merge_default_options(options)
           if options[:cloud_service_name].empty?
             raise ArgumentError, "Cloud service name is required."
           end
@@ -218,7 +163,7 @@ module Puppet::CloudAzurePack
         EOT
         required unless optional
         before_action do |action, args, options|
-          options = Puppet::CloudAzurePack.merge_default_options(options)
+          options = Puppet::VirtualMachine.merge_default_options(options)
           if options[:vm_user].empty?
             raise ArgumentError, "The VM user name is required."
           end
@@ -234,7 +179,7 @@ module Puppet::CloudAzurePack
         EOT
         required unless optional
         before_action do |action, args, options|
-          options = Puppet::CloudAzurePack.merge_default_options(options)
+          options = Puppet::VirtualMachine.merge_default_options(options)
           if options[:puppet_master_ip].empty?
             raise ArgumentError, "The pupet master ip address is required."
           end
@@ -250,7 +195,7 @@ module Puppet::CloudAzurePack
         EOT
         required unless optional
         before_action do |action, args, options|
-          options = Puppet::CloudAzurePack.merge_default_options(options)
+          options = Puppet::VirtualMachine.merge_default_options(options)
           if options[:deployment_name].empty?
             raise ArgumentError, "Deployment name is required."
           end
@@ -291,24 +236,9 @@ module Puppet::CloudAzurePack
         EOT
         required unless optional
         before_action do |action, args, options|
-          options = Puppet::CloudAzurePack.merge_default_options(options)
+          options = Puppet::VirtualMachine.merge_default_options(options)
           if options[:node_ipaddress].empty?
             raise ArgumentError, "The Node ip address is require."
-          end
-        end
-      end
-    end
-
-    def add_management_endpoint_option(action)
-      action.option '--management-endpoint=' do
-        summary 'The management endpoint for the Windows Azure portal.'
-        description <<-EOT
-          The management endpoint for the Windows Azure portal.
-        EOT
-        required
-        before_action do |action, args, options|
-          if options[:management_endpoint].empty?
-            raise ArgumentError, "Management endpoint is required."
           end
         end
       end
@@ -385,6 +315,36 @@ module Puppet::CloudAzurePack
             raise ArgumentError, "The vm-size is not valid. Valid choices are valid choice are ExtraSmall, Small, Medium, Large, ExtraLarge"
           end
         end
+      end
+    end
+
+    def add_virtual_network_option(action)
+      action.option '--virtual-network-name=' do
+        summary 'The virtual network name.'
+        description <<-EOT
+          The name of virtual network.
+        EOT
+
+      end
+    end
+
+    def add_subnet_option(action)
+      action.option '--virtual-network-subnet=' do
+        summary 'The virtual network subnet.'
+        description <<-EOT
+          The subnet of virtual network.
+        EOT
+
+      end
+    end
+
+    def add_affinity_group_option(action)
+       action.option '--affinity-group-name=' do
+        summary 'The affinity group name.'
+        description <<-EOT
+          The name of affinity group.
+        EOT
+
       end
     end
 

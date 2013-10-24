@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #--------------------------------------------------------------------------
-require 'puppet/face/node_azure'
+require 'tilt'
 
 Puppet::Face.define :node_azure, '0.0.1' do
   action :locations do
@@ -24,13 +24,13 @@ Puppet::Face.define :node_azure, '0.0.1' do
       displays them on the console output.
     EOT
 
-    Puppet::CloudAzurePack.add_default_options(self)
+    Puppet::VirtualMachine.add_default_options(self)
 
     when_invoked do |options|
-      Puppet::CloudAzurePack.initialize_env_variable(options)
+      Puppet::VirtualMachine.initialize_env_variable(options)
       base_management = Azure::BaseManagementService.new
       locations = base_management.list_locations
-      puts Tilt.new(Puppet::CloudAzurePack.views('locations.erb'), 1, :trim => '%').render(nil, :locations => locations)
+      puts Tilt.new(Puppet::VirtualMachine.views('locations.erb'), 1, :trim => '%').render(nil, :locations => locations)
     end
 
     returns 'Array of attribute hashes containing information about each Azure locations.'

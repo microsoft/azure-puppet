@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #--------------------------------------------------------------------------
-require 'puppet/cloudazurepack'
-require 'puppet/face'
+require 'puppet/virtual_machine'
 
 Puppet::Face.define(:node_azure, '0.0.1') do
   copyright "Windows Azure", 2013

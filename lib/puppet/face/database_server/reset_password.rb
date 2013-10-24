@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #--------------------------------------------------------------------------
-require 'puppet/face/node_azure'
-require 'puppet/cloudpack/bootstrap'
 
 Puppet::Face.define :database_server, '0.0.1' do
   action :reset_password do
@@ -24,11 +22,11 @@ Puppet::Face.define :database_server, '0.0.1' do
       The reset_passowrd action reset password of sql database server.
     EOT
 
-    Puppet::DatabasePack.add_reset_password_options(self)
+    Puppet::SqlDatabase.add_reset_password_options(self)
 
     when_invoked do |options|
-      Puppet::DatabasePack.initialize_env_variable(options)
-      db = Azure::Database::DatabaseService.new
+      Puppet::SqlDatabase.initialize_env_variable(options)
+      db = Azure::SqlDatabaseManagementService.new
       db.reset_password(options[:server_name], options[:password])
       nil
     end

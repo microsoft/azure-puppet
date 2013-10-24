@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #--------------------------------------------------------------------------
-require 'puppet/face/node_azure'
+require 'tilt'
 
 Puppet::Face.define :node_azure, '0.0.1' do
   action :servers do
@@ -25,13 +25,13 @@ Puppet::Face.define :node_azure, '0.0.1' do
       a specific region are provided.
     EOT
 
-    Puppet::CloudAzurePack.add_default_options(self)
+    Puppet::VirtualMachine.add_default_options(self)
 
     when_invoked do |options|
-      Puppet::CloudAzurePack.initialize_env_variable(options)
+      Puppet::VirtualMachine.initialize_env_variable(options)
       virtual_machine_service = Azure::VirtualMachineManagementService.new
       servers = virtual_machine_service.list_virtual_machines
-      puts Tilt.new(Puppet::CloudAzurePack.views('servers.erb'), 1, :trim => '%').render(nil, :roles => servers)
+      puts Tilt.new(Puppet::VirtualMachine.views('servers.erb'), 1, :trim => '%').render(nil, :roles => servers)
     end
 
     returns 'Array of attribute hashes containing information about each Azure instance.'

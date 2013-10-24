@@ -12,27 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #--------------------------------------------------------------------------
-require 'puppet/cloudpack/bootstrap'
+require 'puppet/virtual_network'
 
-Puppet::Face.define :node_azure, '0.0.1' do
-  action :bootstrap do
+Puppet::Face.define(:virtual_network, '0.0.1') do
+  copyright "Windows Azure", 2013
+  license   "Microsoft Open Technologies, Inc; see COPYING"
 
-    summary 'Install puppet node on  Windows Azure VM'
-    
-    description <<-'EOT'
-      Install puppet node on Windows Azure Virtual Machine.
-    EOT
+  summary "View and manage Window Azure virtual networks."
+  description <<-'EOT'
+    This subcommand provides a command line interface to work with Windows Azure
+    virtual networks.  The goal of these actions are to easily create new or update
+    virtual network.
+  EOT
 
-    Puppet::VirtualMachine.add_bootstrap_options(self)
-
-    when_invoked do |options|
-      Puppet::CloudPack::BootStrap.start(options)
-    end
-
-    examples <<-'EOT'
-      $ puppet node_azure bootstrap --publish-settings-file=azuremanagement_pfx.publishsettings \
-       --vm-user=username --puppet-master-ip=152.56.161.48 --password=Abcd123 \
-       --node-ip-address=domain.cloudapp.net
-    EOT
-  end
 end

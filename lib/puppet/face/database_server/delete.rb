@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #--------------------------------------------------------------------------
-require 'puppet/face/node_azure'
 
 Puppet::Face.define :database_server, '0.0.1' do
   action :delete do
@@ -23,11 +22,11 @@ Puppet::Face.define :database_server, '0.0.1' do
       The delete action delete windows azure sql server.
     EOT
 
-    Puppet::DatabasePack.add_delete_options(self)
+    Puppet::SqlDatabase.add_delete_options(self)
 
     when_invoked do |options|
-      Puppet::DatabasePack.initialize_env_variable(options)
-      db = Azure::Database::DatabaseService.new
+      Puppet::SqlDatabase.initialize_env_variable(options)
+      db = Azure::SqlDatabaseManagementService.new
       db.delete_server(options[:server_name])
       nil
     end
