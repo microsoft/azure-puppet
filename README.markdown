@@ -20,13 +20,11 @@ This module requires Puppet 2.7.2 or later.
 * SQL Database Server Management
 	* list, create, list sqldb servers & password reset for a sqldb server
 	* list, set, delete firewall rules for a sqldb server
-
 * Virtual Network Management
     * List VNet
     * Create VNet
     	* via parameters
     	* via xml file
-
 * Affinity Group
     * get, list, create, update, delete affinity groups
 
@@ -67,39 +65,41 @@ Manage Virtual machine
 You may launch a new instance and install puppet agent with this module installed using the following single command:
 
     $puppet node_azure create --management-certificate pem-or-pfx-file-path --azure-subscription-id=your-subscription-id \
-    --image b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-13_04-amd64-server-20130501-en-us-30GB --location 'west us' \
+    --image b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-13_04-amd64-server-20130501-en-us-30GB --location 'west us' 
     --vm-name vmname --vm-user username --password ComplexPassword  --puppet-master-ip 198.62.195.5
 
-Once launched, you should be able to SSH to the new system using the username and password
+Once launched, you should be able to SSH to the new system using the username and password.
 
 Other avaliable actions are
-ACTIONS:
-  bootstrap    Install puppet node on  Windows Azure VM
-  create       Create Windows Azure VM
-  delete       Delete Windows Azure node instances
-  images       List Windows Azure images
-  locations    List Windows Azure locations
-  servers      List Windows Azure node instances
-  shutdown     Shutdown Windows Azure node instances
-  start        starts Windows Azure node instances
+
+  
+    bootstrap    Install puppet node on  Windows Azure VM
+    create       Create Windows Azure VM
+    delete       Delete Windows Azure node instances
+    images       List Windows Azure images
+    locations    List Windows Azure locations
+    servers      List Windows Azure node instances
+    shutdown     Shutdown Windows Azure node instances
+    start        starts Windows Azure node instances
 
 To list all options for any action
-$puppet help node_azure ACTION-NAME
+
+    $puppet help node_azure ACTION-NAME
 
 Manage Virtual Network
 ========================
 
 Creating virtual network
 
-    $puppet virtual_network set --management-certificate pem-or-pfx-file-path --azure-subscription-id=your-subscription-id \
+    $puppet virtual_network set --management-certificate pem-or-pfx-file-path --azure-subscription-id=your-subscription-id
     --virtual-network-name vnetname --affinity-group-name ag-name --address-space '172.16.0.0/12,192.168.0.0/16'
     --dns-servers 'dns1-1:10.10.8.8,dns2:172.8.4.4' --subnets 'subnet-1:172.16.0.0:12,subnet-2:192.168.0.0:29'
 
 Other avaliable actions are
-ACTIONS:
-  list              List virtual networks.
-  set               Set Network configures the virtual network
-  set_xml_schema    set_xml_schema Network configures the virtual network using xml schema
+
+    list              List virtual networks.
+    set               Set Network configures the virtual network
+    set_xml_schema    set_xml_schema Network configures the virtual network using xml schema
 
 Manage SQL database server
 ========================
@@ -110,10 +110,10 @@ Creating SQL database server
     --management-endpoint=https://management.database.windows.net:8443/ --login loginname --password ComplexPassword --location 'West Us'
 
 Other avaliable actions are
-ACTIONS:
-  list              List virtual networks.
-  set               Set Network configures the virtual network
-  set_xml_schema    set_xml_schema Network configures the virtual network using xml schema
+
+    list              List virtual networks.
+    set               Set Network configures the virtual network
+    set_xml_schema    set_xml_schema Network configures the virtual network using xml schema
 
 Puppet Installation
 ===================
