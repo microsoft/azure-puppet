@@ -1,7 +1,7 @@
-Microsoft Windows Cloud Provisioner
+Windows Azure Cloud Provisioner
 ========================
 
-Puppet Module to launch and manage Microsoft Windows Azure Services like Storage, Virtual Network, SQL Database and Virtual Machines..
+Puppet Module to launch and manage Microsoft Windows Azure Services like Virtual Machines, Virtual Network and SQL Database services.
 
 This module requires Puppet 2.7.2 or later.
 
@@ -17,37 +17,20 @@ This module requires Puppet 2.7.2 or later.
 		* create, list, delete cloud services
     * Storage Accounts
 		* create, list storage accounts, list locations
-* SQL Database Server Management
-	* list, create, list sqldb servers & password reset for a sqldb server
-	* list, set, delete firewall rules for a sqldb server
+
 * Virtual Network Management
     * List VNet
     * Create VNet
     	* via parameters
     	* via xml file
+    	
 * Affinity Group
     * get, list, create, update, delete affinity groups
 
-# Useful commands for certificate operations
+* SQL Database Server Management
+	* list, create, list sqldb servers & password reset for a sqldb server
+	* list, set, delete firewall rules for a sqldb server
 
-* Currently the sdk supports *.pem or *.pfx (passwordless pfx) for service management operations. Following are the steps discussed on various cert operations.
-
-	* To create pfx, simply download the publishsettings file for your subscription, copy the contents of Management Certificate from the publishsettings and save it in a file and name the file
-	  as your cert.pfx. This pfx will be a passwordless pfx which can be supplied as a cert parameter for Service Management Commands
-
-	* Using the following openssl commands to extract the pem file and pass the pem file as management cert parameter.
-
-		* To get only private key from pfx use Openssl.exe pkcs12 -in cert.pfx -nocerts -out cert.pem
-
-		* To remove passphrase from the above private key use Openssl.exe rsa -in cert.pem -out certprivnopassword.pem
-
-		* To extract both public & private keys from pfx use Openssl.exe pkcs12 -in cert.pfx -out certprivpub.pem
-
-		* To extract only public key from pem use Openssl x509 -inform pem -in certprivpub.pem -pubkey -out certpub.pem -outform pem
-
-		* Finally copy the public key & private key to a file *.pem and pass that pem file to management cert parameter.
-
-	* To extract pem from custom certificate, export the pfx, follow the above steps to convert to pem and pass that pem file to management cert parameter.
 
 Getting Started
 ===============
@@ -114,6 +97,28 @@ Other avaliable actions are
     list              List virtual networks.
     set               Set Network configures the virtual network
     set_xml_schema    set_xml_schema Network configures the virtual network using xml schema
+
+# Certificate Management
+
+* Currently the sdk supports *.pem or *.pfx (passwordless pfx) for service management operations. Following are the steps discussed on various cert operations.
+
+	* To create pfx, simply download the publishsettings file for your subscription, copy the contents of Management Certificate from the publishsettings and save it in a file and name the file
+	  as your cert.pfx. This pfx will be a passwordless pfx which can be supplied as a cert parameter for Service Management Commands
+
+	* Using the following openssl commands to extract the pem file and pass the pem file as management cert parameter.
+
+		* To get only private key from pfx use Openssl.exe pkcs12 -in cert.pfx -nocerts -out cert.pem
+
+		* To remove passphrase from the above private key use Openssl.exe rsa -in cert.pem -out certprivnopassword.pem
+
+		* To extract both public & private keys from pfx use Openssl.exe pkcs12 -in cert.pfx -out certprivpub.pem
+
+		* To extract only public key from pem use Openssl x509 -inform pem -in certprivpub.pem -pubkey -out certpub.pem -outform pem
+
+		* Finally copy the public key & private key to a file *.pem and pass that pem file to management cert parameter.
+
+	* To extract pem from custom certificate, export the pfx, follow the above steps to convert to pem and pass that pem file to management cert parameter.
+	
 
 Puppet Installation
 ===================
