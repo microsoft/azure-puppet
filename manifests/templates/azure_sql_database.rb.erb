@@ -1,0 +1,10 @@
+require 'azure'
+Azure.configure do |config|
+  config.management_certificate  = ENV["AZURE_MANAGEMENT_CERTIFICATE"]
+  config.subscription_id         = ENV["AZURE_SUBSCRIPTION_ID"]
+  config.management_endpoint     = "https://management.database.windows.net:8443/"
+end
+
+db = Azure::SqlDatabaseManagementService.new
+db.create_server('<%=@login%>', '<%=@password%>', '<%=@location%>')
+

@@ -1,0 +1,23 @@
+{
+  "name": "azure-provisioner",
+  "version": "0.0.1",
+  "source": "https://github.com/MSOpenTech/puppet-wordpress",
+  "author": "MSOpenTech",
+  "license": "Apache2",
+  "summary": "Puppet module to set up an instance of wordpress",
+  "dependencies": [
+    
+  ],
+  "types": [
+ 
+  ],
+  "checksums": {
+    "CHANGELOG": "",
+    "Modulefile": "",
+    "README.markdown": "",
+    "Rakefile": "",
+    "manifests/vm.pp": "cc59f173abcea74040cb29982a8fde09",
+    "manifests/init.pp": "e80b9bb65e0e2372792e03e9d73fe413",
+    "tests/init.pp": "4086340a435b8b5b3fbbdb2b119c42e4"
+  }
+}

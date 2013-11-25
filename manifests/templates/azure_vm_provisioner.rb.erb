@@ -1,0 +1,29 @@
+require 'azure'
+Azure.configure do |config|
+  config.management_certificate  = ENV["AZURE_MANAGEMENT_CERTIFICATE"]
+  config.subscription_id         = ENV["AZURE_SUBSCRIPTION_ID"]
+  config.management_endpoint     = ENV["AZURE_MANAGEMENT_ENDPOINT"]
+end
+virtual_machine = Azure::VirtualMachineManagementService.new
+params = {
+  :vm_name => '<%=@vm_name%>',
+  :vm_user => '<%=@vm_user%>',
+  :image => '<%=@image%>',
+  :password => '<%=@password%>',
+  :location => '<%=@location%>'
+}
+options = {
+   :winrm_transport => <%=@winrm_transport || []%>,
+   :storage_account_name => '<%=@storage_account_name%>',
+   :cloud_service_name => '<%=@cloud_service_name%>',
+   :tcp_endpoints => '<%=@tcp_endpoints%>',
+   :private_key_file => '<%=@private_key_file%>',
+   :certificate_file => '<%=@certificate_file%>',
+   :vitual_network_name => '<%=@vitual_network_name%>',
+   :affinity_group_name => '<%=@affinity_group_name%>',
+   :subnet_name => '<%=@subnet_name%>',
+   :ssh_port => '<%=@ssh_port%>',
+   :vm_size => '<%=@vm_size%>'
+}
+options.delete_if {|key, value| value == ''  or value == nil}
+virtual_machine.create_virtual_machine(params, options)
