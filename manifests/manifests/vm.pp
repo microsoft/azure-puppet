@@ -36,17 +36,39 @@ define windowsazure::vm (
       }
     }
 
+    file { ['/tmp/windowsazure/','/tmp/windowsazure/vm/']:
+      ensure => "directory",
+    }~>
+
     file {"azure_vm_provisioner-${title}.rb":
       ensure  => file,
-      path    => "/tmp/azure_vm_provisioner-${title}.rb",
+      path    => "/tmp/windowsazure/vm/azure_vm_provisioner-${title}.rb",
       content => template('windowsazure/azure_vm_provisioner.rb.erb'),
       owner   => root,
       group   => root,
       mode    => '0644'
     }~>
 
+    file {"azure_vm_bootstrap.rb":
+      ensure  => file,
+      path    => "/tmp/windowsazure/vm/azure_vm_bootstrap.rb",
+      content => template('windowsazure/azure_vm_bootstrap.rb.erb'),
+      owner   => root,
+      group   => root,
+      mode    => '0644'
+    }~>
+
+    file {"puppet-community.sh.erb":
+      ensure  => file,
+      path    => "/tmp/windowsazure/vm/puppet-community.sh",
+      content => template('windowsazure/puppet-community.sh.erb'),
+      owner   => root,
+      group   => root,
+      mode    => '0644'
+    }~>
+
     exec {"Provisioning VM ${title}":
-      command     => "ruby /tmp/azure_vm_provisioner-${title}.rb",
+      command     => "ruby /tmp/windowsazure/vm/azure_vm_provisioner-${title}.rb",
       require     => File["azure_vm_provisioner-${title}.rb"],
       subscribe   => File["azure_vm_provisioner-${title}.rb"],
       refreshonly => true,

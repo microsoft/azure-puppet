@@ -1,4 +1,6 @@
 require 'azure'
+require_relative 'azure_vm_bootstrap'
+
 Azure.configure do |config|
   config.management_certificate  = ENV["AZURE_MANAGEMENT_CERTIFICATE"]
   config.subscription_id         = ENV["AZURE_SUBSCRIPTION_ID"]
@@ -26,4 +28,14 @@ options = {
    :vm_size => '<%=@vm_size%>'
 }
 options.delete_if {|key, value| value == ''  or value == nil}
-virtual_machine.create_virtual_machine(params, options)
+server = virtual_machine.create_virtual_machine(params, options)
+options[:node_ipaddress] = server.ipaddress
+
+if options[:puppet_master_ip] && server
+  test_tcp_connection(server)
+  if  server.os_type == 'Linux'
+    BootStrap.start(options)
+  else
+    puts '\npuppet installation on windows is not yet implemented.'
+  end
+end
