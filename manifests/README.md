@@ -52,7 +52,7 @@ Examples:
     azure::db { 'db-1':
       login =>  'user1',
       password =>  'ComplexPassword',
-      location =>    'East Us'
+      location =>  'East Us'
     }
 
 ### class azure::vnet
@@ -73,13 +73,19 @@ Examples:
       virtual_network_name => 'vnet-name',
       affinity_group_name => 'AG1',
       address_space => ['172.16.0.0/12', '10.0.0.0/8', '192.168.0.0/24'],
-      subnets => [{:name => 'Subnet-2', :ip_address=>'10.0.0.0', :cidr=>8}, {:name => 'Subnet-4', :ip_address=>'192.168.0.0', :cidr=>26}],
-      dns_servers =>[{:name => 'google', :ip_address=>'8.8.8.8'}, {:name => 'google-2', :ip_address=>'8.8.4.2'}]
+      subnets => [
+                  {'name' => 'Subnet-2', 'ip_address' => '10.0.0.0', 'cidr' => 8},
+                  {'name' => 'Subnet-4', 'ip_address' => '192.168.0.0', 'cidr' => 26}
+                 ],
+      dns_servers =>[
+                     {'name' => 'dns-1', 'ip_address' => '192.8.8.8'},
+                     {'name' => 'dns-2', 'ip_address' => '8.8.4.2'}
+                    ]
     }
 
 ## Supported Platforms
 
 * Windows
-* Debian 
-* Ubuntu 
-* RHEL 
+* Debian
+* Ubuntu
+* RHEL

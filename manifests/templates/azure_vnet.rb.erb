@@ -9,7 +9,7 @@ vnet_name = '<%=@virtual_network_name%>'
 affinity_group_name = '<%=@affinity_group_name%>'
 address_space = <%=@address_space%>
 options = {
-  :subnet => <%=@subnets || []%>,
-  :dns => <%=@dns_servers || []%>
+  :subnet => <%=@subnets.map! { |l| Hash[l.map{ |k, v| [k.to_sym, v] }] }%>,
+  :dns => <%=@dns_servers.map! { |l| Hash[l.map{ |k, v| [k.to_sym, v] }] }%>
   }
 virtual_network.set_network_configuration(vnet_name, affinity_group_name, address_space, options)
