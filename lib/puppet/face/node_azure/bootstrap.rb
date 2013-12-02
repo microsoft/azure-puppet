@@ -27,6 +27,7 @@ Puppet::Face.define :node_azure, '0.0.1' do
 
     when_invoked do |options|
       Puppet::CloudPack::BootStrap.start(options)
+      nil
     end
 
     examples <<-'EOT'

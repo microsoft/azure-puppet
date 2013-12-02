@@ -54,9 +54,17 @@ Puppet::Face.define :node_azure, '0.0.1' do
         if options[:puppet_master_ip] && server
           test_tcp_connection(server)
           if  server.os_type == 'Linux'
+            options[:ssh_user] = params[:vm_user]
             Puppet::CloudPack::BootStrap.start(options)
           else
-            puts '\npuppet installation on windows is not yet implemented.'
+            puts 
+            msg = <<-'EOT'
+              To Bootstrap windows node log into the VM and run these two commands:
+              winrm set winrm/config/service @{AllowUnencrypted="true"}
+              winrm set winrm/config/service/auth @{Basic="true"}
+              And then run puppet bootstrap command on master.
+            EOT
+            puts msg
           end
         end
       end

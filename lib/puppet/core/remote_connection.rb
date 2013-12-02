@@ -15,12 +15,13 @@
 require 'rubygems'
 require 'net/ssh'
 require 'net/scp'
+require 'winrm'
 
 module Puppet
   module Core
     module RemoteConnection
 
-      def scp_remote_upload(server, login, ssh_opts, local_path,remote_path)
+      def scp_remote_upload(server, login, ssh_opts, local_path, remote_path)
         begin
           Net::SCP.start(server, login, ssh_opts) do |scp|
             scp.upload! local_path, remote_path
@@ -36,7 +37,7 @@ module Puppet
         end
       end
 
-      def ssh_remote_execute(server, login, ssh_opts, command, keyfile = nil)
+      def ssh_remote_execute(server, login, ssh_opts, command)
         puts "Executing remote command ..."
         puts "Command: #{command}"
 
@@ -93,6 +94,22 @@ module Puppet
 
         puts "Executing remote command ... Done"
         { :exit_code => exit_code, :stdout => stdout }
+      end
+
+      def winrm_remote_execute(node_ip, login, password, cmds, endpoint_protocol, port)
+        endpoint = "#{endpoint_protocol}://#{node_ip}:#{port}/wsman"
+        winrm = WinRM::WinRMWebService.new(endpoint,
+          :plaintext,
+          :user => login,
+          :pass => password,
+          :basic_auth_only => true)
+        cmds.each do |cmd|
+          puts "Executing command #{cmd}"
+          winrm.cmd(cmd) do |stdout, stderr|
+            STDOUT.print stdout
+            STDERR.print stderr
+          end
+        end
       end
     
     end

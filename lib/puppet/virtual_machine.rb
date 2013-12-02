@@ -41,13 +41,16 @@ module Puppet::VirtualMachine
 
     def add_bootstrap_options(action)
       add_default_options(action)
-      add_vm_user_option(action,false)
-      add_node_ipaddress_options(action,false)
-      add_password_option(action)
-      add_puppet_master_ip_option(action,false)
+      add_bootstrap_password_option(action)
+      add_ssh_user_option(action)
       add_ssh_port_option(action)
+      add_winrm_user_option(action)
+      add_winrm_port_option(action)
+      add_node_ipaddress_options(action)
+      add_puppet_master_ip_option(action, false)
       add_certificate_file_option(action)
       add_private_key_file_option(action)
+      add_bootstrap_winrm_transport_option(action)
     end
 
     def add_create_options(action)
@@ -177,7 +180,7 @@ module Puppet::VirtualMachine
         description <<-EOT
           The puppet master ip address. It mandatory incase of puppet node installation.
         EOT
-        required unless optional
+        required if !optional
         before_action do |action, args, options|
           options = Puppet::VirtualMachine.merge_default_options(options)
           if options[:puppet_master_ip].empty?
@@ -228,13 +231,13 @@ module Puppet::VirtualMachine
       end
     end
 
-    def add_node_ipaddress_options(action, optional=true)
+    def add_node_ipaddress_options(action)
       action.option '--node-ipaddress=' do
         summary 'Node Ip address. '
         description <<-EOT
           The ip address where puppet need to install."
         EOT
-        required unless optional
+        required
         before_action do |action, args, options|
           options = Puppet::VirtualMachine.merge_default_options(options)
           if options[:node_ipaddress].empty?
@@ -339,7 +342,7 @@ module Puppet::VirtualMachine
     end
 
     def add_affinity_group_option(action)
-       action.option '--affinity-group-name=' do
+      action.option '--affinity-group-name=' do
         summary 'The affinity group name.'
         description <<-EOT
           The name of affinity group.
@@ -348,5 +351,81 @@ module Puppet::VirtualMachine
       end
     end
 
+    def add_ssh_user_option(action)
+      action.option '--ssh-user=' do
+        summary 'The VM user name.'
+        description <<-EOT
+          The ssh user name. It mandatory incase of liunx VM installation.
+        EOT
+        required if @os_type == 'Linux'
+        before_action do |action, args, options|
+          puts options
+          if options[:ssh_user]
+            raise ArgumentError, "The ssh username is required."
+          end
+        end
+      end
+    end
+
+    def add_winrm_user_option(action)
+      action.option '--winrm-user=' do
+        summary 'The winrm user name.'
+        description <<-EOT
+          The winrm user name. It mandatory incase of Windows puppet agent installation.
+        EOT
+        required if @os_type == 'Windows'
+        before_action do |action, args, options|
+          if options[:winrm_user].empty?
+            raise ArgumentError, "The winrm username is required."
+          end
+        end
+      end
+    end
+
+    def add_winrm_port_option(action)
+      action.option '--winrm-port=' do
+        summary 'Port for winrm.'
+        description <<-EOT
+          Port for winrm.
+        EOT
+      end
+    end
+
+    def add_bootstrap_password_option(action)
+      action.option '--password=' do
+        summary 'Authentication password for vm.'
+        description <<-EOT
+          Authentication password for vm.
+        EOT
+        required 
+        before_action do |action, args, options|
+          if options[:ssh_user].nil? && options[:winrm_user].nil?
+            raise ArgumentError, "winrm_user or ssh_user is required."
+          elsif options[:ssh_user].nil?
+            @os_type = 'Windows'
+          elsif  options[:winrm_user].nil?
+            @os_type = 'Linux'
+          elsif options[:password].empty?
+            raise ArgumentError, "The password is required."
+          end
+        end
+      end
+    end
+
+    def add_bootstrap_winrm_transport_option(action)
+      action.option '--winrm-transport=' do
+        summary "Winrm authentication protocol. Valid choices are http or https"
+        description <<-EOT
+          Winrm authentication protocol. Valid choices are http or https.
+        EOT
+        before_action do |action, args, options|
+          winrm_transport = options[:winrm_transport]
+          unless (['http', 'https', nil].include?(winrm_transport))
+            raise ArgumentError, "The winrm transport is not valid. Valid choices are http or https"
+          end
+
+        end
+      end
+    end
   end
 end

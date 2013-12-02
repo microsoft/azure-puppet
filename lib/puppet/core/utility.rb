@@ -37,7 +37,6 @@ module Puppet
           puts "Require atleast 1 captial letter and digit."
           options[:password] = ask("\nPASSWORD?  ") { |pass| pass.echo ="*"; pass.validate = regex }
         end
-
         options
       end
 
@@ -117,7 +116,33 @@ module Puppet
         sleep 2
         false
       end
-  
+
+      def wget_script
+      wget_content = <<-WGET
+URL = WScript.Arguments(0)
+saveTo = WScript.Arguments(1)
+Set objXMLHTTP = CreateObject("MSXML2.ServerXMLHTTP")
+objXMLHTTP.open "GET", URL, false
+objXMLHTTP.send()
+If objXMLHTTP.Status = 200 Then
+Set objADOStream = CreateObject("ADODB.Stream")
+objADOStream.Open
+objADOStream.Type = 1 'adTypeBinary
+objADOStream.Write objXMLHTTP.ResponseBody
+objADOStream.Position = 0
+Set objFSO = Createobject("Scripting.FileSystemObject")
+If objFSO.Fileexists(saveTo) Then objFSO.DeleteFile saveTo
+Set objFSO = Nothing
+objADOStream.SaveToFile saveTo
+objADOStream.Close
+Set objADOStream = Nothing
+End if
+Set objXMLHTTP = Nothing
+WScript.Quit
+WGET
+        wget_content
+      end
+      
     end
   end
 end
