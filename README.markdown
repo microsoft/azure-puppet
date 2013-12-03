@@ -8,15 +8,11 @@ This module requires Puppet 2.7.2 or later.
 # Library Features
 * Virtual Machine Management
     * Images
-		* list images	
+	* list images	
     * Virtual Machines
-		* create linux based VMs and ssh with cert and key option enabled for ssh and WINRM (both http & https)enabled for windows based VMs
-		* list, shut down, delete, find virtual machine deployments. While shutting down your VMs the provisioning state would be deallocated and this VM will not be included in the billing cycle.
-		* Create VM for a specific virtual network
-    * Cloud Services
-		* create, list, delete cloud services
-    * Storage Accounts
-		* create, list storage accounts, list locations
+        * create linux based VMs and ssh with cert and key option enabled for ssh and WINRM (both http & https)enabled for windows based VMs
+	* list, shut down, delete, find virtual machine deployments. While shutting down your VMs the provisioning state would be deallocated and this VM will not be included in the billing cycle.
+        * Create VM for a specific virtual network
 
 * Virtual Network Management
     * List VNet
@@ -24,9 +20,6 @@ This module requires Puppet 2.7.2 or later.
     	* via parameters
     	* via xml file
     	
-* Affinity Group
-    * get, list, create, update, delete affinity groups
-
 * SQL Database Server Management
 	* list, create, list sqldb servers & password reset for a sqldb server
 	* list, set, delete firewall rules for a sqldb server
@@ -41,6 +34,7 @@ Required Gems
  * azure (>= 0.5.1)
  * net-ssh (>= 2.1.4)
  * net-scp (>= 1.0.4)
+ * winrm (>= 1.1.3)
 
 Manage Virtual machine
 ========================
