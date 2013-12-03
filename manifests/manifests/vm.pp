@@ -18,9 +18,9 @@ define windowsazure::vm (
     Exec { path => ['/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/'] }
 
     $cmd = "puppet node_azure create --vm-user $vm_user \
-           --management-certificate $azure_management_certificate \
-           --azure-subscription-id $azure_subscription_id \
-           --image $image --vm-name $vm_name --location $location"
+            --management-certificate $azure_management_certificate \
+            --azure-subscription-id $azure_subscription_id \
+            --image $image --vm-name $vm_name --location '$location'"
 
     if $vm_name == undef {
       fail('No vm_name specified for provisioning VM.')
@@ -73,8 +73,6 @@ define windowsazure::vm (
     if $cloud_service_name != undef {
       $csn = "--cloud-service-name $cloud_service_name"
     }
-
-  $storage_account_name = undef,
 
     $command = "$cmd $pmi $passwd $san $crtf $pkf $csn"
 
