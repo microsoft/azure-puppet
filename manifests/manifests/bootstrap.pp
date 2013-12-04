@@ -1,5 +1,5 @@
 define windowsazure::bootstrap (
-  $homedir,
+  $homedir = undef,
   $azure_management_certificate,
   $azure_subscription_id,
   $puppet_master_ip,
@@ -28,8 +28,8 @@ define windowsazure::bootstrap (
       fail('Please specify either SSH User or Winrm User.')
     }
 
-    if $homedir == undef {
-      fail('Specify home directory path.')
+    if ($homedir == undef) and ($ssh_user != undef) {
+      fail('home directory path is required for Linux VM bootstrap.')
     }
 
     if $azure_management_certificate == undef {
