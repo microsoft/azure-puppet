@@ -1,10 +1,25 @@
 define windowsazure::db (
+  $azure_management_certificate,
+  $azure_subscription_id,
   $login,
   $password,
   $location
 ) {
 
     Exec { path => ['/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/'] }
+
+    $cmd = "puppet database_server create --login $login \
+        --management-certificate $azure_management_certificate \
+        --azure-subscription-id $azure_subscription_id \
+        --password $password --location '$location'"
+
+    if $azure_management_certificate == undef {
+      fail('Specify azure management certificate path.')
+    }
+
+    if $azure_subscription_id == undef {
+      fail('Specify subscription id.')
+    }
 
     if $login == undef {
       fail('No login specified for provisioning VM.')
@@ -25,21 +40,9 @@ define windowsazure::db (
       }
     }
 
-    file {"azure_sql_database-${title}.rb":
-      ensure  => file,
-      path    => "/tmp/azure_sql_database-${title}.rb",
-      content => template('windowsazure/azure_sql_database.rb.erb'),
-      owner   => root,
-      group   => root,
-      mode    => '0644'
-    }~>
-
     exec {"SQL database ${title}":
-      command     => "ruby /tmp/azure_sql_database-${title}.rb",
-      require     => File["azure_sql_database-${title}.rb"],
-      subscribe   => File["azure_sql_database-${title}.rb"],
-      refreshonly => true,
-      logoutput   => true
+      command    => "$cmd",
+      logoutput  => true
     }
 
 }
