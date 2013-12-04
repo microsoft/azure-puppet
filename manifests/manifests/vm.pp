@@ -3,7 +3,7 @@ define windowsazure::vm (
   $vm_user,
   $image,
   $location,
-  $homedir,
+  $homedir = undef,
   $azure_management_certificate,
   $azure_subscription_id,
   $vm_size = 'Small',
@@ -38,7 +38,7 @@ define windowsazure::vm (
       fail('No location specified for provisioning VM.')
     }
 
-    if $homedir == undef {
+    if ($homedir == undef) and ($puppet_master_ip != undef) {
       fail('Specify home directory path.')
     }
 
