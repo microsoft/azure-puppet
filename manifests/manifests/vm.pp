@@ -40,6 +40,8 @@ define windowsazure::vm (
 
     if ($homedir == undef) and ($puppet_master_ip != undef) {
       fail('Specify home directory path.')
+    }elsif ($homedir != undef){
+      $export_home_dir = "export HOME=$homedir;"
     }
 
     if $azure_management_certificate == undef {
@@ -84,7 +86,7 @@ define windowsazure::vm (
     }
 
     exec {"Provisioning VM ${title}":
-      command    => "/bin/bash -c \"export HOME=$homedir; $command\"",
+      command    => "/bin/bash -c \"$export_home_dir $command\"",
       logoutput  => true
     }
 

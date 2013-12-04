@@ -30,6 +30,8 @@ define windowsazure::bootstrap (
 
     if ($homedir == undef) and ($ssh_user != undef) {
       fail('home directory path is required for Linux VM bootstrap.')
+    }elsif ($homedir != undef){
+      $export_home_dir = "export HOME=$homedir;"
     }
 
     if $azure_management_certificate == undef {
@@ -83,7 +85,7 @@ define windowsazure::bootstrap (
     }
 
     exec {"Provisioning VM ${title}":
-      command    => "/bin/bash -c \"export HOME=$homedir; $command\"",
+      command    => "/bin/bash -c \"$export_home_dir  $command\"",
       logoutput  => true
     }
 
