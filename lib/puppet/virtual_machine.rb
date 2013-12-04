@@ -41,12 +41,12 @@ module Puppet::VirtualMachine
 
     def add_bootstrap_options(action)
       add_default_options(action)
-      add_bootstrap_password_option(action)
+      add_node_ipaddress_options(action)
+      add_password_option(action)
       add_ssh_user_option(action)
       add_ssh_port_option(action)
       add_winrm_user_option(action)
       add_winrm_port_option(action)
-      add_node_ipaddress_options(action)
       add_puppet_master_ip_option(action, false)
       add_certificate_file_option(action)
       add_private_key_file_option(action)
@@ -239,7 +239,13 @@ module Puppet::VirtualMachine
         EOT
         required
         before_action do |action, args, options|
-          options = Puppet::VirtualMachine.merge_default_options(options)
+          if options[:ssh_user].nil? && options[:winrm_user].nil?
+            raise ArgumentError, "winrm_user or ssh_user is required."
+          elsif options[:ssh_user].nil?
+            @os_type = 'Windows'
+          elsif options[:winrm_user].nil?
+            @os_type = 'Linux'
+          end
           if options[:node_ipaddress].empty?
             raise ArgumentError, "The Node ip address is require."
           end
@@ -360,7 +366,7 @@ module Puppet::VirtualMachine
         required if @os_type == 'Linux'
         before_action do |action, args, options|
           puts options
-          if options[:ssh_user]
+          if options[:ssh_user].empty?
             raise ArgumentError, "The ssh username is required."
           end
         end
@@ -388,27 +394,6 @@ module Puppet::VirtualMachine
         description <<-EOT
           Port for winrm.
         EOT
-      end
-    end
-
-    def add_bootstrap_password_option(action)
-      action.option '--password=' do
-        summary 'Authentication password for vm.'
-        description <<-EOT
-          Authentication password for vm.
-        EOT
-        required 
-        before_action do |action, args, options|
-          if options[:ssh_user].nil? && options[:winrm_user].nil?
-            raise ArgumentError, "winrm_user or ssh_user is required."
-          elsif options[:ssh_user].nil?
-            @os_type = 'Windows'
-          elsif  options[:winrm_user].nil?
-            @os_type = 'Linux'
-          elsif options[:password].empty?
-            raise ArgumentError, "The password is required."
-          end
-        end
       end
     end
 
