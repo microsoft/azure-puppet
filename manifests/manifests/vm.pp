@@ -50,7 +50,7 @@ define windowsazure::vm (
       fail('Specify subscription id.')
     }
 
-    if $azure_subscription_id != undef {
+    if $puppet_master_ip != undef {
       $pmi = "--puppet-master-ip $puppet_master_ip"
     }
 
