@@ -365,7 +365,6 @@ module Puppet::VirtualMachine
         EOT
         required if @os_type == 'Linux'
         before_action do |action, args, options|
-          puts options
           if options[:ssh_user].empty?
             raise ArgumentError, "The ssh username is required."
           end
