@@ -31,11 +31,14 @@ Parameters:
 Examples:
  
     azure::vm { 'vm-1':
+      azure_subscription_id => 'your-subscription-id',
+      azure_management_certificate => '<path to management certificate>',
       vm_name =>  'demo-vm-1',
       vm_user =>  'user1',
       image =>    '5112500ae3b842c8b9c604889f8753c3__OpenLogic-CentOS-63APR20130415',
       password => 'ComplexPassword',
-      location => 'west US'
+      location => 'west US',
+      homedir => '/home/ranjan'   #For puppet bootstrap
     }
 
 ### class azure::db
@@ -50,6 +53,8 @@ Parameters:
 Examples:
 
     azure::db { 'db-1':
+      azure_subscription_id => 'your-subscription-id',
+      azure_management_certificate => '<path to management certificate>',
       login =>  'user1',
       password =>  'ComplexPassword',
       location =>  'East Us'
@@ -70,6 +75,8 @@ Parameters:
 Examples:
 
     windowsazure::vnet { 'vnet-1':
+      azure_subscription_id => 'your-subscription-id',
+      azure_management_certificate => '<path to management certificate>',
       virtual_network_name => 'vnet-name',
       affinity_group_name => 'AG1',
       address_space => ['172.16.0.0/12', '10.0.0.0/8', '192.168.0.0/24'],
