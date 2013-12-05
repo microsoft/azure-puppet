@@ -1,11 +1,21 @@
 define windowsazure::vnet (
+  $azure_management_certificate,
+  $azure_subscription_id,
   $virtual_network_name,
   $affinity_group_name,
   $address_space,
-  $subnets = [],
-  $dns_servers = []
+  $subnets = undef,
+  $dns_servers = undef
 ) {
+
     Exec { path => ['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/'] }
+
+    if !defined( Package['azure'] ) {
+      package { 'azure':
+        ensure   => '0.6.0',
+        provider => 'gem',
+      }
+    }
 
     if $virtual_network_name == undef {
       fail('No virtual network name specified for virtual network.')
@@ -17,29 +27,36 @@ define windowsazure::vnet (
 
     if $address_space == undef {
       fail('No address space specified for virtual network.')
+    }else {
+      $addr_spc_val = inline_template("<%=(@address_space).join(',')%>")
     }
 
-    if !defined( Package['azure'] ) {
-      package { 'azure':
-        ensure   => 'installed',
-        provider => 'gem',
-      }
+    if $subnets != undef {
+      $subnet_values = inline_template("<% values=[] %>\
+<% @subnets.each do |x| %>\
+<% values << x.values.join(':') %><% end %><%= values.join(',') %>")
+      $snet = "--subnets '${subnet_values}'"
     }
 
-    file {"azure_vnet-${title}.rb":
-      ensure  =>  file,
-      path    => "/tmp/azure_vnet-${title}.rb",
-      content => template('windowsazure/azure_vnet.rb.erb'),
-      owner   => root,
-      group   => root,
-      mode    => '0644'
-    }~>
+    if $dns_servers != undef {
+      $dns_values = inline_template("<% values=[] %>\
+<% @dns_servers.each do |x| %>\
+<% values << x.values.join(':') %><% end %><%= values.join(',') %>")
+      $dns = "--dns-servers '${dns_values}'"
+    }
+
+    $cmd = "puppet virtual_network set \
+      --virtual-network-name ${virtual_network_name} \
+      --management-certificate ${azure_management_certificate} \
+      --azure-subscription-id ${azure_subscription_id} \
+      --affinity-group-name ${affinity_group_name} \
+      --address-space '${addr_spc_val}' "
+
+    $puppet_command = "${cmd} ${dns} ${snet}"
 
     exec {"Creating virtual network ${title}":
-      command     => "ruby /tmp/azure_vnet-${title}.rb",
-      require     => File["azure_vnet-${title}.rb"],
-      subscribe   => File["azure_vnet-${title}.rb"],
-      refreshonly => true,
-      logoutput   => true
+      require    => Package['azure'],
+      command    => $puppet_command,
+      logoutput  => true
     }
 }
