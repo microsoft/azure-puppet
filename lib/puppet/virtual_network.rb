@@ -74,22 +74,7 @@ module Puppet::VirtualNetwork
         end
       end
     end
-
-    def add_affinity_group_name_option(action)
-      action.option '--affinity-group-name=' do
-        summary "The affinity group name."
-        description <<-EOT
-          The affinity group name.
-        EOT
-        required
-        before_action do |action, args, options|
-          if options[:affinity_group_name].empty?
-            raise ArgumentError, "Affinity group name is required"
-          end
-        end
-      end
-    end
-
+    
     def add_address_space_option(action)
       action.option '--address-space=' do
         summary "The address space for virtual network."

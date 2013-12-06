@@ -75,26 +75,6 @@ module Puppet::VirtualMachine
       add_affinity_group_option(action)
     end
 
-    def add_location_option(action)
-      action.option '--location=' do
-        summary "The location identifier for the Windows Azure portal.valid choices are ('West US', 'East US', 'East Asia', 'Southeast Asia','North Europe', 'West Europe')."
-        description <<-EOT
-          The location identifier for the Windows Azure portal.
-          valid choices are ('West US', 'East US', 'East Asia', 'Southeast Asia',
-          'North Europe', 'West Europe').
-        EOT
-        required
-        before_action do |action, args, options|
-          valid_locations = ['west us', 'east us', 'east asia', 'southeast asia', 'north europe', 'west europe']
-          if options[:location].empty?
-            raise ArgumentError, "Location is required"
-          elsif options[:location] && !valid_locations.include?(options[:location].downcase)
-            raise ArgumentError, "The location is not valid. .valid choices are ('West US', 'East US', 'East Asia', 'Southeast Asia','North Europe', 'West Europe')."
-          end
-        end
-      end
-    end
-
     def add_vm_name_option(action, optional=true)
       action.option '--vm-name=' do
         summary 'The name of the virtual machine.'

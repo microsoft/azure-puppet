@@ -1,0 +1,9 @@
+<%="Listing affinity groups".bold%><%index=1%>
+<%affinity_groups.each do |ag|%>
+  <%="Affinity Group: #{index}".bold%>
+    <%="Name".fix(20)%>: <%=ag.name %>
+    <%="Label".fix(20)%>: <%=ag.label%>
+    <%="Locaton".fix(20)%>: <%=ag.location%>
+    <%="Description".fix(20)%>: <%=ag.description%>
+    <%="Capability".fix(20)%>: <%=ag.capability.join(", ")%><%index+=1%>
+<%end%>

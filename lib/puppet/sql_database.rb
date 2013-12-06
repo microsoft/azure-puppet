@@ -94,21 +94,6 @@ module Puppet::SqlDatabase
       end
     end
 
-    def add_location_option(action)
-      action.option '--location=' do
-        summary 'The location of Windows Azure sql database server.'
-        description <<-EOT
-          The location of the Windows Azure sql database server.
-        EOT
-        required
-        before_action do |action, args, options|
-          if options[:location].empty?
-            raise ArgumentError, "Location is required."
-          end
-        end
-      end
-    end
-
     def add_server_name_option(action)
       action.option '--server-name=' do
         summary 'The server name for the Windows Azure sql database server.'
