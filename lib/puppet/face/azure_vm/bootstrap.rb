@@ -1,4 +1,4 @@
-require 'puppet/cloudpack/bootstrap'
+require 'puppet/azurepack/bootstrap'
 
 Puppet::Face.define :azure_vm, '0.0.1' do
   action :bootstrap do
@@ -12,7 +12,7 @@ Puppet::Face.define :azure_vm, '0.0.1' do
     Puppet::VirtualMachine.add_bootstrap_options(self)
 
     when_invoked do |options|
-      Puppet::CloudPack::BootStrap.start(options)
+      Puppet::AzurePack::BootStrap.start(options)
       nil
     end
 

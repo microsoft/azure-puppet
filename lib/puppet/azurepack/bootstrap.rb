@@ -1,12 +1,12 @@
 require 'puppet/core/remote_connection'
 require 'puppet/core/utility'
-require 'puppet/cloudpack/installer'
+require 'puppet/azurepack/installer'
 require 'tempfile'
+
 include Puppet::Core::RemoteConnection
 include Puppet::Core::Utility
-  
 module Puppet
-  module CloudPack
+  module AzurePack
     module BootStrap
       class << self
         def start(params)
@@ -75,7 +75,7 @@ module Puppet
 
         def compile_template(options)
           puts "Installing Puppet ..."
-          install_script = Installer.build_installer_template('puppet-community', options)
+          install_script = Installer.build_installer_template('puppet-agent-bootstrap', options)
           puts("Compiled installation script:")
           begin
             f = Tempfile.open('install_script')

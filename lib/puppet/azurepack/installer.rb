@@ -1,7 +1,7 @@
 require 'erb'
 
 module Puppet
-  module CloudPack
+  module AzurePack
     module Installer
       class << self
         def build_installer_template(name, options = {})

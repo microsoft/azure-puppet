@@ -41,7 +41,7 @@ Puppet::Face.define :azure_vm, '0.0.1' do
           test_tcp_connection(server)
           if  server.os_type == 'Linux'
             options[:ssh_user] = params[:vm_user]
-            Puppet::CloudPack::BootStrap.start(options)
+            Puppet::AzurePack::BootStrap.start(options)
           else
             puts 
             msg = <<-'EOT'
