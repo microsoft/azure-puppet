@@ -41,7 +41,7 @@ Manage Virtual machine
 
 You may launch a new instance and install puppet agent with this module installed using the following single command:
 
-    $puppet node_azure create --management-certificate pem-or-pfx-file-path --azure-subscription-id=your-subscription-id \
+    $puppet azure_vm create --management-certificate pem-or-pfx-file-path --azure-subscription-id=your-subscription-id \
     --image b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-13_04-amd64-server-20130501-en-us-30GB --location 'west us' 
     --vm-name vmname --vm-user username --password ComplexPassword  --puppet-master-ip 198.62.195.5
 
@@ -61,14 +61,14 @@ Other avaliable actions are
 
 To list all options for any action
 
-    $puppet help node_azure ACTION-NAME
+    $puppet help azure_vm ACTION-NAME
 
 Manage Virtual Network
 ========================
 
 Creating virtual network
 
-    $puppet virtual_network set --management-certificate pem-or-pfx-file-path --azure-subscription-id=your-subscription-id
+    $puppet azure_vnet set --management-certificate pem-or-pfx-file-path --azure-subscription-id=your-subscription-id
     --virtual-network-name vnetname --affinity-group-name ag-name --address-space '172.16.0.0/12,192.168.0.0/16'
     --dns-servers 'dns1-1:10.10.8.8,dns2:172.8.4.4' --subnets 'subnet-1:172.16.0.0:12,subnet-2:192.168.0.0:29'
 
@@ -83,7 +83,7 @@ Manage SQL database server
 
 Creating SQL database server
 
-    $puppet database_server create --management-certificate pem-or-pfx-file-path --azure-subscription-id=your-subscription-id \
+    $puppet azure_sqldb create --management-certificate pem-or-pfx-file-path --azure-subscription-id=your-subscription-id \
     --management-endpoint=https://management.database.windows.net:8443/ --login loginname --password ComplexPassword --location 'West Us'
 
 Other avaliable actions are

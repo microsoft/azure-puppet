@@ -21,7 +21,7 @@ module Puppet::AffinityGroup
 
   class << self
     def views(name)
-      File.join(File.dirname(__FILE__), 'face/azure_affinity_group/views', name)
+      File.join(File.dirname(__FILE__), 'face/azure_affinitygroup/views', name)
     end
 
     def add_create_options(action)

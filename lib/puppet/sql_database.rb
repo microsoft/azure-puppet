@@ -29,7 +29,7 @@ module Puppet::SqlDatabase
     end
     
     def views(name)
-      File.join(File.dirname(__FILE__), 'face/database_server/views', name)
+      File.join(File.dirname(__FILE__), 'face/azure_sqldb/views', name)
     end
 
     def add_create_options(action)

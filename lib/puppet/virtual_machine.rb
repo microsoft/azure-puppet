@@ -20,7 +20,7 @@ module Puppet::VirtualMachine
   class << self
     
     def views(name)
-      File.join(File.dirname(__FILE__), 'face/node_azure/views', name)
+      File.join(File.dirname(__FILE__), 'face/azure_vm/views', name)
     end
 
     def add_shutdown_options(action)

@@ -22,7 +22,7 @@ module Puppet::VirtualNetwork
   class << self
     
     def views(name)
-      File.join(File.dirname(__FILE__), 'face/virtual_network/views', name)
+      File.join(File.dirname(__FILE__), 'face/azure_vnet/views', name)
     end
 
     def add_set_virtual_network_options(action)
