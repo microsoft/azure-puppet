@@ -1,25 +1,9 @@
-#-------------------------------------------------------------------------
-# Copyright 2013 Microsoft Open Technologies, Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#--------------------------------------------------------------------------
-
 #!/bin/bash
-# This script is intended to be used with the install puppet-client
 
 set -u
 #set -e
 
-function rpm_install(){
+function redhat_setup(){
   # Setup the yum Puppet repository
   cat >/etc/yum.repos.d/puppet.repo <<'EOFYUMREPO'
 [puppetlabs]
@@ -35,23 +19,15 @@ EOFYUMREPO
   yum install -y puppet
 }
 
-function suse_install(){
+function suse_setup(){
   zypper ar --refresh http://download.opensuse.org/repositories/home:/eclipseagent:/puppet/SLE_11/ repo-puppet  
   zypper --non-interactive --gpg-auto-import-keys ref
   zypper install -y puppet
 }
 
-function apt_install() {
-  # Download and install the puppetlabs apt public
+function ubuntu_setup() {
+
   apt-key adv --recv-key --keyserver pool.sks-keyservers.net 4BD6EC30
-
-  # We need to grab the distro and release in order to populate
-  # the apt repo details. We are assuming that the lsb_release command
-  # will be available as even puppet evens has it (lsb_base) package as
-  # dependancy.
-
-  # Since puppet requires lsb-release I believe this is ok to use for
-  # the purpose of distro and release discovery.
   apt-get update
   apt-get -y install lsb-release 
   release=$(lsb_release -c | cut -f 2)
@@ -65,14 +41,14 @@ EOFAPTREPO
   apt-get -y install puppet
 }
 
-function install_puppet() {
+function bootstrap_puppet() {
   case ${breed} in
     "redhat")
-      rpm_install ;;
+      redhat_setup ;;
     "debian")
-      apt_install ;;
+      ubuntu_setup ;;
     "suse")
-      suse_install ;;
+      suse_setup ;;
   esac
 }
 
@@ -88,19 +64,15 @@ function configure_puppet() {
   runinterval = 120
   server = puppet
   environment = <%= options[:environment] %>
-  <% if options[:puppetagent_certname] %>
-  certname = <%= options[:puppetagent_certname] %>
-  <% end %>
+
 EOFPUPPETCONF
 
   if [ -f /etc/default/puppet ]; then
     cat > /etc/default/puppet <<EOFPUPPETDEFAULT
-# Defaults for puppet - sourced by /etc/init.d/puppet
+# 
 
-# Start puppet on boot?
 START=yes
 
-# Startup options
 DAEMON_OPTS=""
 EOFPUPPETDEFAULT
   fi
@@ -124,7 +96,7 @@ function update_hosts(){
   echo 'DNS or host is added in /etc/hosts'
 }
 
-function provision_puppet() {
+function install_puppet_agent() {
   if [ -f /etc/redhat-release ]; then
     export breed='redhat'
   elif [ -f /etc/debian_version ]; then
@@ -132,11 +104,11 @@ function provision_puppet() {
   elif [ -f /etc/SuSE-release ]; then
     export breed='suse'
   else
-    echo "This OS is not supported by Puppet Cloud Provisioner"
+    echo "This distro is not supported."
     exit 1
   fi
 
-  install_puppet
+  bootstrap_puppet
   configure_puppet
   update_hosts
   start_puppet
@@ -144,4 +116,4 @@ function provision_puppet() {
   exit 0
 }
 
-provision_puppet
+install_puppet_agent
