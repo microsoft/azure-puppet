@@ -1,4 +1,4 @@
-name    'MSOpentech-WindowsAzuremodule' 
+name    'MSOpentech-WindowsAzure' 
 version '1.0.0'
 source 'https://github.com/MSOpenTech/puppet.git'
 author 'MSOpentech'
