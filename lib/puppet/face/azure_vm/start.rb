@@ -1,5 +1,5 @@
 
-Puppet::Face.define :azure_vm, '0.0.1' do
+Puppet::Face.define :azure_vm, '1.0.0' do
   action :start do
 
     summary 'starts Windows Azure node instances'

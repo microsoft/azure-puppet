@@ -1,5 +1,5 @@
 
-Puppet::Face.define :azure_vm, '0.0.1' do
+Puppet::Face.define :azure_vm, '1.0.0' do
   action :shutdown do
 
     summary 'Shutdown Windows Azure node instances'

@@ -1,8 +1,6 @@
 require 'puppet/sql_database'
 
-Puppet::Face.define(:azure_sqldb, '0.0.1') do
-  copyright "Windows Azure", 2013
-  license   "Microsoft Open Technologies, Inc; see COPYING"
+Puppet::Face.define(:azure_sqldb, '1.0.0') do
 
   summary "View and manage Window Azure database servers."
   description <<-'EOT'

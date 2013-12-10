@@ -48,6 +48,7 @@ module Puppet
           cmds << "copy %TEMP%\\puppet.msi C:\\puppet\\puppet.msi"
           cmds << "msiexec /qn /i c:\\puppet\\puppet.msi PUPPET_MASTER_SERVER=#{master_ip}"
           cmds << 'sc config puppet start= demand'
+          cmds << 'rmdir C:\\puppet /s /q'
           winrm_remote_execute(node_ip, login, password, cmds, endpoint_protocol, winrm_port)
         end
 

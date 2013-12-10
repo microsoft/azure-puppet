@@ -1,5 +1,5 @@
 
-Puppet::Face.define :azure_vnet, '0.0.1' do
+Puppet::Face.define :azure_vnet, '1.0.0' do
   action :set_xml_schema do
 
     summary 'set_xml_schema Network configures the virtual network using xml schema'

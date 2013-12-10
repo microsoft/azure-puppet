@@ -1,4 +1,4 @@
-Puppet::Face.define :azure_affinitygroup, '0.0.1' do
+Puppet::Face.define :azure_affinitygroup, '1.0.0' do
   action :update do
 
     summary 'Update affinity group.'

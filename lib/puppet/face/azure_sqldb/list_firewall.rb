@@ -1,6 +1,6 @@
 require 'tilt'
 
-Puppet::Face.define :azure_sqldb, '0.0.1' do
+Puppet::Face.define :azure_sqldb, '1.0.0' do
   action :list_firewall do
 
     summary 'List firewall of SQL database servers.'

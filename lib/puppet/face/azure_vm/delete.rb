@@ -1,5 +1,5 @@
 
-Puppet::Face.define :azure_vm, '0.0.1' do
+Puppet::Face.define :azure_vm, '1.0.0' do
   action :delete do
 
     summary 'Delete Windows Azure node instances'

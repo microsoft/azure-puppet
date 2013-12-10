@@ -1,5 +1,5 @@
 
-Puppet::Face.define :azure_vnet, '0.0.1' do
+Puppet::Face.define :azure_vnet, '1.0.0' do
   action :list do
 
     summary 'List virtual networks.'

@@ -1,8 +1,6 @@
 require 'puppet/virtual_network'
 
-Puppet::Face.define(:azure_vnet, '0.0.1') do
-  copyright "Windows Azure", 2013
-  license   "Microsoft Open Technologies, Inc; see COPYING"
+Puppet::Face.define(:azure_vnet, '1.0.0') do
 
   summary "View and manage Window Azure virtual networks."
   description <<-'EOT'

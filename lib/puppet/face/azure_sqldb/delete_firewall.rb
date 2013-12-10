@@ -1,5 +1,5 @@
 
-Puppet::Face.define :azure_sqldb, '0.0.1' do
+Puppet::Face.define :azure_sqldb, '1.0.0' do
   action :delete_firewall do
 
     summary 'Delete Windows Azure sql database server firewall'
