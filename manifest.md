@@ -21,17 +21,27 @@ $ winrm set winrm/config/service/auth @{Basic="true"}
 <li>net-scp (>= 1.0.4)</li>
 </p>
 
+<h2>Windows Azure</h2>
+
+To provision a puppet agent on the Windows Azure platform, run the following command.
+
+<pre><code>puppet module install msopentech/windowsazure --version 1.1.0</code></pre>
+
+For more information on Windows Azure, <a href="http://www.windowsazure.com/en-us/solutions/infrastructure/" tartget="_blank">visit the Windows Azure website</a>.
+
 <h2>Manifest files</h2>
 
 <p>Manifest files are collections of definitions, references (Including other manifest files.) and commands that enable you to quickly and repeatably deploy a configured virtual machine, virtual network or SQL database. 
-There are five provided manifest files listed below, the parameters they use and their defaults. Parameters with the value "undef" require you to supply the appropriate value.</p>
+There are provided manifest files which are listed below, the parameters they use and their defaults. Parameters with the value "undef" require you to supply the appropriate value.</p>
 
-<p><strong>bootstrap.pp</strong><br />
-Bootstrap.pp allows you to create a new instance with Puppet already installed and configured. This manifest takes the following parameters.</p>
+<p><strong>Enabling the puppet agent</strong><br />
+Bootstrap.pp allows you to create a new instance with Puppet already installed and configured. When using the class, the reference will be,
+
+<pre><code>windowsazure::bootstrap</code></pre>
+
+This manifest takes the following parameters.</p>
 
 <pre><code>
-Class reference will be windowsazure::bootstrap
-
 $homedir = undef,
 $azure_management_certificate,
 $azure_subscription_id,
@@ -45,35 +55,28 @@ $password = undef,
 $ssh_port = 22,
 $winrm_transport = 'http'</code></pre>
 
+<p><strong>Creating a database</strong><br />
+db.pp allows you to create a new instance of SQL server. When using the class, the reference will be,
 
+<pre><code>windowsazure::db</code></pre>
 
-<p><strong>db.pp</strong><br />
-db.pp allows you to create a new instance of SQL server. This manifest takes the following parameters.</p>
+This manifest takes the following parameters.</p>
 
 <pre><code>
-Class reference will be windowsazure::db
-
 $azure_management_certificate,
 $azure_subscription_id,
 $login,
 $password,
 $location</code></pre>
 
-<p><strong>init.pp</strong><br />
-init.pp defines the windowsazure class which will allow you to easily deploy to your Windows Azure account. This manifest takes the following parameters.</p>
+<p><strong>Creating a vm</strong><br />
+vm.pp allows you to create a new virtual machine instance. When using the class, the reference will be,
 
-<pre><code>$location = 'West US',
-$vm_name = undef,
-$vm_user = undef,
-$image = undef,
-$password = undef</code></pre>
+<pre><code>windowsazure::VM</code></pre>
 
-<p><strong>vm.pp</strong><br />
-vm.pp allows you to create a new virtual machine instance. This manifest takes the following parameters.</p>
+This manifest takes the following parameters.</p>
 
 <pre><code>
-Class reference will be windowsazure::VM
-
 $vm_name,
 $vm_user,
 $image,
@@ -89,12 +92,14 @@ $storage_account_name = undef,
 $cloud_service_name = undef,
 $password = undef</code></pre>
 
-<p><strong>vnet.pp</strong><br />
-vnet.pp allows you to create a new virtual network instance. This manifest takes the following parameters.</p>
+<p><strong>Creating a virtual network</strong><br />
+vnet.pp allows you to create a new virtual network instance. When using the class, the reference will be,
+
+<pre><code>windowsazure::vnet</code></pre>
+
+This manifest takes the following parameters.</p>
 
 <pre><code>
-Class reference will be windowsazure::vnet
-
 $azure_management_certificate,
 $azure_subscription_id,
 $virtual_network_name,
