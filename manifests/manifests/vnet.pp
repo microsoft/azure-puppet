@@ -32,25 +32,16 @@ define windowsazure::vnet (
     }
 
     if $subnets != undef {
-      $subnet_values = inline_template("<% values=[] %>\
-<% @subnets.each do |x| %>\
-<% values << x.values.join(':') %><% end %><%= values.join(',') %>")
+      $subnet_values = inline_template("<% values=[] %><% @subnets.each do |x| %><% values << x.values.join(':') %><% end %><%= values.join(',') %>")
       $snet = "--subnets '${subnet_values}'"
     }
 
     if $dns_servers != undef {
-      $dns_values = inline_template("<% values=[] %>\
-<% @dns_servers.each do |x| %>\
-<% values << x.values.join(':') %><% end %><%= values.join(',') %>")
+      $dns_values = inline_template("<% values=[] %><% @dns_servers.each do |x| %><% values << x.values.join(':') %><% end %><%= values.join(',') %>")
       $dns = "--dns-servers '${dns_values}'"
     }
 
-    $cmd = "puppet virtual_network set \
-      --virtual-network-name ${virtual_network_name} \
-      --management-certificate ${azure_management_certificate} \
-      --azure-subscription-id ${azure_subscription_id} \
-      --affinity-group-name ${affinity_group_name} \
-      --address-space '${addr_spc_val}' "
+    $cmd = "puppet azure_vnet set --virtual-network-name ${virtual_network_name} --management-certificate ${azure_management_certificate} --azure-subscription-id ${azure_subscription_id} --affinity-group-name ${affinity_group_name} --address-space '${addr_spc_val}' "
 
     $puppet_command = "${cmd} ${dns} ${snet}"
 
