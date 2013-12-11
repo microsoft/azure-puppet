@@ -29,7 +29,10 @@ There are five provided manifest files listed below, the parameters they use and
 <p><strong>bootstrap.pp</strong><br />
 Bootstrap.pp allows you to create a new instance with Puppet already installed and configured. This manifest takes the following parameters.</p>
 
-<pre><code>$homedir = undef,
+<pre><code>
+Class reference will be windowsazure::bootstrap
+
+$homedir = undef,
 $azure_management_certificate,
 $azure_subscription_id,
 $puppet_master_ip,
@@ -42,10 +45,15 @@ $password = undef,
 $ssh_port = 22,
 $winrm_transport = 'http'</code></pre>
 
+
+
 <p><strong>db.pp</strong><br />
 db.pp allows you to create a new instance of SQL server. This manifest takes the following parameters.</p>
 
-<pre><code>$azure_management_certificate,
+<pre><code>
+Class reference will be windowsazure::db
+
+$azure_management_certificate,
 $azure_subscription_id,
 $login,
 $password,
@@ -63,7 +71,10 @@ $password = undef</code></pre>
 <p><strong>vm.pp</strong><br />
 vm.pp allows you to create a new virtual machine instance. This manifest takes the following parameters.</p>
 
-<pre><code>$vm_name,
+<pre><code>
+Class reference will be windowsazure::VM
+
+$vm_name,
 $vm_user,
 $image,
 $location,
@@ -81,7 +92,10 @@ $password = undef</code></pre>
 <p><strong>vnet.pp</strong><br />
 vnet.pp allows you to create a new virtual network instance. This manifest takes the following parameters.</p>
 
-<pre><code>$azure_management_certificate,
+<pre><code>
+Class reference will be windowsazure::vnet
+
+$azure_management_certificate,
 $azure_subscription_id,
 $virtual_network_name,
 $affinity_group_name,
