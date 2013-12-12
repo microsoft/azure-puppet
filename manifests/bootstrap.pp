@@ -1,7 +1,5 @@
 define windowsazure::bootstrap (
   $homedir = undef,
-  $azure_management_certificate,
-  $azure_subscription_id,
   $puppet_master_ip,
   $node_ipaddress,
   $ssh_user = undef,
@@ -15,7 +13,7 @@ define windowsazure::bootstrap (
 
     Exec { path => ['/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/'] }
 
-    $cmd = "puppet azure_vm bootstrap --node-ipaddress $node_ipaddress --management-certificate $azure_management_certificate --azure-subscription-id $azure_subscription_id --puppet-master-ip $puppet_master_ip"
+    $cmd = "puppet azure_vm bootstrap --node-ipaddress $node_ipaddress --puppet-master-ip $puppet_master_ip"
 
     if ($ssh_user == undef) and ($winrm_user == undef) {
       fail('Please specify SSH User or Winrm User.')
@@ -33,14 +31,6 @@ define windowsazure::bootstrap (
 
     if ($node_ipaddress == undef) {
       fail('Please specify IP address of VM to be provisioned.')
-    }
-    
-    if $azure_management_certificate == undef {
-      fail('Specify azure management certificate path.')
-    }
-
-    if $azure_subscription_id == undef {
-      fail('Specify subscription id.')
     }
 
     if $winrm_user != undef {
@@ -75,7 +65,7 @@ define windowsazure::bootstrap (
 
     if !defined( Package['azure'] ) {
       package { 'azure':
-        ensure   => 'installed',
+        ensure   => '0.6.0',
         provider => 'gem',
       }
     }

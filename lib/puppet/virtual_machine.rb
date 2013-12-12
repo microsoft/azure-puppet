@@ -26,7 +26,6 @@ module Puppet::VirtualMachine
     end
 
     def add_bootstrap_options(action)
-      add_default_options(action)
       add_node_ipaddress_options(action)
       add_password_option(action)
       add_ssh_user_option(action)

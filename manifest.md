@@ -43,8 +43,6 @@ This manifest takes the following parameters.</p>
 
 <pre><code>
 $homedir = undef,
-$azure_management_certificate,
-$azure_subscription_id,
 $puppet_master_ip,
 $node_ipaddress,
 $ssh_user = undef,
