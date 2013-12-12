@@ -2,10 +2,10 @@
 Puppet::Face.define :azure_sqldb, '1.0.0' do
   action :delete_firewall do
 
-    summary 'Delete Windows Azure sql database server firewall'
+    summary 'Delete Windows Azure sql database firewall rule on server'
 
     description <<-'EOT'
-      The delete action delete windows azure sql server firewall.
+      The delete action delete windows azure sql database firewall on server.
     EOT
 
     Puppet::SqlDatabase.add_delete_firewall_options(self)

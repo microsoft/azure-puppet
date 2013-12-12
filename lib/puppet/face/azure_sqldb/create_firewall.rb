@@ -2,10 +2,10 @@
 Puppet::Face.define :azure_sqldb, '1.0.0' do
   action :create_firewall do
 
-    summary 'Create SQL database server.'
+    summary 'Create SQL database firewall rule on a server.'
 
     description <<-'EOT'
-      The create action create a SQL database server.
+      The create action create a SQL database firewall rule on a server.
     EOT
 
     Puppet::SqlDatabase.add_create_firewall_options(self)

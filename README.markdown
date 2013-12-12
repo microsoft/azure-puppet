@@ -88,9 +88,14 @@ Creating SQL database server
 
 Other avaliable actions are
 
-    list              List virtual networks.
-    set               Set Network configures the virtual network
-    set_xml_schema    set_xml_schema Network configures the virtual network using xml schema
+    create             Create SQL database server.
+    create_firewall    Create SQL database firewall rule on a server.
+    delete             Delete Windows Azure sql database server
+    delete_firewall    Delete Windows Azure sql database firewall rule on a server.
+    list               List SQL database servers.
+    list_firewall      List firewall of SQL database servers.
+    reset_password     Reset password of sql database server.
+
 
 # Certificate Management
 
