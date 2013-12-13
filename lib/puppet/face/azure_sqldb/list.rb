@@ -23,8 +23,8 @@ Puppet::Face.define :azure_sqldb, '1.0.0' do
     returns 'Array of database server objets.'
 
     examples <<-'EOT'
-      $ puppet azure_sqldb list --management-certificate ~/exp/azuremanagement.pem\
-        --azure-subscription-id=368a3-dcd0-4cd3 --management-endpoint=https://management.database.windows.net:8443/
+      $ puppet azure_sqldb list --management-certificate path-to-azure-certificate \
+        --azure-subscription-id=YOUR-SUBSCRIPTION-ID --management-endpoint=https://management.database.windows.net:8443/
 
     Listing Servers
 

@@ -22,8 +22,9 @@ Puppet::Face.define :azure_vnet, '1.0.0' do
     returns 'Array of virtual network objets.'
 
     examples <<-'EOT'
-      $ puppet azure_vnet list --management-certificate ~/exp/azuremanagement.pem\
-        --azure-subscription-id=368a3-dcd0-4cd3 --management-endpoint=https://management.core.windows.net                                 Listing virtual networks
+      $ puppet azure_vnet list --management-certificate path-to-azure-certificate \
+        --azure-subscription-id=YOUR-SUBSCRIPTION-ID
+      Listing virtual networks
 
       Virtual Network: 1
         Server Name         : vnet-AG

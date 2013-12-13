@@ -21,8 +21,8 @@ Puppet::Face.define :azure_sqldb, '1.0.0' do
     end
 
     examples <<-'EOT'
-      $  puppet azure_sqldb list_firewall --management-certificate ~/exp/azuremanagement.pem\
-         --azure-subscription-id=ID --management-endpoint=https://management.database.windows.net:8443/\
+      $  puppet azure_sqldb list_firewall --management-certificate path-to-azure-certificate \
+         --azure-subscription-id=YOUR-SUBSCRIPTION-ID --management-endpoint=https://management.database.windows.net:8443/\
          --server-name=g2jxhsbk0w
         Listing Firewall
 

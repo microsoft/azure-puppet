@@ -18,8 +18,8 @@ Puppet::Face.define :azure_sqldb, '1.0.0' do
     end
 
     examples <<-'EOT'
-      $ puppet azure_sqldb create --management-certificate ~/exp/azuremanagement.pem\
-        --azure-subscription-id=ABCD1234 --login puppet --location 'West Us'\
+      $ puppet azure_sqldb create --management-certificate path-to-azure-certificate \
+        --azure-subscription-id=YOUR-SUBSCRIPTION-ID --login puppet --location 'West Us'\
         --management-endpoint=https://management.database.windows.net:8443/ --password Ranjan@123
     EOT
   end

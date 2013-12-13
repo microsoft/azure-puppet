@@ -23,7 +23,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
     returns 'Array of attribute hashes containing information about each Azure instance.'
 
     examples <<-'EOT'
-      $ puppet azure_vm servers --publish-settings-file azuremanagement.publishsettings --azure-subscription-id ID
+      $ puppet azure_vm servers --publish-settings-file path-to-azure-certificate --azure-subscription-id YOUR-SUBSCRIPTION-ID
       Server: 1
         Service: cloudserver1
         Deployment:  deployment1

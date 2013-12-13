@@ -5,7 +5,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
     summary 'Create Windows Azure VM'
 
     description <<-'EOT'
-      The create action create a storage account, cloud service and vm.
+      The create action create a storage account, cloud service and virtula machine.
     EOT
 
     Puppet::VirtualMachine.add_create_options(self)
@@ -29,7 +29,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
         :certificate_file => options[:certificate_file],
         :ssh_port => options[:ssh_port],
         :vm_size => options[:vm_size],
-        :vitual_network_name => options[:virtual_network_name],
+        :virtual_network_name => options[:virtual_network_name],
         :subnet_name => options[:virtual_network_subnet],
         :affinity_group_name => options[:affinity_group_name]
       }
@@ -37,9 +37,9 @@ Puppet::Face.define :azure_vm, '1.0.0' do
       server = virtual_machine_service.create_virtual_machine(params, others)
       unless server.class == String
         options[:node_ipaddress] = server.ipaddress
-        if options[:puppet_master_ip] && server
-          test_tcp_connection(server)
+        if options[:puppet_master_ip] && server          
           if  server.os_type == 'Linux'
+            test_tcp_connection(server)
             options[:ssh_user] = params[:vm_user]
             Puppet::AzurePack::BootStrap.start(options)
           else
@@ -57,11 +57,11 @@ Puppet::Face.define :azure_vm, '1.0.0' do
     end
 
     examples <<-'EOT'
-      $ puppet azure_vm create --publish-settings-file azuremanagement.publishsettings --vm-name vmname\
+      $ puppet azure_vm create  --vm-name vmname --management-certificate path-to-azure-certificate \
            --vm-user ranjan  --password Password!@12  --storage-account-name storageaccount1'\
            --image  b4590d9e3ed742e4a1d46e5424aa335e__SUSE-Linux-Enterprise-Server-11-SP2-Agent13\
-           --cloud-service-name cloudname --subscription-id 2346a-fce0-4cd3-a4ea-80e84bddff87\
-           --service-location "Southeast Asia" --tcp-endpoints "80,3889:3889"
+           --cloud-service-name cloudname --subscription-id YOUR-SUBSCRIPTION-ID \
+           --location "Southeast Asia" --tcp-endpoints "80,3889:3889"
     EOT
   end
 end

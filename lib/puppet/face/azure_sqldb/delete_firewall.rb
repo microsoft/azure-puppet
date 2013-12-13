@@ -20,10 +20,10 @@ Puppet::Face.define :azure_sqldb, '1.0.0' do
     returns 'NONE'
 
     examples <<-'EOT'
-      $  puppet azure_sqldb delete --management-certificate ~/exp/azuremanagement.pem\
-         puppet azure_sqldb delete_firewall --management-certificate ~/exp/azuremanagement.pem\
-         --azure-subscription-id=ID --management-endpoint=https://management.database.windows.net:8443/\
+      $ puppet azure_sqldb delete_firewall --management-certificate path-to-azure-certificate \
+         --azure-subscription-id=YOUR-SUBSCRIPTION-ID --management-endpoint=https://management.database.windows.net:8443/\
          --server-name=xlykw0su08 --rule-name rule1
+         
     EOT
   end
 end

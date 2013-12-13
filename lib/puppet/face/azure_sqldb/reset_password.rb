@@ -18,8 +18,8 @@ Puppet::Face.define :azure_sqldb, '1.0.0' do
     end
 
     examples <<-'EOT'
-      $ puppet azure_sqldb reset_password --management-certificate ~/exp/azuremanagement.pem\
-        --azure-subscription-id=368a3762-fce0 --management-endpoint=https://management.database.windows.net:8443/\
+      $ puppet azure_sqldb reset_password --management-certificate path-to-azure-certificate\
+        --azure-subscription-id=YOUR-SUBSCRIPTION-ID --management-endpoint=https://management.database.windows.net:8443/\
         --server-name hc786mm0l8 --password Ranjan@1234
     EOT
   end

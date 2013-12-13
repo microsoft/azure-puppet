@@ -22,7 +22,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
     returns 'Array of attribute hashes containing information about each Azure images.'
 
     examples <<-'EOT'
-      $ puppet azure_vm images --publish-settings-file azuremanagement.publishsettings --azure-subscription-id ID
+      $ puppet azure_vm images --management-certificate path-to-azure-certificate --azure-subscription-id YOUR-SUBSCRIPTION-ID
       OS Type      OS Nmae
       Windows :  2cdc6229df6344129ee553dd3499f0d3__BizTalk-Server-2013-Beta
       Windows :  2cdc6229df6344129ee553dd3499f0d3__BizTalk-Server-2013-Beta-February-2013
