@@ -1,4 +1,4 @@
-define windowsazure::db (
+class windowsazure::db (
   $azure_management_certificate,
   $azure_subscription_id,
   $login,
