@@ -105,3 +105,39 @@ $affinity_group_name,
 $address_space,
 $subnets = undef,
 $dns_servers = undef</code></pre>
+
+<p><strong>Creating a virtual network, sql db and virtual machine</strong><br />
+provision.pp allows you to create a new virtual network instance, sql db and virtual network. When using the class, the reference will be,
+
+<pre><code>windowsazure::provisioner</code></pre>
+
+This manifest takes the following parameters.</p>
+
+<pre><code>
+$azure_management_certificate,
+$azure_subscription_id,
+$create_vnet, #true or false
+$virtual_network_name,
+$affinity_group_name,
+$address_space,
+$subnets,
+$dns_servers,
+$create_vm,  #true or false
+$vm_name,
+$vm_user,
+$image,
+$location,
+$homedir,
+$azure_management_certificate,
+$azure_subscription_id,
+$vm_size = 'Small',
+$puppet_master_ip,
+$private_key_file,
+$certificate_file,
+$storage_account_name,
+$cloud_service_name,
+$password,
+$create_sqldb,   #true or false
+$login,
+$password,
+$location</code></pre>
