@@ -1,7 +1,7 @@
 define windowsazure::bootstrap (
-  $homedir = undef,
   $puppet_master_ip,
   $node_ipaddress,
+  $homedir = undef,
   $ssh_user = undef,
   $winrm_user = undef,
   $private_key_file = undef,
@@ -13,7 +13,7 @@ define windowsazure::bootstrap (
 
     Exec { path => ['/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/'] }
 
-    $cmd = "puppet azure_vm bootstrap --node-ipaddress $node_ipaddress --puppet-master-ip $puppet_master_ip"
+    $cmd = "puppet azure_vm bootstrap --node-ipaddress ${node_ipaddress} --puppet-master-ip ${puppet_master_ip}"
 
     if ($ssh_user == undef) and ($winrm_user == undef) {
       fail('Please specify SSH User or Winrm User.')
@@ -26,7 +26,7 @@ define windowsazure::bootstrap (
     if ($homedir == undef) and ($ssh_user != undef) {
       fail('home directory path is required for Linux VM bootstrap.')
     }elsif ($homedir != undef){
-      $export_home_dir = "export HOME=$homedir;"
+      $export_home_dir = "export HOME=${homedir};"
     }
 
     if ($node_ipaddress == undef) {
@@ -34,34 +34,34 @@ define windowsazure::bootstrap (
     }
 
     if $winrm_user != undef {
-      $winrmu = "--winrm-user $winrm_user"
+      $winrmu = "--winrm-user ${winrm_user}"
     }
 
     if $ssh_user != undef {
-      $sshu = "--ssh-user $ssh_user"
+      $sshu = "--ssh-user ${ssh_user}"
     }
 
     if $password != undef {
-      $passwd = "--password $password"
+      $passwd = "--password ${password}"
     }
 
     if $private_key_file != undef {
-      $pkf = "--private-key-file $private_key_file"
+      $pkf = "--private-key-file ${private_key_file}"
     }
 
     if $winrm_port != undef {
-      $wp = "--winrm-port $winrm_port"
+      $wp = "--winrm-port ${winrm_port}"
     }
 
     if $ssh_port != undef {
-      $ssp = "--ssh-port $ssh_port"
+      $ssp = "--ssh-port ${ssh_port}"
     }
 
     if $winrm_transport != undef {
-      $wrmtp = "--winrm-transport $winrm_transport"
+      $wrmtp = "--winrm-transport ${winrm_transport}"
     }
 
-    $puppet_command = "$export_home_dir ${cmd} ${passwd} ${pkf} ${wp} ${ssp} ${wrmtp} ${winrmu} ${sshu}"
+    $puppet_command = "${export_home_dir} ${cmd} ${passwd} ${pkf} ${wp} ${ssp} ${wrmtp} ${winrmu} ${sshu}"
 
     if !defined( Package['azure'] ) {
       package { 'azure':
@@ -71,8 +71,9 @@ define windowsazure::bootstrap (
     }
 
     exec {"Provisioning VM ${title}":
-      command    => "/bin/bash -c \"$puppet_command\"",
-      logoutput  => true
+      command    => "/bin/bash -c \"${puppet_command}\"",
+      logoutput  => true,
+      timeout    => 900
     }
 
 }
