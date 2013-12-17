@@ -107,7 +107,7 @@ $subnets = undef,
 $dns_servers = undef</code></pre>
 
 <p><strong>Creating a virtual network, sql db and virtual machine</strong><br />
-provision.pp allows you to create a new virtual network instance, sql db and virtual network. When using the class, the reference will be,
+provisioner.pp allows you to create a new virtual network instance, sql db and virtual network. When using the class, the reference will be,
 
 <pre><code>windowsazure::provisioner</code></pre>
 
