@@ -45,7 +45,7 @@ module Puppet::VirtualMachine
       add_storage_account_option(action)
       add_cloud_service_name_option(action)
       add_deployment_name_option(action)
-      add_vm_user_option(action)
+      add_vm_user_option(action, false)
       add_password_option(action)
       add_puppet_master_ip_option(action)
       add_end_points_option(action)
@@ -286,7 +286,7 @@ module Puppet::VirtualMachine
         before_action do |action, args, options|
           valid_role_sizes = ['ExtraSmall', 'Small', 'Medium', 'Large', 'ExtraLarge', 'A6', 'A7']
           if options[:vm_size] && !valid_role_sizes.include?(options[:vm_size])
-            raise ArgumentError, "The vm-size is not valid. Valid choices are valid choice are ExtraSmall, Small, Medium, Large, ExtraLarge"
+            raise ArgumentError, "The vm-size is not valid. Valid choice are ExtraSmall, Small, Medium, Large, ExtraLarge"
           end
         end
       end

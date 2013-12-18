@@ -5,8 +5,10 @@ describe Puppet::Face[:azure_vm, :current] do
   before :all do
     #$stdout.stubs(:write)
   end
-  let(:image_name) {'azure-linux-image'}
-  let(:os_type) {'Windows'}
+  let(:image_name) { 'azure-linux-image' }
+  let(:os_type) { 'Windows' }
+  let(:image_service) { Azure::VirtualMachineImageManagementService }
+  let(:vm_service) { Azure::VirtualMachineManagementService }
   before :each do
     @options = {
       :management_certificate => File.expand_path("spec/fixtures/management_certificate.pem"),
@@ -33,10 +35,10 @@ describe Puppet::Face[:azure_vm, :current] do
     }
   end 
   let(:image){
-    image = VirtualMachineImage.new
-    image.os_type = os_type
-    image.name = image_name
-    image
+    image = VirtualMachineImage.new do |image|
+      image.os_type = os_type
+      image.name = image_name
+    end
   }
 
   describe 'option validation' do
@@ -44,13 +46,13 @@ describe Puppet::Face[:azure_vm, :current] do
     describe 'valid options' do
       $stdout.stubs(:write)
       before :each do
-        Azure::VirtualMachineImageManagementService.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
+        image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
         virtual_machine_obj = Azure::VirtualMachineManagement::VirtualMachine.new do |virtual_machine|
           virtual_machine.vm_name = 'windows-instance'
           virtual_machine.ipaddress = '192.168.1.1'
           virtual_machine.os_type = os_type
         end        
-        Azure::VirtualMachineManagementService.any_instance.stubs(:create_virtual_machine).with(anything, anything).returns(virtual_machine_obj)
+        vm_service.any_instance.stubs(:create_virtual_machine).with(anything, anything).returns(virtual_machine_obj)
       end
 
       it 'should not raise any exception' do
@@ -80,12 +82,76 @@ describe Puppet::Face[:azure_vm, :current] do
     end
 
     describe '(azure_subscription_id)' do
-      it 'should validate the azure_subscription_id' do
+      it 'should require a azure_subscription_id' do
         @options.delete(:azure_subscription_id)
         expect { subject.create(@options) }.to raise_error ArgumentError, /required/
       end
     end
 
+    describe '(management_certificate)' do
+      it 'should require a management_certificate' do
+        @options.delete(:management_certificate)
+        expect { subject.create(@options) }.to raise_error ArgumentError, /required/
+      end
+    end
+
+    describe '(vm_user)' do
+      before :each do
+        image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
+      end
+
+      it 'should require a management_certificate' do
+        @options.delete(:vm_user)
+        expect { subject.create(@options) }.to raise_error ArgumentError, /required/
+      end
+    end
+  end
+  
+  describe 'optional parameter validation' do
+    before :each do
+      $stdout.stubs(:write)
+      image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
+      virtual_machine_obj = Azure::VirtualMachineManagement::VirtualMachine.new do |virtual_machine|
+        virtual_machine.vm_name = 'windows-instance'
+        virtual_machine.ipaddress = '192.168.1.1'
+        virtual_machine.os_type = os_type
+      end
+      vm_service.any_instance.stubs(:create_virtual_machine).with(anything, anything).returns(virtual_machine_obj)
+    end
+
+    describe '(vm_size)' do
+      it 'vm_size should be optional' do
+        @options.delete(:vm_size)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+
+      it 'should validate the vm_size' do
+        @options[:vm_size] = 'InvalidSize'
+        expect { subject.create(@options) }.to raise_error ArgumentError, /The vm-size is not valid/
+      end
+    end
+
+    describe '(winrm_transport)' do
+      it 'winrm_transport should be optional' do
+        @options.delete(:winrm_transport)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+
+      it 'should validate the winrm_transport' do
+        @options[:winrm_transport] = 'ftp'
+        expect { subject.create(@options) }.to raise_error ArgumentError, /The winrm transport is not valid/
+      end
+
+      it 'should validate the winrm_transport' do
+        @options[:winrm_transport] = 'http'
+        expect { subject.create(@options) }.to_not raise_error 
+      end
+
+      it 'should validate the winrm_transport' do
+        @options[:winrm_transport] = 'https,http'
+        expect { subject.create(@options) }.to_not raise_error
+      end
+    end
   end
 
 end
