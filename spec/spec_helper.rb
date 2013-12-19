@@ -19,9 +19,9 @@ RSpec.configure do |config|
   config.before :each do
     $puppet_application_mode = nil
     $puppet_application_name = nil
-    Puppet[:confdir] = "/dev/null"
-    Puppet[:vardir] = "/dev/null"
-    Puppet.settings[:bindaddress] = "127.0.0.1"
+    Puppet[:confdir] = '/dev/null'
+    Puppet[:vardir] = '/dev/null'
+    Puppet.settings[:bindaddress] = '127.0.0.1'
     @logs = []
     Puppet::Util::Log.newdestination(Puppet::Test::LogCollector.new(@logs))
   end
