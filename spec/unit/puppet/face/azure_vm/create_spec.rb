@@ -106,7 +106,6 @@ describe Puppet::Face[:azure_vm, :current] do
         @options[:management_certificate] = File.expand_path('spec/fixtures/invalid_file.txt')
         expect { subject.create(@options) }.to raise_error RuntimeError, /Management certificate expects a .pem or .pfx file/
       end
-
     end
 
     describe '(vm_user)' do
@@ -262,6 +261,16 @@ describe Puppet::Face[:azure_vm, :current] do
       end
     end
 
+    describe '(password)' do
+      before :each do
+        @options.delete(:password)
+        @options.delete(:winrm_transport)
+        Puppet::Core::Utility.expects(:ask_for_password).with(@options, os_type).returns(@options).once
+      end
+      it 'should ask for password' do
+        expect { subject.create(@options) }.to_not raise_error
+      end
+    end
   end
 
 end

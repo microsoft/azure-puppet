@@ -11,7 +11,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
     Puppet::VirtualMachine.add_create_options(self)
 
     when_invoked do |options|
-      options = ask_for_password(options, @os_type)
+      options = Puppet::Core::Utility.ask_for_password(options, @os_type)
       virtual_machine_service = Azure::VirtualMachineManagementService.new
       params = {
         :vm_name=> options[:vm_name],
