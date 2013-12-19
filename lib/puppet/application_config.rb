@@ -13,11 +13,6 @@ module Puppet
       add_subscription_id_option(action)
       add_management_endpoint_option(action)
     end
-      
-    def merge_default_options(options)
-      default_options = { "management-certificate" => true, "subscription-id" => true, "management-endpoint" => true }
-      default_options.merge(options)
-    end
 
     def add_management_certificate_option(action)
       action.option '--management-certificate=' do

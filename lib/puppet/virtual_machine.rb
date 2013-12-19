@@ -68,7 +68,6 @@ module Puppet::VirtualMachine
         EOT
         required unless optional
         before_action do |action, args, options|
-          options = Puppet::VirtualMachine.merge_default_options(options)
           if options[:vm_name].empty?
             raise ArgumentError, "VM Name is required."
           end
@@ -84,7 +83,6 @@ module Puppet::VirtualMachine
         EOT
         required
         before_action do |action, args, options|
-          options = Puppet::VirtualMachine.merge_default_options(options)
           if options[:image].empty?
             raise ArgumentError, "Source image name is required"
           else
@@ -115,7 +113,6 @@ module Puppet::VirtualMachine
         EOT
         required unless optional
         before_action do |action, args, options|
-          options = Puppet::VirtualMachine.merge_default_options(options)
           if options[:cloud_service_name].empty?
             raise ArgumentError, "Cloud service name is required."
           end
@@ -131,7 +128,6 @@ module Puppet::VirtualMachine
         EOT
         required unless optional
         before_action do |action, args, options|
-          options = Puppet::VirtualMachine.merge_default_options(options)
           if options[:vm_user].empty?
             raise ArgumentError, "The VM user name is required."
           end
@@ -147,7 +143,6 @@ module Puppet::VirtualMachine
         EOT
         required if !optional
         before_action do |action, args, options|
-          options = Puppet::VirtualMachine.merge_default_options(options)
           if options[:puppet_master_ip].empty?
             raise ArgumentError, "The pupet master ip address is required."
           end
@@ -163,7 +158,6 @@ module Puppet::VirtualMachine
         EOT
         required unless optional
         before_action do |action, args, options|
-          options = Puppet::VirtualMachine.merge_default_options(options)
           if options[:deployment_name].empty?
             raise ArgumentError, "Deployment name is required."
           end

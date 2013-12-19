@@ -7,7 +7,9 @@ describe Puppet::Face[:azure_vm, :current] do
   let(:image_service) { Azure::VirtualMachineImageManagementService }
   let(:vm_service) { Azure::VirtualMachineManagementService }
   let(:vm) { Azure::VirtualMachineManagement::VirtualMachine.new }
+
   before :each do
+    $stdout.stubs(:write)
     @options = {
       management_certificate: File.expand_path('spec/fixtures/management_certificate.pem'),
       azure_subscription_id: 'Subscription-id',
@@ -46,7 +48,6 @@ describe Puppet::Face[:azure_vm, :current] do
   describe 'option validation' do
 
     describe 'valid options' do
-      # $stdout.stubs(:write)
       before :each do
         image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
         virtual_machine_obj = vm do |virtual_machine|
@@ -95,6 +96,17 @@ describe Puppet::Face[:azure_vm, :current] do
         @options.delete(:management_certificate)
         expect { subject.create(@options) }.to raise_error ArgumentError, /required/
       end
+
+      it 'management_certificate doesn\'t  exist' do
+        @options[:management_certificate] = 'FileNotExist'
+        expect { subject.create(@options) }.to raise_error ArgumentError, /Could not find file 'FileNotExist'/
+      end
+
+      it 'management_certificate extension is not valid' do
+        @options[:management_certificate] = File.expand_path('spec/fixtures/invalid_file.txt')
+        expect { subject.create(@options) }.to raise_error RuntimeError, /Management certificate expects a .pem or .pfx file/
+      end
+
     end
 
     describe '(vm_user)' do
@@ -111,7 +123,6 @@ describe Puppet::Face[:azure_vm, :current] do
 
   describe 'optional parameter validation' do
     before :each do
-      $stdout.stubs(:write)
       image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
       virtual_machine_obj = vm do |virtual_machine|
         virtual_machine.vm_name = 'windows-instance'
@@ -156,6 +167,101 @@ describe Puppet::Face[:azure_vm, :current] do
         expect { subject.create(@options) }.to_not raise_error
       end
     end
+
+    describe '(virtual_network_subnet)' do
+      it 'virtual_network_subnet should be optional' do
+        @options.delete(:virtual_network_subnet)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+    end
+
+    describe '(virtual_network_name)' do
+      it 'virtual_network_name should be optional' do
+        @options.delete(:virtual_network_name)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+    end
+
+    describe '(tcp_endpoints)' do
+      it 'tcp_endpoints should be optional' do
+        @options.delete(:tcp_endpoints)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+    end
+
+    describe '(ssh_port)' do
+      it 'ssh_port should be optional' do
+        @options.delete(:ssh_port)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+    end
+
+    describe '(affinity_group_name)' do
+      it 'affinity_group_name should be optional' do
+        @options.delete(:affinity_group_name)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+    end
+
+    describe '(certificate_file)' do
+      it 'certificate_file should be optional' do
+        @options.delete(:certificate_file)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+
+      it 'certificate_file should exist' do
+        @options[:certificate_file] = 'FileNotExist'
+        expect { subject.create(@options) }.to raise_error ArgumentError, /Could not find file 'FileNotExist'/
+      end
+    end
+
+    describe '(private_key_file)' do
+      it 'private_key_file should be optional' do
+        @options.delete(:private_key_file)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+
+      it 'private_key_file should exist' do
+        @options[:private_key_file] = 'FileNotExist'
+        expect { subject.create(@options) }.to raise_error ArgumentError, /Could not find file 'FileNotExist'/
+      end
+    end
+
+    describe '(cloud_service_name)' do
+      it 'cloud_service_name should be optional' do
+        @options.delete(:cloud_service_name)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+    end
+
+    describe '(deployment_name)' do
+      it 'deployment_name should be optional' do
+        @options.delete(:deployment_name)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+    end
+
+    describe '( management_endpoint)' do
+      it ' management_endpoint should be optional' do
+        @options.delete(:management_endpoint)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+    end
+
+    describe '(puppet_master_ip)' do
+      it 'puppet_master_ip should be optional' do
+        @options.delete(:puppet_master_ip)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+    end
+
+    describe '(storage_account_name)' do
+      it 'storage_account_name should be optional' do
+        @options.delete(:storage_account_name)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+    end
+
   end
 
 end
