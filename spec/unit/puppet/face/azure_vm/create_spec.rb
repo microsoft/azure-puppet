@@ -6,7 +6,14 @@ describe Puppet::Face[:azure_vm, :current] do
   let(:os_type) { 'Windows' }
   let(:image_service) { Azure::VirtualMachineImageManagementService }
   let(:vm_service) { Azure::VirtualMachineManagementService }
-  let(:vm) { Azure::VirtualMachineManagement::VirtualMachine.new }
+  let(:vm) { Azure::VirtualMachineManagement::VirtualMachine }
+  let(:virtual_machine_obj) do
+    vm.new do |virtual_machine|
+      virtual_machine.vm_name = 'windows-instance'
+      virtual_machine.ipaddress = '192.168.1.1'
+      virtual_machine.os_type = os_type
+    end
+  end
 
   before :each do
     $stdout.stubs(:write)
@@ -37,6 +44,7 @@ describe Puppet::Face[:azure_vm, :current] do
       config.management_certificate  = @options[:management_certificate]
       config.subscription_id         = @options[:azure_subscription_id]
     end
+    vm_service.any_instance.stubs(:create_virtual_machine).with(anything, anything).returns(virtual_machine_obj)
   end
   let(:image) do
     VirtualMachineImage.new do |image|
@@ -50,12 +58,6 @@ describe Puppet::Face[:azure_vm, :current] do
     describe 'valid options' do
       before :each do
         image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
-        virtual_machine_obj = vm do |virtual_machine|
-          virtual_machine.vm_name = 'windows-instance'
-          virtual_machine.ipaddress = '192.168.1.1'
-          virtual_machine.os_type = os_type
-        end
-        vm_service.any_instance.stubs(:create_virtual_machine).with(anything, anything).returns(virtual_machine_obj)
       end
 
       it 'should not raise any exception' do
@@ -123,14 +125,6 @@ describe Puppet::Face[:azure_vm, :current] do
   describe 'optional parameter validation' do
     before :each do
       image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
-      virtual_machine_obj = vm do |virtual_machine|
-        virtual_machine.vm_name = 'windows-instance'
-        virtual_machine.ipaddress = '192.168.1.1'
-        virtual_machine.os_type = os_type
-      end
-      vm_service.any_instance.stubs(:create_virtual_machine)
-      .with(anything, anything)
-      .returns(virtual_machine_obj)
     end
 
     describe '(vm_size)' do
@@ -261,14 +255,88 @@ describe Puppet::Face[:azure_vm, :current] do
       end
     end
 
-    describe '(password)' do
+  end
+
+  describe '(Password)' do
+
+    describe '(password prompt for windows)' do
       before :each do
-        @options.delete(:password)
-        @options.delete(:winrm_transport)
-        Puppet::Core::Utility.expects(:ask_for_password).with(@options, os_type).returns(@options).once
+        image.os_type = 'Windows'
+        image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
+        @count = 0
+        @prompt_msg = nil
+        HighLine.any_instance.stubs(:ask).with(anything) do |msg|
+          @prompt_msg = msg
+          @count += 1
+        end
       end
-      it 'should ask for password' do
+
+      it 'should ask for password if password options is empty' do
+        @options.delete(:password)
         expect { subject.create(@options) }.to_not raise_error
+        expect(@count).to eq(1)
+        expect(@prompt_msg).to match(/PASSWORD?/)
+      end
+
+      it 'should prompt for password if password is weak.' do
+        @options[:password] = 'weakpassword'
+        expect { subject.create(@options) }.to_not raise_error
+        expect(@count).to eq(1)
+        expect(@prompt_msg).to match(/PASSWORD?/)
+      end
+
+      it 'should not prompt for password if password is complex.' do
+        @options[:password] = 'ComplexPassword$123'
+        expect { subject.create(@options) }.to_not raise_error
+        expect(@count).to eq(0)
+      end
+    end
+
+    describe 'password prompt for linux' do
+      before :each do
+        image.os_type = 'Linux'
+        image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
+        @options.delete(:puppet_master_ip)
+        @count = 0
+        @prompt_msg = nil
+        HighLine.any_instance.stubs(:ask).with(anything) do |msg|
+          @prompt_msg = msg
+          @count += 1
+          @count == 1 ? 'y' : 'ComplexPassword123'   # TODO: Fix Input to IOStream
+        end
+      end
+
+      it 'should prompt enable password message if options password is empty and ssh certificate is provided.' do
+        @options.delete(:password)
+        expect { subject.create(@options) }.to_not raise_error
+        expect(@count).to eq(1)
+        expect(@prompt_msg).to match(/Do you want to enable password authentication/)
+      end
+
+      it 'should ask for password if password and ssh certificate options is empty' do
+        @options.delete(:password)
+        @options.delete(:certificate_file)
+        @options.delete(:private_key_file)
+        expect { subject.create(@options) }.to_not raise_error
+        expect(@count).to eq(1)
+        expect(@prompt_msg).to match(/PASSWORD?/)
+      end
+
+      it 'should prompt for password if password is weak and ssh certificate is given.' do
+        @options.delete(:certificate_file)
+        @options.delete(:private_key_file)
+        @options[:password] = 'weakpassword'
+        expect { subject.create(@options) }.to_not raise_error
+        expect(@count).to eq(1)
+        expect(@prompt_msg).to match(/PASSWORD?/)
+      end
+
+      it 'should not prompt for password if password is complex.' do
+        @options[:password] = 'ComplexPassword$123'
+        @options.delete(:certificate_file)
+        @options.delete(:private_key_file)
+        expect { subject.create(@options) }.to_not raise_error
+        expect(@count).to eq(0)
       end
     end
   end
