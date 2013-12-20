@@ -1,3 +1,8 @@
-Wed Dec 11 2013 Ranjan Kumar 1.1.0
+Fri Dec 20 2013 MSOpenTech 1.1.1
+ * updated example for puppet command
+ * Updated reporting issues url in readme
+ * updated readme for SQL database server
+ * Implement bootstrapping of nodes without subscription_id and management_certificate
+Wed Dec 11 2013 MSOpenTech 1.1.0
  * added manifests
  * updated readme
