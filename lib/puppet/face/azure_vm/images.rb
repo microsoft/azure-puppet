@@ -4,7 +4,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
   action :images do
 
     summary 'List Windows Azure images'
-    #arguments 'NONE'
+
     description <<-'EOT'
       The images action obtains a list of images from the cloud provider and
       displays them on the console output.  
@@ -19,14 +19,23 @@ Puppet::Face.define :azure_vm, '1.0.0' do
       puts Tilt.new(Puppet::VirtualMachine.views('images.erb'), 1, :trim => '%').render(nil, :images => images)
     end
     
-    returns 'Array of attribute hashes containing information about each Azure images.'
+    returns 'List containing information about each Azure images.'
 
     examples <<-'EOT'
       $ puppet azure_vm images --management-certificate path-to-azure-certificate --azure-subscription-id YOUR-SUBSCRIPTION-ID
-      OS Type      OS Nmae
-      Windows :  2cdc6229df6344129ee553dd3499f0d3__BizTalk-Server-2013-Beta
-      Windows :  2cdc6229df6344129ee553dd3499f0d3__BizTalk-Server-2013-Beta-February-2013
-      Linux   :  5112500ae3b842c8b9c604889f8753c3__OpenLogic-CentOS63JAN20130122
+      Listing Virtual Machine Images
+
+      OS Type            Category                  Name
+
+      Linux              RightScale with Linu      0b11de9248dd4d87b18621318e037d37__RightImage-CentOS-6.2-x64-v5.8.8.1
+
+      Linux              RightScale with Linu      0b11de9248dd4d87b18621318e037d37__RightImage-CentOS-6.3-x64-v5.8.8
+
+      Linux              RightScale with Linu      0b11de9248dd4d87b18621318e037d37__RightImage-CentOS-6.3-x64-v5.8.8.5
+
+      Linux              RightScale with Linu      0b11de9248dd4d87b18621318e037d37__RightImage-CentOS-6.3-x64-v5.8.8.6
+
+      Linux              RightScale with Linu      0b11de9248dd4d87b18621318e037d37__RightImage-CentOS-6.3-x64-v5.8.8.7
     EOT
   end
 end

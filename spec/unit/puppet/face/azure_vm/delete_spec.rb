@@ -11,8 +11,8 @@ describe Puppet::Face[:azure_vm, :current] do
       cloud_service_name: 'cloud-name'
     }
     Azure.configure do |config|
-      config.management_certificate  = @options[:management_certificate]
-      config.subscription_id         = @options[:azure_subscription_id]
+      config.management_certificate = @options[:management_certificate]
+      config.subscription_id        = @options[:azure_subscription_id]
     end
     vm_service.any_instance.stubs(:delete_virtual_machine).with(anything, anything)
   end
@@ -41,14 +41,14 @@ describe Puppet::Face[:azure_vm, :current] do
     describe '(azure_subscription_id)' do
       it 'should require a azure_subscription_id' do
         @options.delete(:azure_subscription_id)
-        expect { subject.delete(@options) }.to raise_error ArgumentError, /required/
+        expect { subject.delete(@options) }.to raise_error ArgumentError, /required: azure_subscription_id/
       end
     end
 
     describe '(management_certificate)' do
       it 'should require a management_certificate' do
         @options.delete(:management_certificate)
-        expect { subject.delete(@options) }.to raise_error ArgumentError, /required/
+        expect { subject.delete(@options) }.to raise_error ArgumentError, /required: management_certificate/
       end
 
       it 'management_certificate doesn\'t  exist' do

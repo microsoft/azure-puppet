@@ -46,8 +46,8 @@ describe Puppet::Face[:azure_vm, :current] do
       vm_size: 'Small'
     }
     Azure.configure do |config|
-      config.management_certificate  = @options[:management_certificate]
-      config.subscription_id         = @options[:azure_subscription_id]
+      config.management_certificate = @options[:management_certificate]
+      config.subscription_id        = @options[:azure_subscription_id]
     end
     vm_service.any_instance.stubs(:create_virtual_machine).with(anything, anything).returns(virtual_machine_obj)
     image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
@@ -64,7 +64,7 @@ describe Puppet::Face[:azure_vm, :current] do
     describe '(image)' do
       it 'should require a image' do
         @options.delete(:image)
-        expect { subject.create(@options) }.to raise_error Exception, /required/
+        expect { subject.create(@options) }.to raise_error Exception, /required: image/
       end
 
       it 'should validate the image' do
@@ -76,28 +76,28 @@ describe Puppet::Face[:azure_vm, :current] do
     describe '(vm_name)' do
       it 'should validate the vm name' do
         @options.delete(:vm_name)
-        expect { subject.create(@options) }.to raise_error ArgumentError, /required/
+        expect { subject.create(@options) }.to raise_error ArgumentError, /required: vm_name/
       end
     end
 
     describe '(location)' do
       it 'should require a location' do
         @options.delete(:location)
-        expect { subject.create(@options) }.to raise_error ArgumentError, /required/
+        expect { subject.create(@options) }.to raise_error ArgumentError, /required: location/
       end
     end
 
     describe '(azure_subscription_id)' do
       it 'should require a azure_subscription_id' do
         @options.delete(:azure_subscription_id)
-        expect { subject.create(@options) }.to raise_error ArgumentError, /required/
+        expect { subject.create(@options) }.to raise_error ArgumentError, /required: azure_subscription_id/
       end
     end
 
     describe '(management_certificate)' do
       it 'should require a management_certificate' do
         @options.delete(:management_certificate)
-        expect { subject.create(@options) }.to raise_error ArgumentError, /required/
+        expect { subject.create(@options) }.to raise_error ArgumentError, /required: management_certificate/
       end
 
       it 'management_certificate doesn\'t  exist' do
@@ -114,7 +114,7 @@ describe Puppet::Face[:azure_vm, :current] do
     describe '(vm_user)' do
       it 'should require a vm user' do
         @options.delete(:vm_user)
-        expect { subject.create(@options) }.to raise_error ArgumentError, /required/
+        expect { subject.create(@options) }.to raise_error ArgumentError, /required: vm_user/
       end
     end
   end
