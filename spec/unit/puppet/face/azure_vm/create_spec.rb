@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'puppet/virtual_machine'
 
 describe Puppet::Face[:azure_vm, :current] do
   let(:image_name) { 'azure-linux-image' }
@@ -12,6 +11,12 @@ describe Puppet::Face[:azure_vm, :current] do
       virtual_machine.vm_name = 'windows-instance'
       virtual_machine.ipaddress = '192.168.1.1'
       virtual_machine.os_type = os_type
+    end
+  end
+  let(:image) do
+    VirtualMachineImage.new do |image|
+      image.os_type = os_type
+      image.name = image_name
     end
   end
 
@@ -45,21 +50,12 @@ describe Puppet::Face[:azure_vm, :current] do
       config.subscription_id         = @options[:azure_subscription_id]
     end
     vm_service.any_instance.stubs(:create_virtual_machine).with(anything, anything).returns(virtual_machine_obj)
-  end
-  let(:image) do
-    VirtualMachineImage.new do |image|
-      image.os_type = os_type
-      image.name = image_name
-    end
+    image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
   end
 
   describe 'option validation' do
 
     describe 'valid options' do
-      before :each do
-        image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
-      end
-
       it 'should not raise any exception' do
         expect { subject.create(@options) }.to_not raise_error
       end
@@ -69,6 +65,11 @@ describe Puppet::Face[:azure_vm, :current] do
       it 'should require a image' do
         @options.delete(:image)
         expect { subject.create(@options) }.to raise_error Exception, /required/
+      end
+
+      it 'should validate the image' do
+        @options[:image] = 'WrongImageName'
+        expect { subject.create(@options) }.to raise_error ArgumentError, /Source image name is invalid/
       end
     end
 
@@ -111,10 +112,6 @@ describe Puppet::Face[:azure_vm, :current] do
     end
 
     describe '(vm_user)' do
-      before :each do
-        image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
-      end
-
       it 'should require a vm user' do
         @options.delete(:vm_user)
         expect { subject.create(@options) }.to raise_error ArgumentError, /required/
@@ -123,9 +120,6 @@ describe Puppet::Face[:azure_vm, :current] do
   end
 
   describe 'optional parameter validation' do
-    before :each do
-      image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
-    end
 
     describe '(vm_size)' do
       it 'vm_size should be optional' do
