@@ -119,6 +119,11 @@ Other avaliable actions are
 
 	* To extract pem from custom certificate, export the pfx, follow the above steps to convert to pem and pass that pem file to management cert parameter.
 	
+# Reporting Issues
+
+  Please report any problems you have with the Windows Azure Cloud Provisioner module in issue tracker at
+  
+  * [Windows Azure Cloud Provisioner Issues](https://github.com/MSOpenTech/azure-puppet/issues)
 
 Puppet Installation
 ===================
