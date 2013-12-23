@@ -18,11 +18,11 @@ Puppet::Face.define :azure_vm, '1.0.0' do
     end
 
     returns 'NONE'
-    
+
     examples <<-'EOT'
       $ puppet azure_vm shutdown --publish-settings-file azuremanagement.publishsettings \
-       --cloud-service-name service_name --vm-name name 
-     
+       --cloud-service-name service_name --vm-name name
+
     EOT
   end
 end

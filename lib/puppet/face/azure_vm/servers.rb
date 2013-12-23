@@ -17,7 +17,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
       Puppet::VirtualMachine.initialize_env_variable(options)
       virtual_machine_service = Azure::VirtualMachineManagementService.new
       servers = virtual_machine_service.list_virtual_machines
-      puts Tilt.new(Puppet::VirtualMachine.views('servers.erb'), 1, :trim => '%').render(nil, :roles => servers)
+      puts Tilt.new(Puppet::VirtualMachine.views('servers.erb'), 1, trim:  '%').render(nil, roles:  servers)
     end
 
     returns 'Array of attribute hashes containing information about each Azure instance.'

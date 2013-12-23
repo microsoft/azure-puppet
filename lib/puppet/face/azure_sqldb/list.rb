@@ -17,7 +17,7 @@ Puppet::Face.define :azure_sqldb, '1.0.0' do
       db_server = Azure::SqlDatabaseManagementService.new
 
       servers = db_server.list_servers
-      puts Tilt.new(Puppet::SqlDatabase.views('servers.erb'), 1, :trim => '%').render(nil, :db_servers => servers)
+      puts Tilt.new(Puppet::SqlDatabase.views('servers.erb'), 1, trim:  '%').render(nil, db_servers:  servers)
     end
 
     returns 'Array of database server objets.'

@@ -12,23 +12,23 @@ Puppet::Face.define :azure_vnet, '1.0.0' do
     when_invoked do |options|
       Puppet::VirtualNetwork.initialize_env_variable(options)
       virtual_network_service = Azure::VirtualNetworkManagementService.new
-      address_space = options[:address_space].split(",")
+      address_space = options[:address_space].split(',')
       optional = {}
       if options[:subnets]
         subnets = []
-        options[:subnets].split(",").each do |subnet|
-          values = subnet.split(":")
-          raise "Missing argument name or ip_address or cidr in subnet" if values.size !=3
-          subnets << {:name =>values[0], :ip_address=>values[1], :cidr=>values[2] }
+        options[:subnets].split(',').each do |subnet|
+          values = subnet.split(':')
+          raise 'Missing argument name or ip_address or cidr in subnet' if values.size != 3
+          subnets << { name:  values[0], ip_address:  values[1], cidr:  values[2] }
         end
         optional[:subnet] = subnets
       end
       if options[:dns_servers]
         dns = []
-        options[:dns_servers].split(",").each do |ds|
-          values = ds.split(":")
-          raise "Missing argument name or ip_address in dns" if values.size !=2
-          dns << {:name =>values[0], :ip_address=>values[1]}
+        options[:dns_servers].split(',').each do |ds|
+          values = ds.split(':')
+          raise 'Missing argument name or ip_address in dns' if values.size != 2
+          dns << { name:  values[0], ip_address:  values[1] }
         end
         optional[:dns] = dns
       end

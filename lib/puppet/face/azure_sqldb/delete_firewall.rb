@@ -23,7 +23,7 @@ Puppet::Face.define :azure_sqldb, '1.0.0' do
       $ puppet azure_sqldb delete_firewall --management-certificate path-to-azure-certificate \
          --azure-subscription-id=YOUR-SUBSCRIPTION-ID --management-endpoint=https://management.database.windows.net:8443/\
          --server-name=xlykw0su08 --rule-name rule1
-         
+
     EOT
   end
 end

@@ -14,7 +14,7 @@ Puppet::Face.define :azure_affinitygroup, '1.0.0' do
       Puppet::AffinityGroup.initialize_env_variable(options)
       affinity_group_service = Azure::BaseManagementService.new
       affinity_groups = affinity_group_service.list_affinity_groups
-      puts Tilt.new(Puppet::AffinityGroup.views('affinity_groups.erb'), 1, :trim => '%').render(nil, :affinity_groups => affinity_groups)
+      puts Tilt.new(Puppet::AffinityGroup.views('affinity_groups.erb'), 1, trim:  '%').render(nil, affinity_groups:  affinity_groups)
     end
 
     returns 'Array of affinity group objets.'
@@ -22,7 +22,7 @@ Puppet::Face.define :azure_affinitygroup, '1.0.0' do
     examples <<-'EOT'
       $ puppet affinity_group list  --management-certificate path-to-azure-certificate \
         --azure-subscription-id YOUR-SUBSCRIPTION-ID --management-endpoint=https://management.core.windows.net
-                               
+
       Listing affinity groups
 
         Affinity Group: 1

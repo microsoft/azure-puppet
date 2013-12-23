@@ -4,7 +4,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
   action :bootstrap do
 
     summary 'Install puppet node on  Windows Azure VM'
-    
+
     description <<-'EOT'
       Install puppet node on Windows Azure Virtual Machine.
     EOT

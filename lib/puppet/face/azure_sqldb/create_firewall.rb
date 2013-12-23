@@ -13,7 +13,7 @@ Puppet::Face.define :azure_sqldb, '1.0.0' do
     when_invoked do |options|
       Puppet::SqlDatabase.initialize_env_variable(options)
       db_server = Azure::SqlDatabaseManagementService.new
-      ip_range = {:start_ip_address => options[:start_ip_address], :end_ip_address => options[:end_ip_address]}
+      ip_range = { start_ip_address:  options[:start_ip_address], end_ip_address:  options[:end_ip_address] }
       db_server.set_sql_server_firewall_rule(options[:server_name], options[:rule_name], ip_range)
     end
 

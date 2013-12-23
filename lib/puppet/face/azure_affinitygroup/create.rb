@@ -13,7 +13,7 @@ Puppet::Face.define :azure_affinitygroup, '1.0.0' do
     when_invoked do |options|
       Puppet::AffinityGroup.initialize_env_variable(options)
       affinity_group_service = Azure::BaseManagementService.new
-      others = { :description => options[:description] }
+      others = { description:  options[:description] }
       begin
         affinity_group_service.create_affinity_group(options[:affinity_group_name], options[:location], options[:label], others)
       rescue Exception => e

@@ -16,7 +16,7 @@ Puppet::Face.define :azure_vnet, '1.0.0' do
       virtual_network_service = Azure::VirtualNetworkManagementService.new
 
       virtual_networks = virtual_network_service.list_virtual_networks
-      puts Tilt.new(Puppet::VirtualNetwork.views('virtual_networks.erb'), 1, :trim => '%').render(nil, :vnets => virtual_networks)
+      puts Tilt.new(Puppet::VirtualNetwork.views('virtual_networks.erb'), 1, trim:  '%').render(nil, vnets:  virtual_networks)
     end
 
     returns 'Array of virtual network objets.'
