@@ -16,13 +16,15 @@ Puppet::Face.define :azure_vm, '1.0.0' do
       Puppet::VirtualMachine.initialize_env_variable(options)
       virtual_machine_image_service = Azure::VirtualMachineImageManagementService.new
       images = virtual_machine_image_service.list_virtual_machine_images
-      puts Tilt.new(Puppet::VirtualMachine.views('images.erb'), 1, trim:  '%').render(nil, images:  images)
+      template = Tilt.new(Puppet::VirtualMachine.views('images.erb'))
+      template.render(nil, images:  images)
     end
 
     returns 'List containing information about each Azure images.'
 
     examples <<-'EOT'
-      $ puppet azure_vm images --management-certificate path-to-azure-certificate --azure-subscription-id YOUR-SUBSCRIPTION-ID
+      $ puppet azure_vm images --management-certificate path-to-azure-certificate \
+        --azure-subscription-id YOUR-SUBSCRIPTION-ID
       Listing Virtual Machine Images
 
       OS Type            Category                  Name

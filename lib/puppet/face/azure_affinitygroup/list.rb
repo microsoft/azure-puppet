@@ -14,7 +14,8 @@ Puppet::Face.define :azure_affinitygroup, '1.0.0' do
       Puppet::AffinityGroup.initialize_env_variable(options)
       affinity_group_service = Azure::BaseManagementService.new
       affinity_groups = affinity_group_service.list_affinity_groups
-      puts Tilt.new(Puppet::AffinityGroup.views('affinity_groups.erb'), 1, trim:  '%').render(nil, affinity_groups:  affinity_groups)
+      template = Tilt.new(Puppet::AffinityGroup.views('affinity_groups.erb'))
+      template.render(nil, affinity_groups:  affinity_groups)
     end
 
     returns 'Array of affinity group objets.'

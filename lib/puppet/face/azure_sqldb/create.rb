@@ -14,7 +14,8 @@ Puppet::Face.define :azure_sqldb, '1.0.0' do
       Puppet::SqlDatabase.initialize_env_variable(options)
       db = Azure::SqlDatabaseManagementService.new
       servers = db.create_server(options[:login], options[:password], options[:location])
-      puts Tilt.new(Puppet::SqlDatabase.views('servers.erb'), 1, trim:  '%').render(nil, db_servers:  servers) if servers
+      template = Tilt.new(Puppet::SqlDatabase.views('servers.erb'))
+      template.render(nil, db_servers:  servers) if servers
     end
 
     examples <<-'EOT'

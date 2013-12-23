@@ -17,7 +17,8 @@ Puppet::Face.define :azure_sqldb, '1.0.0' do
       db_server = Azure::SqlDatabaseManagementService.new
 
       firewalls = db_server.list_sql_server_firewall_rules(options[:server_name])
-      puts Tilt.new(Puppet::SqlDatabase.views('server_firewalls.erb'), 1, trim:  '%').render(nil, firewalls:  firewalls)
+      template = Tilt.new(Puppet::SqlDatabase.views('server_firewalls.erb'))
+      template.render(nil, firewalls:  firewalls)
     end
 
     examples <<-'EOT'

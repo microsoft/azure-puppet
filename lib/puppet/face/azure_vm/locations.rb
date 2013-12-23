@@ -16,7 +16,8 @@ Puppet::Face.define :azure_vm, '1.0.0' do
       Puppet::VirtualMachine.initialize_env_variable(options)
       base_management = Azure::BaseManagementService.new
       locations = base_management.list_locations
-      puts Tilt.new(Puppet::VirtualMachine.views('locations.erb'), 1, trim:  '%').render(nil, locations:  locations)
+      template = Tilt.new(Puppet::VirtualMachine.views('locations.erb'))
+      template.render(nil, locations:  locations)
     end
 
     returns 'Array of attribute hashes containing information about each Azure locations.'
