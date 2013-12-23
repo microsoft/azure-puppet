@@ -6,7 +6,7 @@ include Puppet::ApplicationConfig
 module Puppet::VirtualNetwork
 
   class << self
-    
+
     def views(name)
       File.join(File.dirname(__FILE__), 'face/azure_vnet/views', name)
     end
@@ -45,7 +45,7 @@ module Puppet::VirtualNetwork
         end
       end
     end
-    
+
     def add_virtual_network_name_option(action)
       action.option '--virtual-network-name=' do
         summary "The virtual network name."
@@ -60,7 +60,7 @@ module Puppet::VirtualNetwork
         end
       end
     end
-    
+
     def add_address_space_option(action)
       action.option '--address-space=' do
         summary "The address space for virtual network."
@@ -96,5 +96,5 @@ module Puppet::VirtualNetwork
     end
 
   end
-  
+
 end

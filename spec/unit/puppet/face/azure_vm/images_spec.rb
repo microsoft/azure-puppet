@@ -18,7 +18,7 @@ describe Puppet::Face[:azure_vm, :current] do
     Azure.configure do |config|
       config.management_certificate = @options[:management_certificate]
       config.subscription_id        = @options[:azure_subscription_id]
-    end    
+    end
   end
 
   describe 'option validation' do

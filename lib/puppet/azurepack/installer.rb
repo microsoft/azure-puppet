@@ -13,7 +13,7 @@ module Puppet
           File.join(File.dirname(__FILE__), 'scripts')
         end
 
-        def find_template(name)  
+        def find_template(name)
           user_script = File.expand_path("../#{name}.erb", __FILE__)
           puts user_script
           return user_script if File.exists?(user_script)

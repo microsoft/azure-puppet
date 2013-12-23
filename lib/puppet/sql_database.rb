@@ -13,7 +13,7 @@ module Puppet::SqlDatabase
       ENV['azure_management_endpoint'.upcase] = options[:management_endpoint]
       require 'azure'
     end
-    
+
     def views(name)
       File.join(File.dirname(__FILE__), 'face/azure_sqldb/views', name)
     end

@@ -34,7 +34,7 @@ module Puppet
         begin
           Net::SSH.start(server, login, ssh_opts) do |session|
             session.open_channel do |channel|
-            
+
               channel.request_pty do |c, success|
                 raise "could not request pty" unless success
                 channel.on_data do |ch, data|
@@ -97,7 +97,7 @@ module Puppet
           end
         end
       end
-    
+
     end
   end
 end

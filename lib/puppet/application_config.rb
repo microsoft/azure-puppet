@@ -59,7 +59,7 @@ module Puppet
         description <<-EOT
           The management endpoint for the Windows Azure portal.
         EOT
-        
+
       end
     end
 
@@ -95,6 +95,5 @@ module Puppet
       end
     end
 
-    
   end
 end

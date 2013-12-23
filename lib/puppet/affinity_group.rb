@@ -13,14 +13,14 @@ module Puppet::AffinityGroup
     def add_create_options(action)
       add_default_options(action)
       add_affinity_group_name_option(action)
-      add_location_option(action)      
+      add_location_option(action)
       add_description_option(action)
       add_label_option(action)
     end
 
     def add_delete_options(action)
       add_default_options(action)
-      add_affinity_group_name_option(action)     
+      add_affinity_group_name_option(action)
     end
 
     def add_update_options(action)
@@ -53,7 +53,6 @@ module Puppet::AffinityGroup
         end
       end
     end
-    
   end
 
 end

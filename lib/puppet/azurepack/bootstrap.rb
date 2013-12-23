@@ -22,7 +22,7 @@ module Puppet
           else
             raise "Missing option ssh_user or winrm_user"
           end
-         
+
         end
 
         def bootstrap_windows_node(params)
@@ -37,7 +37,7 @@ module Puppet
             winrm_port = params[:winrm_port] || 5985
             endpoint_protocol = 'http'
           end
-          
+
           cmds = []
           cmds << "mkdir C:\\puppet"
           wget_script.each_line do |line|

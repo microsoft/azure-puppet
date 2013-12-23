@@ -4,7 +4,7 @@ include Puppet::ApplicationConfig
 module Puppet::VirtualMachine
 
   class << self
-    
+
     def views(name)
       File.join(File.dirname(__FILE__), 'face/azure_vm/views', name)
     end

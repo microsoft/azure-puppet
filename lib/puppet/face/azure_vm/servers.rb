@@ -7,7 +7,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
     arguments 'list'
     description <<-'EOT'
       The list action obtains a list of instances from the cloud provider and
-      displays them on the console output. For Azure instances, only the 
+      displays them on the console output. For Azure instances, only the
       instances in a specific region are provided.
     EOT
 

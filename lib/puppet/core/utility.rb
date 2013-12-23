@@ -128,7 +128,7 @@ WScript.Quit
 WGET
         wget_content
       end
-      
+
     end
   end
 end
