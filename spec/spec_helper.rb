@@ -1,10 +1,10 @@
-ARGV.clear
-
 require 'puppet'
 require 'puppet/face'
 require 'azure'
 require 'mocha/api'
 gem 'rspec', '>=2.0.0'
+
+Dir["./spec/support/**/*.rb"].sort.each {|f| require f}
 
 RSpec.configure do |config|
   config.mock_with :mocha

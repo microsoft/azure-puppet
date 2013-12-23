@@ -1,6 +1,7 @@
-<%index=1%> 
+<%index=1%>
 <%="Listing Servers".bold%>
 <%roles.each do |role|%>
+
   <%="Server: #{index}".bold%>
     <%="Service".fix%>: <%=role.cloud_service_name %>
     <%="Deployment".fix%>: <%=role.deployment_name%>
@@ -9,5 +10,4 @@
     <%="Deployment Status".fix%>: <%=role.deployment_status == "Running" ? role.deployment_status.green : role.deployment_status%>
     <%="Role Status".fix%>: <%=role.status%>
     <%="IP Address".fix%>: <%=role.ipaddress%>
-  <%index+=1%>
-<%end%>
+  <%index+=1%><%end%>

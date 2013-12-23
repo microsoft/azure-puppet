@@ -1,5 +1,7 @@
-<%="Listing virtual networks".bold%><%index=1%>
+<%="Listing virtual networks".bold%>
+<%index=1%>
 <%vnets.each do |vnet|%>
+
   <%="Virtual Network: #{index}".bold%>
     <%="Server Name".fix(20)%>: <%=vnet.name %>
     <%="Address Space".fix(20)%>: <%=vnet.address_space.join(", ")%>
@@ -9,5 +11,4 @@
            		 <%end%>
     <%="Dns Servers"%>:         <%="Name".fix.bold%><%="Ip Address".fix.bold%>
                          <%vnet.dns_servers.each do |endpoint|%><%=endpoint[:name].fix%><%=endpoint[:ip_address].to_s.fix%>
-           		 <%end%>   <%index+=1%>
-<%end%>
+           		 <%end%>   <%index+=1%><%end%>
