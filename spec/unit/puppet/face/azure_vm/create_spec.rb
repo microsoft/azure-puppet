@@ -239,13 +239,6 @@ describe Puppet::Face[:azure_vm, :current] do
       end
     end
 
-    describe '( management_endpoint)' do
-      it ' management_endpoint should be optional' do
-        @options.delete(:management_endpoint)
-        expect { subject.create(@options) }.to_not raise_error
-      end
-    end
-
     describe '(puppet_master_ip)' do
       it 'puppet_master_ip should be optional' do
         @options.delete(:puppet_master_ip)

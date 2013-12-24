@@ -36,4 +36,10 @@ shared_examples 'validate authentication credential' do |service_method|
     end
   end
 
+  describe '(management_endpoint)' do
+    it 'management_endpoint should be optional' do
+      @options.delete(:management_endpoint)
+      expect { subject.send(service_method, @options) }.to_not raise_error
+    end
+  end
 end

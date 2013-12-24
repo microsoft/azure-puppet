@@ -14,6 +14,7 @@ describe Puppet::Face[:azure_vm, :current] do
     mgmtcertfile = File.expand_path('spec/fixtures/management_certificate.pem')
     @options = {
       management_certificate: mgmtcertfile,
+      management_endpoint: 'management.core.windows.net',
       azure_subscription_id: 'Subscription-id'
     }
     Azure.configure do |config|
@@ -32,6 +33,11 @@ describe Puppet::Face[:azure_vm, :current] do
     describe 'valid options' do
       it 'should not raise any exception' do
         expect { subject.images(@options) }.to_not raise_error
+      end
+
+      it 'should print images details' do
+        images = subject.images(@options)
+        expect(images).to match(/#{image.os_type}            #{image.category[0..19]}      #{image.name}/)
       end
     end
 

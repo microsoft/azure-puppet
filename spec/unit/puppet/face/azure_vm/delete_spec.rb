@@ -8,6 +8,7 @@ describe Puppet::Face[:azure_vm, :current] do
     @options = {
       management_certificate: mgmtcertfile,
       azure_subscription_id: 'Subscription-id',
+      management_endpoint: 'management.core.windows.net',
       vm_name: 'test-vm',
       cloud_service_name: 'cloud-name'
     }
