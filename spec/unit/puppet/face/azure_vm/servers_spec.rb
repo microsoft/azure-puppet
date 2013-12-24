@@ -46,7 +46,7 @@ describe Puppet::Face[:azure_vm, :current] do
         expect(servers).to match(/IP Address        : #{ip_address}/)
       end
     end
-    
+
     it_behaves_like 'validate authentication credential', :servers
   end
 end

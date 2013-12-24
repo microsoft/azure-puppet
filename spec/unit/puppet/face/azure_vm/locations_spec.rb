@@ -29,12 +29,12 @@ describe Puppet::Face[:azure_vm, :current] do
       base_service.any_instance.stubs(:list_locations).returns([location])
     end
 
-    describe 'valid options' do  
+    describe 'valid options' do
       it 'should not raise any exception' do
         expect { subject.locations(@options) }.to_not raise_error
       end
 
-      it 'should print locations details' do 
+      it 'should print locations details' do
         locations = subject.locations(@options)
         expect(locations).to match(/#{location_name}                 #{loc_services}/)
       end
