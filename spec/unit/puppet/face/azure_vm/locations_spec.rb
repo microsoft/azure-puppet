@@ -10,8 +10,9 @@ describe Puppet::Face[:azure_vm, :current] do
   end
 
   before :each do
+    mgmtcertfile = File.expand_path('spec/fixtures/management_certificate.pem')
     @options = {
-      management_certificate: File.expand_path('spec/fixtures/management_certificate.pem'),
+      management_certificate: mgmtcertfile,
       azure_subscription_id: 'Subscription-id'
     }
     Azure.configure do |config|

@@ -4,8 +4,24 @@ module Puppet
   module Core
     module Utility
 
-      def random_string(str='azure',no_of_char=5)
+      def random_string(str='azure', no_of_char=5)
         str+(0...no_of_char).map{ ('a'..'z').to_a[rand(26)] }.join
+      end
+
+      def validate_file(filepath, filename, extensions)
+        if filepath.empty?
+          raise ArgumentError, "#{filename} file is required"
+        end
+        unless test 'f', filepath
+          raise ArgumentError, "Could not find file '#{filepath}'"
+        end
+        unless test 'r', filepath
+          raise ArgumentError, "Could not read from file '#{filepath}'"
+        end
+        ext_msg = extensions.map{|ele| '.'+ele}.join(' or ')
+        if filepath !~ /(#{extensions.join('|')})$/
+          raise RuntimeError, "#{filename} expects a #{ext_msg} file."
+        end
       end
 
       def ask_for_password(options, os_type)
@@ -104,7 +120,7 @@ module Puppet
       end
 
       def wget_script
-      wget_content = <<-WGET
+        wget_content = <<-WGET
 URL = WScript.Arguments(0)
 saveTo = WScript.Arguments(1)
 Set objXMLHTTP = CreateObject("MSXML2.ServerXMLHTTP")
@@ -125,7 +141,7 @@ Set objADOStream = Nothing
 End if
 Set objXMLHTTP = Nothing
 WScript.Quit
-WGET
+        WGET
         wget_content
       end
 

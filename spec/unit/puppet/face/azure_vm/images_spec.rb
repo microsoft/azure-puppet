@@ -11,8 +11,9 @@ describe Puppet::Face[:azure_vm, :current] do
   end
 
   before :each do
+    mgmtcertfile = File.expand_path('spec/fixtures/management_certificate.pem')
     @options = {
-      management_certificate: File.expand_path('spec/fixtures/management_certificate.pem'),
+      management_certificate: mgmtcertfile,
       azure_subscription_id: 'Subscription-id'
     }
     Azure.configure do |config|
@@ -24,7 +25,9 @@ describe Puppet::Face[:azure_vm, :current] do
   describe 'option validation' do
     before :each do
       $stdout.stubs(:write)
-      image_service.any_instance.stubs(:list_virtual_machine_images).returns([image])
+      image_service.any_instance.stubs(
+        :list_virtual_machine_images
+      ).returns([image])
     end
     describe 'valid options' do
       it 'should not raise any exception' do

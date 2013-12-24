@@ -22,18 +22,8 @@ module Puppet
         EOT
         required
         before_action do |action, args, options|
-          if options[:management_certificate].empty?
-            raise ArgumentError, "Management certificate file is required"
-          end
-          unless test 'f', options[:management_certificate]
-            raise ArgumentError, "Could not find file '#{options[:management_certificate]}'"
-          end
-          unless test 'r', options[:management_certificate]
-            raise ArgumentError, "Could not read from file '#{options[:management_certificate]}'"
-          end
-          unless(options[:management_certificate] =~ /(pem|pfx)$/)
-            raise RuntimeError, "Management certificate expects a .pem or .pfx file."
-          end
+          file = options[:management_certificate]
+          validate_file(file,'Management certificate', ['pem','pfx'])
         end
       end
     end
@@ -68,8 +58,8 @@ module Puppet
         summary "The location identifier for the Windows Azure portal."
         description <<-EOT
           The location identifier for the Windows Azure portal.
-          valid choices are ('West US', 'East US', 'East Asia', 'Southeast Asia',
-          'North Europe', 'West Europe' ...).
+          valid choices are ('West US', 'East US', 'Southeast Asia',
+          'North Europe', 'West Europe', 'East Asia' ...).
         EOT
         required
         before_action do |action, args, options|

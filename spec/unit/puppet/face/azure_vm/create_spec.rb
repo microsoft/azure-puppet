@@ -22,8 +22,9 @@ describe Puppet::Face[:azure_vm, :current] do
 
   before :each do
     $stdout.stubs(:write)
+    mgmtcertfile = File.expand_path('spec/fixtures/management_certificate.pem')
     @options = {
-      management_certificate: File.expand_path('spec/fixtures/management_certificate.pem'),
+      management_certificate: mgmtcertfile,
       azure_subscription_id: 'Subscription-id',
       vm_name: 'test-vm',
       vm_user: 'vm_user',
@@ -49,8 +50,13 @@ describe Puppet::Face[:azure_vm, :current] do
       config.management_certificate = @options[:management_certificate]
       config.subscription_id        = @options[:azure_subscription_id]
     end
-    vm_service.any_instance.stubs(:create_virtual_machine).with(anything, anything).returns(virtual_machine_obj)
-    image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
+    vm_service.any_instance.stubs(:create_virtual_machine).with(
+      anything,
+      anything
+    ).returns(virtual_machine_obj)
+    image_service.any_instance.expects(
+      :list_virtual_machine_images
+    ).returns([image]).at_least(0)
   end
 
   describe 'option validation' do
@@ -64,26 +70,38 @@ describe Puppet::Face[:azure_vm, :current] do
     describe '(image)' do
       it 'should require a image' do
         @options.delete(:image)
-        expect { subject.create(@options) }.to raise_error Exception, /required: image/
+        expect { subject.create(@options) }.to raise_error(
+          ArgumentError,
+          /required: image/
+        )
       end
 
       it 'should validate the image' do
         @options[:image] = 'WrongImageName'
-        expect { subject.create(@options) }.to raise_error ArgumentError, /Source image name is invalid/
+        expect { subject.create(@options) }.to raise_error(
+          ArgumentError,
+          /Source image name is invalid/
+        )
       end
     end
 
     describe '(vm_name)' do
       it 'should validate the vm name' do
         @options.delete(:vm_name)
-        expect { subject.create(@options) }.to raise_error ArgumentError, /required: vm_name/
+        expect { subject.create(@options) }.to raise_error(
+          ArgumentError,
+          /required: vm_name/
+        )
       end
     end
 
     describe '(location)' do
       it 'should require a location' do
         @options.delete(:location)
-        expect { subject.create(@options) }.to raise_error ArgumentError, /required: location/
+        expect { subject.create(@options) }.to raise_error(
+          ArgumentError,
+          /required: location/
+        )
       end
     end
 
@@ -92,7 +110,10 @@ describe Puppet::Face[:azure_vm, :current] do
     describe '(vm_user)' do
       it 'should require a vm user' do
         @options.delete(:vm_user)
-        expect { subject.create(@options) }.to raise_error ArgumentError, /required: vm_user/
+        expect { subject.create(@options) }.to raise_error(
+          ArgumentError,
+          /required: vm_user/
+        )
       end
     end
   end
@@ -107,7 +128,10 @@ describe Puppet::Face[:azure_vm, :current] do
 
       it 'should validate the vm_size' do
         @options[:vm_size] = 'InvalidSize'
-        expect { subject.create(@options) }.to raise_error ArgumentError, /The vm-size is not valid/
+        expect { subject.create(@options) }.to raise_error(
+          ArgumentError,
+          /The vm-size is not valid/
+        )
       end
     end
 
@@ -119,7 +143,10 @@ describe Puppet::Face[:azure_vm, :current] do
 
       it 'should validate the winrm_transport' do
         @options[:winrm_transport] = 'ftp'
-        expect { subject.create(@options) }.to raise_error ArgumentError, /The winrm transport is not valid/
+        expect { subject.create(@options) }.to raise_error(
+          ArgumentError,
+          /The winrm transport is not valid/
+        )
       end
 
       it 'should validate the winrm_transport' do
@@ -176,7 +203,10 @@ describe Puppet::Face[:azure_vm, :current] do
 
       it 'certificate_file should exist' do
         @options[:certificate_file] = 'FileNotExist'
-        expect { subject.create(@options) }.to raise_error ArgumentError, /Could not find file 'FileNotExist'/
+        expect { subject.create(@options) }.to raise_error(
+          ArgumentError,
+          /Could not find file 'FileNotExist'/
+        )
       end
     end
 
@@ -188,7 +218,10 @@ describe Puppet::Face[:azure_vm, :current] do
 
       it 'private_key_file should exist' do
         @options[:private_key_file] = 'FileNotExist'
-        expect { subject.create(@options) }.to raise_error ArgumentError, /Could not find file 'FileNotExist'/
+        expect { subject.create(@options) }.to raise_error(
+          ArgumentError,
+          /Could not find file 'FileNotExist'/
+        )
       end
     end
 
@@ -234,7 +267,8 @@ describe Puppet::Face[:azure_vm, :current] do
     describe '(password prompt for windows)' do
       before :each do
         image.os_type = 'Windows'
-        image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
+        image_service.any_instance.expects(
+          :list_virtual_machine_images).returns([image]).at_least(0)
         @count = 0
         @prompt_msg = nil
         HighLine.any_instance.stubs(:ask).with(anything) do |msg|
@@ -267,14 +301,16 @@ describe Puppet::Face[:azure_vm, :current] do
     describe 'password prompt for linux' do
       before :each do
         image.os_type = 'Linux'
-        image_service.any_instance.expects(:list_virtual_machine_images).returns([image]).at_least(0)
+        image_service.any_instance.expects(
+          :list_virtual_machine_images).returns([image]).at_least(0)
         @options.delete(:puppet_master_ip)
         @count = 0
         @prompt_msg = nil
         HighLine.any_instance.stubs(:ask).with(anything) do |msg|
           @prompt_msg = msg
           @count += 1
-          @count == 1 ? 'y' : 'ComplexPassword123'   # TODO: Fix Input to IOStream
+          # TODO: Fix How to input into IOStream
+          @count == 1 ? 'y' : 'ComplexPassword123'
         end
       end
 
