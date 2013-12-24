@@ -6,7 +6,6 @@ require 'winrm'
 module Puppet
   module Core
     module RemoteConnection
-
       def scp_remote_upload(server, login, ssh_opts, local_path, remote_path)
         begin
           Net::SCP.start(server, login, ssh_opts) do |scp|
@@ -97,7 +96,6 @@ module Puppet
           end
         end
       end
-
     end
   end
 end

@@ -4,7 +4,6 @@ require 'puppet/core/utility'
 include Puppet::ApplicationConfig
 
 module Puppet::AffinityGroup
-
   class << self
     def views(name)
       File.join(File.dirname(__FILE__), 'face/azure_affinitygroup/views', name)
@@ -42,13 +41,10 @@ module Puppet::AffinityGroup
         summary 'Label of affinity group'
         description 'Label of affinity group.'
         required
-        before_action do |action, args, options|
-          if options[:label].empty?
-            fail ArgumentError, 'Label is required'
-          end
+        before_action do |act, args, options|
+          fail ArgumentError, 'Label is required' if options[:label].empty?
         end
       end
     end
   end
-
 end

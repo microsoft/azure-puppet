@@ -3,9 +3,7 @@ require 'puppet/application_config'
 include Puppet::ApplicationConfig
 
 module Puppet::SqlDatabase
-
   class << self
-
     def initialize_env_variable(options)
       options[:management_endpoint] ||= 'https://management.database.windows.net:8443/'
       ENV['azure_management_certificate'.upcase] = options[:management_certificate]
@@ -57,7 +55,7 @@ module Puppet::SqlDatabase
           The login usernam for the Windows Azure sql database server.
         EOT
         required
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:login].empty?
             fail ArgumentError, 'Login is required.'
           end
@@ -70,7 +68,7 @@ module Puppet::SqlDatabase
         summary 'The pasword for the Windows Azure sql database server.'
         description 'The password for the Windows Azure sql database server.'
         required
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:password].empty?
             fail ArgumentError, 'Password is required.'
           end
@@ -83,7 +81,7 @@ module Puppet::SqlDatabase
         summary 'The server name for the Windows Azure sql database server.'
         description 'The server name for the Windows Azure sql database server.'
         required
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:server_name].empty?
             fail ArgumentError, 'Server name is required.'
           end
@@ -96,7 +94,7 @@ module Puppet::SqlDatabase
         summary 'The rule name for the sql database server firewall.'
         description 'The rule name for the sql database server firewall.'
         required
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:rule_name].empty?
             fail ArgumentError, 'Firewall rule name is required.'
           end
@@ -119,6 +117,5 @@ module Puppet::SqlDatabase
         description 'The end ip address for the sql database server firewall.'
       end
     end
-
   end
 end

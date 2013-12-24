@@ -1,6 +1,5 @@
 module Puppet
   module ApplicationConfig
-
     def initialize_env_variable(options)
       ENV['azure_management_certificate'.upcase] = options[:management_certificate]
       ENV['azure_subscription_id'.upcase] = options[:azure_subscription_id]
@@ -19,9 +18,9 @@ module Puppet
         summary 'The subscription identifier for the Windows Azure portal.'
         description 'The subscription identifier for the Windows Azure portal.'
         required
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           file = options[:management_certificate]
-          validate_file(file, 'Management certificate', ['pem', 'pfx'])
+          validate_file(file, 'Management certificate', %w(pem pfx))
         end
       end
     end
@@ -29,11 +28,9 @@ module Puppet
     def add_subscription_id_option(action)
       action.option '--azure-subscription-id=' do
         summary 'The subscription identifier for the Windows Azure portal.'
-        description "
-          The subscription identifier for the Windows Azure portal.
-"
+        description 'The subscription identifier for the Windows Azure portal.'
         required
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:azure_subscription_id].empty?
             fail ArgumentError, 'Subscription id is required.'
           end
@@ -58,7 +55,7 @@ module Puppet
           'North Europe', 'West Europe', 'East Asia' ...).
         EOT
         required
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:location].empty?
             fail ArgumentError, 'Location is required'
           end
@@ -71,13 +68,12 @@ module Puppet
         summary 'The affinity group name.'
         description 'The affinity group name.'
         required
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:affinity_group_name].empty?
             fail ArgumentError, 'Affinity group name is required'
           end
         end
       end
     end
-
   end
 end

@@ -22,7 +22,6 @@ module Puppet
           else
             fail 'Missing option ssh_user or winrm_user'
           end
-
         end
 
         def bootstrap_windows_node(params)
@@ -62,7 +61,7 @@ module Puppet
           end
           ssh_opts[:paranoid] = false
           ssh_opts[:port] = params[:ssh_port] || 22
-          options = { :environment => 'production', puppet_master_ip: params[:puppet_master_ip] }
+          options = { environment: 'production', puppet_master_ip: params[:puppet_master_ip] }
           options[:tmp_dir] = File.join('/', 'tmp', random_string('puppet-tmp-location-', 10))
           create_tmpdir_cmd = "bash -c 'umask 077; mkdir #{options[:tmp_dir]}'"
           ssh_remote_execute(params[:node_ipaddress], login, ssh_opts, create_tmpdir_cmd)

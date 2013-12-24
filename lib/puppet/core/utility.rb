@@ -3,7 +3,6 @@ require 'highline/import'
 module Puppet
   module Core
     module Utility
-
       def random_string(str = 'azure', no_of_char = 5)
         str + (0...no_of_char).map { ('a'..'z').to_a[rand(26)] }.join
       end
@@ -20,7 +19,7 @@ module Puppet
         end
         ext_msg = extensions.map { |ele| '.' + ele }.join(' or ')
         if filepath !~ /(#{extensions.join('|')})$/
-          fail RuntimeError, "#{filename} expects a #{ext_msg} file."
+          fail "#{filename} expects a #{ext_msg} file."
         end
       end
 
@@ -34,7 +33,7 @@ module Puppet
             |pass| pass.validate = /^y{1}$|^n{1}$/
           end
         end
-        if password_required == 'y' or os_type == 'Windows'
+        if password_required == 'y' || os_type == 'Windows'
           puts 'The supplied password must be 6-72 characters long and meet password complexity requirements.'
           puts 'Require atleast 1 captial letter and digit.'
           options[:password] = ask("\nPASSWORD?  ") { |pass| pass.echo = '*'; pass.validate = regex }
@@ -144,15 +143,12 @@ WScript.Quit
         WGET
         wget_content
       end
-
     end
   end
 end
 
 class String
-
   def fix(size = 18, padstr = ' ')
     self[0...size].ljust(size, padstr)
   end
-
 end

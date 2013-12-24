@@ -2,9 +2,7 @@ require 'puppet/application_config'
 include Puppet::ApplicationConfig
 
 module Puppet::VirtualMachine
-
   class << self
-
     def views(name)
       File.join(File.dirname(__FILE__), 'face/azure_vm/views', name)
     end
@@ -65,7 +63,7 @@ module Puppet::VirtualMachine
         summary 'The name of the virtual machine.'
         description 'The name of the virtual machine.'
         required unless optional
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:vm_name].empty?
             fail ArgumentError, 'VM Name is required.'
           end
@@ -80,7 +78,7 @@ module Puppet::VirtualMachine
           The name of the disk image that will be used to create the virtual machine
         EOT
         required
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:image].empty?
             fail ArgumentError, 'Source image name is required'
           else
@@ -108,7 +106,7 @@ module Puppet::VirtualMachine
         summary 'The name of the cloud service.'
         description 'The name of the cloud service.'
         required unless optional
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:cloud_service_name].empty?
             fail ArgumentError, 'Cloud service name is required.'
           end
@@ -123,7 +121,7 @@ module Puppet::VirtualMachine
           The VM user name. It mandatory incase of liunx VM installation.
         EOT
         required unless optional
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:vm_user].empty?
             fail ArgumentError, 'The VM user name is required.'
           end
@@ -137,8 +135,8 @@ module Puppet::VirtualMachine
         description <<-EOT
           The puppet master ip address. It mandatory incase of puppet node installation.
         EOT
-        required if !optional
-        before_action do |action, args, options|
+        required unless optional
+        before_action do |act, args, options|
           if options[:puppet_master_ip].empty?
             fail ArgumentError, 'The pupet master ip address is required.'
           end
@@ -151,7 +149,7 @@ module Puppet::VirtualMachine
         summary 'The vm instance deployment name.'
         description 'The vm instance deployment name.'
         required unless optional
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:deployment_name].empty?
             fail ArgumentError, 'Deployment name is required.'
           end
@@ -164,7 +162,7 @@ module Puppet::VirtualMachine
         summary 'Authentication password for vm.'
         description 'Authentication password for vm.'
         required if @os_type == 'Windows'
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:password].empty?
             fail ArgumentError, 'The password is required.'
           end
@@ -186,7 +184,7 @@ module Puppet::VirtualMachine
         description 'The ip address where puppet need to install.'
 
         required
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:ssh_user].nil? && options[:winrm_user].nil?
             fail ArgumentError, 'winrm_user or ssh_user is required.'
           elsif options[:ssh_user].nil?
@@ -205,12 +203,13 @@ module Puppet::VirtualMachine
       action.option '--certificate-file=' do
         summary 'Authentication using certificate instead of password.'
         description 'Authentication using certificate instead of password.'
-        before_action do |action, args, options|
-          unless test 'f', options[:certificate_file]
-            fail ArgumentError, "Could not find file '#{options[:certificate_file]}'"
+        before_action do |act, args, options|
+          file_path = options[:certificate_file]
+          unless test 'f', file_path
+            fail ArgumentError, "Could not find file '#{file_path}'"
           end
-          unless test 'r', options[:certificate_file]
-            fail ArgumentError, "Could not read from file '#{options[:certificate_file]}'"
+          unless test 'r', file_path
+            fail ArgumentError, "Could not read from file '#{file_path}'"
           end
         end
       end
@@ -220,12 +219,13 @@ module Puppet::VirtualMachine
       action.option '--private-key-file=' do
         summary 'Authentication using certificate instead of password.'
         description 'Authentication using certificate instead of password.'
-        before_action do |action, args, options|
-          unless test 'f', options[:private_key_file]
-            fail ArgumentError, "Could not find file '#{options[:private_key_file]}'"
+        before_action do |act, args, options|
+          file_path = options[:private_key_file]
+          unless test 'f', file_path
+            fail ArgumentError, "Could not find file '#{file_path}'"
           end
-          unless test 'r', options[:private_key_file]
-            fail ArgumentError, "Could not read from file '#{options[:private_key_file]}'"
+          unless test 'r', file_path
+            fail ArgumentError, "Could not read from file '#{file_path}'"
           end
         end
       end
@@ -237,9 +237,9 @@ module Puppet::VirtualMachine
         description <<-EOT
           Winrm authentication protocol. Valid choices are http or https or http,https.
         EOT
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           winrm_transport = options[:winrm_transport].split(',')
-          winrm_transport_size = winrm_transport.select { |x| x.downcase == 'http' or x.downcase == 'https' }.size
+          winrm_transport_size = winrm_transport.select { |x| x.downcase == 'http' || x.downcase == 'https' }.size
           unless !winrm_transport.nil? && (winrm_transport_size > 0)
             fail ArgumentError, 'The winrm transport is not valid. Valid choices are http or https or http,https'
           end
@@ -261,8 +261,8 @@ module Puppet::VirtualMachine
         description <<-EOT
           The instance size. valid choice are ExtraSmall, Small, Medium, Large, ExtraLarge
         EOT
-        before_action do |action, args, options|
-          valid_role_sizes = ['ExtraSmall', 'Small', 'Medium', 'Large', 'ExtraLarge', 'A6', 'A7']
+        before_action do |act, args, options|
+          valid_role_sizes = %w(ExtraSmall Small Medium Large ExtraLarge A6 A7)
           if options[:vm_size] && !valid_role_sizes.include?(options[:vm_size])
             fail ArgumentError, 'The vm-size is not valid. Valid choice are ExtraSmall, Small, Medium, Large, ExtraLarge'
           end
@@ -300,7 +300,7 @@ module Puppet::VirtualMachine
           The ssh user name. It mandatory incase of liunx VM installation.
         EOT
         required if @os_type == 'Linux'
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:ssh_user].empty?
             fail ArgumentError, 'The ssh username is required.'
           end
@@ -315,7 +315,7 @@ module Puppet::VirtualMachine
           The winrm user name. It mandatory incase of Windows puppet agent installation.
         EOT
         required if @os_type == 'Windows'
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           if options[:winrm_user].empty?
             fail ArgumentError, 'The winrm username is required.'
           end
@@ -336,7 +336,7 @@ module Puppet::VirtualMachine
         description <<-EOT
           Winrm authentication protocol. Valid choices are http or https.
         EOT
-        before_action do |action, args, options|
+        before_action do |act, args, options|
           winrm_transport = options[:winrm_transport]
           unless ['http', 'https', nil].include?(winrm_transport)
             fail ArgumentError, 'The winrm transport is not valid. Valid choices are http or https'
