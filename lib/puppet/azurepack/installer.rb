@@ -21,11 +21,10 @@ module Puppet
           if File.exists?(lib_script)
             lib_script
           else
-            raise "Could not find installation template for #{name}"
+            fail "Could not find installation template for #{name}"
           end
         end
       end
     end
   end
 end
-

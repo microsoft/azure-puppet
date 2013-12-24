@@ -32,23 +32,19 @@ module Puppet::AffinityGroup
 
     def add_description_option(action)
       action.option '--description=' do
-        summary "Description of affinity group"
-        description <<-EOT
-          Description of affinity group.
-        EOT
+        summary 'Description of affinity group'
+        description 'Description of affinity group.'
       end
     end
 
     def add_label_option(action)
       action.option '--label=' do
-        summary "Label of affinity group"
-        description <<-EOT
-          Label of affinity group.
-        EOT
+        summary 'Label of affinity group'
+        description 'Label of affinity group.'
         required
         before_action do |action, args, options|
           if options[:label].empty?
-            raise ArgumentError, "Label is required"
+            fail ArgumentError, 'Label is required'
           end
         end
       end

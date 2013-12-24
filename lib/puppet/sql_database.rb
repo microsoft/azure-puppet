@@ -59,7 +59,7 @@ module Puppet::SqlDatabase
         required
         before_action do |action, args, options|
           if options[:login].empty?
-            raise ArgumentError, "Login is required."
+            fail ArgumentError, 'Login is required.'
           end
         end
       end
@@ -68,13 +68,11 @@ module Puppet::SqlDatabase
     def add_password_option(action)
       action.option '--password=' do
         summary 'The pasword for the Windows Azure sql database server.'
-        description <<-EOT
-          The password for the Windows Azure sql database server.
-        EOT
+        description 'The password for the Windows Azure sql database server.'
         required
         before_action do |action, args, options|
           if options[:password].empty?
-            raise ArgumentError, "Password is required."
+            fail ArgumentError, 'Password is required.'
           end
         end
       end
@@ -83,13 +81,11 @@ module Puppet::SqlDatabase
     def add_server_name_option(action)
       action.option '--server-name=' do
         summary 'The server name for the Windows Azure sql database server.'
-        description <<-EOT
-          The server name for the Windows Azure sql database server.
-        EOT
+        description 'The server name for the Windows Azure sql database server.'
         required
         before_action do |action, args, options|
           if options[:server_name].empty?
-            raise ArgumentError, "Server name is required."
+            fail ArgumentError, 'Server name is required.'
           end
         end
       end
@@ -98,13 +94,11 @@ module Puppet::SqlDatabase
     def add_rule_name_option(action)
       action.option '--rule-name=' do
         summary 'The rule name for the sql database server firewall.'
-        description <<-EOT
-          The rule name for the sql database server firewall.
-        EOT
+        description 'The rule name for the sql database server firewall.'
         required
         before_action do |action, args, options|
           if options[:rule_name].empty?
-            raise ArgumentError, "Firewall rule name is required."
+            fail ArgumentError, 'Firewall rule name is required.'
           end
         end
       end
@@ -122,9 +116,7 @@ module Puppet::SqlDatabase
     def  add_end_ip_address_option(action)
       action.option '--end-ip-address=' do
         summary 'The end ip address for the sql database server firewall.'
-        description <<-EOT
-          The end ip address for the sql database server firewall.
-        EOT
+        description 'The end ip address for the sql database server firewall.'
       end
     end
 

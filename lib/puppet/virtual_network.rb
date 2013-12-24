@@ -30,7 +30,7 @@ module Puppet::VirtualNetwork
         required
         before_action do |act, args, options|
           filepath = options[:xml_schema_file]
-          validate_file(filepath, 'Network schema', ['xml'])          
+          validate_file(filepath, 'Network schema', ['xml'])
         end
       end
     end
@@ -42,7 +42,7 @@ module Puppet::VirtualNetwork
         required
         before_action do |act, args, options|
           if options[:virtual_network_name].empty?
-            raise ArgumentError, 'Virtual network name is required'
+            fail ArgumentError, 'Virtual network name is required'
           end
         end
       end
@@ -55,7 +55,7 @@ module Puppet::VirtualNetwork
         required
         before_action do |act, args, options|
           if options[:address_space].empty?
-            raise ArgumentError, 'Virtual network address space is required'
+            fail ArgumentError, 'Virtual network address space is required'
           end
         end
       end

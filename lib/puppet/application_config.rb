@@ -17,13 +17,11 @@ module Puppet
     def add_management_certificate_option(action)
       action.option '--management-certificate=' do
         summary 'The subscription identifier for the Windows Azure portal.'
-        description <<-EOT
-          The subscription identifier for the Windows Azure portal.
-        EOT
+        description 'The subscription identifier for the Windows Azure portal.'
         required
         before_action do |action, args, options|
           file = options[:management_certificate]
-          validate_file(file,'Management certificate', ['pem','pfx'])
+          validate_file(file, 'Management certificate', ['pem', 'pfx'])
         end
       end
     end
@@ -31,13 +29,13 @@ module Puppet
     def add_subscription_id_option(action)
       action.option '--azure-subscription-id=' do
         summary 'The subscription identifier for the Windows Azure portal.'
-        description <<-EOT
+        description "
           The subscription identifier for the Windows Azure portal.
-        EOT
+"
         required
         before_action do |action, args, options|
           if options[:azure_subscription_id].empty?
-            raise ArgumentError, "Subscription id is required."
+            fail ArgumentError, 'Subscription id is required.'
           end
         end
       end
@@ -46,16 +44,14 @@ module Puppet
     def add_management_endpoint_option(action)
       action.option '--management-endpoint=' do
         summary 'The management endpoint for the Windows Azure portal.'
-        description <<-EOT
-          The management endpoint for the Windows Azure portal.
-        EOT
+        description 'The management endpoint for the Windows Azure portal.'
 
       end
     end
 
     def add_location_option(action)
       action.option '--location=' do
-        summary "The location identifier for the Windows Azure portal."
+        summary 'The location identifier for the Windows Azure portal.'
         description <<-EOT
           The location identifier for the Windows Azure portal.
           valid choices are ('West US', 'East US', 'Southeast Asia',
@@ -64,7 +60,7 @@ module Puppet
         required
         before_action do |action, args, options|
           if options[:location].empty?
-            raise ArgumentError, "Location is required"
+            fail ArgumentError, 'Location is required'
           end
         end
       end
@@ -72,14 +68,12 @@ module Puppet
 
     def add_affinity_group_name_option(action)
       action.option '--affinity-group-name=' do
-        summary "The affinity group name."
-        description <<-EOT
-          The affinity group name.
-        EOT
+        summary 'The affinity group name.'
+        description 'The affinity group name.'
         required
         before_action do |action, args, options|
           if options[:affinity_group_name].empty?
-            raise ArgumentError, "Affinity group name is required"
+            fail ArgumentError, 'Affinity group name is required'
           end
         end
       end

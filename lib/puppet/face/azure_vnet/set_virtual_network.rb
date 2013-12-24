@@ -18,7 +18,7 @@ Puppet::Face.define :azure_vnet, '1.0.0' do
         subnets = []
         options[:subnets].split(',').each do |subnet|
           values = subnet.split(':')
-          raise 'Missing argument name or ip_address or cidr in subnet' if values.size != 3
+          fail 'Missing argument name or ip_address or cidr in subnet' if values.size != 3
           subnets << { name:  values[0], ip_address:  values[1], cidr:  values[2] }
         end
         optional[:subnet] = subnets
@@ -27,7 +27,7 @@ Puppet::Face.define :azure_vnet, '1.0.0' do
         dns = []
         options[:dns_servers].split(',').each do |ds|
           values = ds.split(':')
-          raise 'Missing argument name or ip_address in dns' if values.size != 2
+          fail 'Missing argument name or ip_address in dns' if values.size != 2
           dns << { name:  values[0], ip_address:  values[1] }
         end
         optional[:dns] = dns

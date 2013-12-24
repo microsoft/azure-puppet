@@ -17,10 +17,10 @@ module Puppet
           elsif params[:ssh_user]
             results = bootstrap_linux_node(params)
             if results[:exit_code] != 0 then
-              puts  "The installation script exited with a non-zero exit status, indicating a failure."
+              puts  'The installation script exited with a non-zero exit status, indicating a failure.'
             end
           else
-            raise "Missing option ssh_user or winrm_user"
+            fail 'Missing option ssh_user or winrm_user'
           end
 
         end
@@ -39,13 +39,13 @@ module Puppet
           end
 
           cmds = []
-          cmds << "mkdir C:\\puppet"
+          cmds << 'mkdir C:\\puppet'
           wget_script.each_line do |line|
-            ln = line.gsub("\n"," ")
+            ln = line.gsub("\n", ' ')
             cmds << "echo #{ln} >> C:\\puppet\\wget.vbs"
           end
-          cmds << "cscript /nologo C:\\puppet\\wget.vbs https://downloads.puppetlabs.com/windows/puppet-3.3.2.msi %TEMP%\\puppet.msi"
-          cmds << "copy %TEMP%\\puppet.msi C:\\puppet\\puppet.msi"
+          cmds << 'cscript /nologo C:\\puppet\\wget.vbs https://downloads.puppetlabs.com/windows/puppet-3.3.2.msi %TEMP%\\puppet.msi'
+          cmds << 'copy %TEMP%\\puppet.msi C:\\puppet\\puppet.msi'
           cmds << "msiexec /qn /i c:\\puppet\\puppet.msi PUPPET_MASTER_SERVER=#{master_ip}"
           cmds << 'sc config puppet start= demand'
           cmds << 'rmdir C:\\puppet /s /q'
@@ -54,7 +54,7 @@ module Puppet
 
         def bootstrap_linux_node(params)
           login =  params[:ssh_user]
-          ssh_opts = { }
+          ssh_opts = {}
           if params[:password]
             ssh_opts[:password] = params[:password]
           else
@@ -62,12 +62,12 @@ module Puppet
           end
           ssh_opts[:paranoid] = false
           ssh_opts[:port] = params[:ssh_port] || 22
-          options = {:environment=>'production', :puppet_master_ip => params[:puppet_master_ip]}
-          options[:tmp_dir] = File.join('/', 'tmp', random_string('puppet-tmp-location-',10))
+          options = { :environment => 'production', puppet_master_ip: params[:puppet_master_ip] }
+          options[:tmp_dir] = File.join('/', 'tmp', random_string('puppet-tmp-location-', 10))
           create_tmpdir_cmd = "bash -c 'umask 077; mkdir #{options[:tmp_dir]}'"
           ssh_remote_execute(params[:node_ipaddress], login, ssh_opts, create_tmpdir_cmd)
           tmp_script_file = compile_template(options)
-          remote_script_path = File.join(options[:tmp_dir], "puppet_installation_script.sh")
+          remote_script_path = File.join(options[:tmp_dir], 'puppet_installation_script.sh')
           scp_remote_upload(params[:node_ipaddress], login, ssh_opts, tmp_script_file.path, remote_script_path)
           cmd_prefix = login == 'root' ? '' : 'sudo '
           install_command = "#{cmd_prefix}bash -c 'chmod u+x #{remote_script_path};  sed -i 's/\r//' #{remote_script_path}; #{remote_script_path}'"
@@ -75,9 +75,9 @@ module Puppet
         end
 
         def compile_template(options)
-          puts "Installing Puppet ..."
+          puts 'Installing Puppet ...'
           install_script = Installer.build_installer_template('puppet-agent-bootstrap', options)
-          puts("Compiled installation script:")
+          puts('Compiled installation script:')
           begin
             f = Tempfile.open('install_script')
             f.write(install_script)
