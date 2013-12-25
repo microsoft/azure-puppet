@@ -1,3 +1,6 @@
+require 'puppet/core/utility'
+include Puppet::Core::Utility
+
 module Puppet
   module ApplicationConfig
     def initialize_env_variable(options)
