@@ -9,7 +9,6 @@ describe Puppet::Face[:azure_sqldb, :current] do
       db.administrator_login = 'login-name'
       db.location = 'West US'
     end
-
   end
   before :each do
     mgmtcertfile = File.expand_path('spec/fixtures/management_certificate.pem')
