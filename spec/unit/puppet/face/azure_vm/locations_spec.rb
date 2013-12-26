@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'spec_helper'
 
 describe Puppet::Face[:azure_vm, :current] do
@@ -36,7 +37,7 @@ describe Puppet::Face[:azure_vm, :current] do
 
       it 'should print locations details' do
         locations = subject.locations(@options)
-        expect(locations).to match(/#{location_name}                 #{loc_services}/)
+        expect(locations).to match(/#{location_name.fix}      #{loc_services}/)
       end
     end
 

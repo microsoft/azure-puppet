@@ -1,6 +1,5 @@
 require 'tilt'
 require 'puppet/application_config'
-require 'puppet/core/utility'
 include Puppet::ApplicationConfig
 
 module Puppet::AffinityGroup

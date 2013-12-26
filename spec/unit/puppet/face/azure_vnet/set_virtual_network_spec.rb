@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'spec_helper'
 
 describe Puppet::Face[:azure_vnet, :current] do
@@ -12,7 +13,7 @@ describe Puppet::Face[:azure_vnet, :current] do
       affinity_group_name: 'AG1',
       address_space: '172.16.0.0/12,10.0.0.0/8,192.168.0.0/24',
       dns_servers: 'dns-1:8.8.8.8,dns-2:8.8.4.4',
-      subnets: 'subnet-1:172.16.0.0:12,subnet-2:192.168.0.0:29',
+      subnets: 'subnet-1:172.16.0.0:12'
     }
     Azure.configure do |config|
       config.management_certificate = @options[:management_certificate]
@@ -77,6 +78,29 @@ describe Puppet::Face[:azure_vnet, :current] do
         @options.delete(:subnets)
         expect { subject.set(@options) }.to_not raise_error
       end
+
+      it 'should accept multiple value of subnet using comma seperated' do
+        @options[:subnets] = 'subnet-1:172.16.0.0:12,subnet-2:192.168.0.0:29'
+        expect { subject.set(@options) }.to_not raise_error
+      end
+
+      describe 'invalid subnets' do
+        it 'should raise error when cidr and ip_address is missing' do
+          @options[:subnets] = 'Subnet-name'
+          expect { subject.set(@options) }.to raise_error(
+            RuntimeError,
+            /Missing argument subnet name or ip_address or cidr in subnet/
+          )
+        end
+
+        it 'should raise error when cidr is missing' do
+          @options[:subnets] = 'Subnet-name:192.168.1.1'
+          expect { subject.set(@options) }.to raise_error(
+            RuntimeError,
+            /Missing argument subnet name or ip_address or cidr in subnet/
+          )
+        end
+      end
     end
 
     describe '(dns_servers)' do
@@ -89,6 +113,16 @@ describe Puppet::Face[:azure_vnet, :current] do
         @options.delete(:dns_servers)
         @options.delete(:subnets)
         expect { subject.set(@options) }.to_not raise_error
+      end
+
+      describe 'invalid dns servers' do
+        it 'should raise error when dns name or ipaddress is missing' do
+          @options[:dns_servers] = 'Dns-name'
+          expect { subject.set(@options) }.to raise_error(
+            RuntimeError,
+            /Missing argument dns name or ip_address in dns/
+          )
+        end
       end
     end
   end

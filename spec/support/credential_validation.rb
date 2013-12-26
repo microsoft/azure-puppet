@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 shared_examples 'validate authentication credential' do |service_method|
   describe '(management_certificate)' do
     it 'should require a management_certificate' do

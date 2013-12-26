@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'spec_helper'
 
 describe Puppet::Face[:azure_sqldb, :current] do
@@ -39,7 +40,8 @@ describe Puppet::Face[:azure_sqldb, :current] do
       it 'should print sql server details' do
         server = subject.create(@options)
         expect(server).to match(/Server Name         : #{sql_server.name}/)
-        expect(server).to match(/Administrator login : #{sql_server.administrator_login}/)
+        login = "Administrator login : #{sql_server.administrator_login}"
+        expect(server).to match(/#{login}/)
         expect(server).to match(/Location            : #{sql_server.location}/)
       end
     end

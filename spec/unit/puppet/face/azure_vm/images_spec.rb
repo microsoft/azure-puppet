@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'spec_helper'
 
 describe Puppet::Face[:azure_vm, :current] do
@@ -37,7 +38,9 @@ describe Puppet::Face[:azure_vm, :current] do
 
       it 'should print images details' do
         images = subject.images(@options)
-        expect(images).to match(/#{image.os_type}            #{image.category[0..19]}      #{image.name}/)
+        expect(images).to match(
+          /#{image.os_type.fix} #{image.category[0..19]}      #{image.name}/
+        )
       end
     end
 

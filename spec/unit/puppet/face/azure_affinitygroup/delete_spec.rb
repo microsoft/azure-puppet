@@ -17,7 +17,8 @@ describe Puppet::Face[:azure_affinitygroup, :current] do
     @options = {
       management_certificate: mgmtcertfile,
       management_endpoint: 'management.core.windows.net',
-      azure_subscription_id: 'Subscription-id'
+      azure_subscription_id: 'Subscription-id',
+      affinity_group_name: 'ag-name'
     }
     Azure.configure do |config|
       config.management_certificate = @options[:management_certificate]
@@ -27,27 +28,24 @@ describe Puppet::Face[:azure_affinitygroup, :current] do
 
   describe 'option validation' do
     before :each do
-      base_service.any_instance.stubs(
-        :list_affinity_groups
-      ).returns([affinity_group])
+      base_service.any_instance.stubs(:delete_affinity_group)
     end
     describe 'valid options' do
       it 'should not raise any exception' do
-        expect { subject.list(@options) }.to_not raise_error
-      end
-
-      it 'should print affinity groups details' do
-        affinity_groups = subject.list(@options)
-        name = "#{'Name'.fix(20)}: #{affinity_group.name}"
-        expect(affinity_groups).to match(/#{name}/)
-        label = "#{'Label'.fix(20)}: #{affinity_group.label}"
-        expect(affinity_groups).to match(/#{label}/)
-        capability = "#{'Capability'.fix(20)}: #{affinity_group.capability}"
-        expect(affinity_groups).to match(/#{capability}/)
+        expect { subject.delete(@options) }.to_not raise_error
       end
     end
 
-    it_behaves_like 'validate authentication credential', :list
+    describe '(affinity_group_name)' do
+      it 'should validate the affinity group name' do
+        @options.delete(:affinity_group_name)
+        expect { subject.delete(@options) }.to raise_error(
+          ArgumentError,
+          /required: affinity_group_name/
+        )
+      end
+    end
 
+    it_behaves_like 'validate authentication credential', :delete
   end
 end

@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'puppet'
 require 'puppet/face'
 require 'azure'

@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'spec_helper'
 
 describe Puppet::Face[:azure_vm, :current] do
@@ -307,11 +308,14 @@ describe Puppet::Face[:azure_vm, :current] do
         end
       end
 
-      it 'should prompt enable password message if options password is empty and ssh certificate is provided.' do
+      it 'should prompt enable password message if options password is empty \
+          and ssh certificate is provided.' do
         @options.delete(:password)
         expect { subject.create(@options) }.to_not raise_error
         expect(@count).to eq(1)
-        expect(@prompt_msg).to match(/Do you want to enable password authentication/)
+        expect(@prompt_msg).to match(
+          /Do you want to enable password authentication/
+        )
       end
 
       it 'should ask for password if password and ssh certificate options is empty' do
