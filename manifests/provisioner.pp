@@ -1,4 +1,3 @@
-
 class windowsazure::provisioner (
   # For windows azure authentication
   $azure_management_certificate,

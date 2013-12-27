@@ -1,4 +1,4 @@
-define windowsazure::bootstrap (
+class windowsazure::bootstrap (
   $puppet_master_ip,
   $node_ipaddress,
   $homedir = undef,

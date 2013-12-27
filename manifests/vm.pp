@@ -1,4 +1,4 @@
-define windowsazure::vm (
+class windowsazure::vm (
   $vm_name,
   $vm_user,
   $image,

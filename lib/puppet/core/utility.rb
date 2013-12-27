@@ -3,9 +3,24 @@ require 'highline/import'
 module Puppet
   module Core
     module Utility
+      def random_string(str = 'azure', no_of_char = 5)
+        str + (0...no_of_char).map { ('a'..'z').to_a[rand(26)] }.join
+      end
 
-      def random_string(str='azure',no_of_char=5)
-        str+(0...no_of_char).map{ ('a'..'z').to_a[rand(26)] }.join
+      def validate_file(filepath, filename, extensions)
+        if filepath.empty?
+          fail ArgumentError, "#{filename} file is required"
+        end
+        unless test 'f', filepath
+          fail ArgumentError, "Could not find file '#{filepath}'"
+        end
+        unless test 'r', filepath
+          fail ArgumentError, "Could not read from file '#{filepath}'"
+        end
+        ext_msg = extensions.map { |ele| '.' + ele }.join(' or ')
+        if filepath !~ /(#{extensions.join('|')})$/
+          fail "#{filename} expects a #{ext_msg} file."
+        end
       end
 
       def ask_for_password(options, os_type)
@@ -13,43 +28,43 @@ module Puppet
         password = options[:password]
         return options if !password.nil? && !password.match(regex).nil?
         password_required = 'y'
-        if (options[:private_key_file] && options[:certificate_file] && os_type == 'Linux')
-          password_required = ask("\nDo you want to enable password authentication (y/n)? ")  {
+        if options[:private_key_file] && options[:certificate_file] && os_type == 'Linux'
+          password_required = ask("\nDo you want to enable password authentication (y/n)? ")  do
             |pass| pass.validate = /^y{1}$|^n{1}$/
-          }
+          end
         end
-        if password_required == 'y' or os_type == 'Windows'
-          puts "The supplied password must be 6-72 characters long and meet password complexity requirements."
-          puts "Require atleast 1 captial letter and digit."
-          options[:password] = ask("\nPASSWORD?  ") { |pass| pass.echo ="*"; pass.validate = regex }
+        if password_required == 'y' || os_type == 'Windows'
+          puts 'The supplied password must be 6-72 characters long and meet password complexity requirements.'
+          puts 'Require atleast 1 captial letter and digit.'
+          options[:password] = ask("\nPASSWORD?  ") { |pass| pass.echo = '*'; pass.validate = regex }
         end
         options
       end
 
       def test_tcp_connection(server)
-        unless (server && server.ipaddress)
-          Loggerx.error_with_exit("Instance is not running.")
+        unless server && server.ipaddress
+          Loggerx.error_with_exit('Instance is not running.')
           exit 1
         end
         puts("\n")
         if server.os_type == 'Linux'
           ip = server.ipaddress
-          port = server.tcp_endpoints.collect{|x| x["PublicPort"] if x["Name"] == 'SSH'}.compact.first
+          port = server.tcp_endpoints.map { |x| x['PublicPort'] if x['Name'] == 'SSH' }.compact.first
           Loggerx.info "Waiting for sshd on #{ip}:#{port}"
 
-          print("# ") until tcp_test_ssh(ip,port) {
+          print('# ') until tcp_test_ssh(ip, port) do
             sleep  10
-            Loggerx.info "done"
-          }
+            Loggerx.info 'done'
+          end
         elsif  server.os_type == 'Windows'
           ip = server.ipaddress
           port = 5985
           Loggerx.info "Waiting for winrm on #{ip}:#{port}"
 
-          print("# ") until tcp_test_winrm(ip,port) {
+          print('# ') until tcp_test_winrm(ip, port) do
             sleep  10
-            Loggerx.success("done")
-          }
+            Loggerx.success('done')
+          end
         end
       end
 
@@ -104,7 +119,7 @@ module Puppet
       end
 
       def wget_script
-      wget_content = <<-WGET
+        wget_content = <<-WGET
 URL = WScript.Arguments(0)
 saveTo = WScript.Arguments(1)
 Set objXMLHTTP = CreateObject("MSXML2.ServerXMLHTTP")
@@ -125,18 +140,15 @@ Set objADOStream = Nothing
 End if
 Set objXMLHTTP = Nothing
 WScript.Quit
-WGET
+        WGET
         wget_content
       end
-      
     end
   end
 end
 
 class String
-
-  def fix(size=18, padstr=' ')
+  def fix(size = 18, padstr = ' ')
     self[0...size].ljust(size, padstr)
   end
-
 end

@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'tilt'
 
 Puppet::Face.define :azure_sqldb, '1.0.0' do
@@ -14,17 +15,18 @@ Puppet::Face.define :azure_sqldb, '1.0.0' do
 
     when_invoked do |options|
       Puppet::SqlDatabase.initialize_env_variable(options)
-      db_server = Azure::SqlDatabaseManagementService.new
-
-      servers = db_server.list_servers
-      puts Tilt.new(Puppet::SqlDatabase.views('servers.erb'), 1, :trim => '%').render(nil, :db_servers => servers)
+      sql_service = Azure::SqlDatabaseManagementService.new
+      servers = sql_service.list_servers
+      template = Tilt.new(Puppet::SqlDatabase.views('servers.erb'))
+      template.render(nil, db_servers:  servers)
     end
 
     returns 'Array of database server objets.'
 
     examples <<-'EOT'
-      $ puppet azure_sqldb list --management-certificate path-to-azure-certificate \
-        --azure-subscription-id=YOUR-SUBSCRIPTION-ID --management-endpoint=https://management.database.windows.net:8443/
+      $ puppet azure_sqldb list --azure-subscription-id=YOUR-SUBSCRIPTION-ID \
+        --management-certificate azure-certificate-path \
+        --management-endpoint=https://management.database.windows.net:8443/
 
     Listing Servers
 

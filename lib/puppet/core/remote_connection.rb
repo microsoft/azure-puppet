@@ -6,7 +6,6 @@ require 'winrm'
 module Puppet
   module Core
     module RemoteConnection
-
       def scp_remote_upload(server, login, ssh_opts, local_path, remote_path)
         begin
           Net::SCP.start(server, login, ssh_opts) do |scp|
@@ -17,26 +16,26 @@ module Puppet
           e.remember_host!
           retry
         rescue Net::SSH::AuthenticationFailed => user
-          raise "Authentication failure for user #{user}.".inspect
+          fail "Authentication failure for user #{user}.".inspect
         rescue Exception => e
-          raise e.message.inspect
+          fail e.message.inspect
         end
       end
 
       def ssh_remote_execute(server, login, ssh_opts, command)
-        puts "Executing remote command ..."
+        puts 'Executing remote command ...'
         puts "Command: #{command}"
 
-        buffer = String.new
-        stdout = String.new
+        buffer = ''
+        stdout = ''
         exit_code = nil
 
         begin
           Net::SSH.start(server, login, ssh_opts) do |session|
             session.open_channel do |channel|
-            
+
               channel.request_pty do |c, success|
-                raise "could not request pty" unless success
+                fail 'could not request pty' unless success
                 channel.on_data do |ch, data|
                   if data =~ /\[sudo\]/ || data =~ /Password/i
                     channel.send_data "#{ssh_opts[:password]}\n"
@@ -58,7 +57,7 @@ module Puppet
                     puts buffer
                   end
                 end
-                channel.on_request("exit-status") do |ch, data|
+                channel.on_request('exit-status') do |ch, data|
                   exit_code = data.read_long
                   puts "SSH Command Exit Code: #{exit_code}"
                 end
@@ -73,22 +72,22 @@ module Puppet
           e.remember_host!
           retry
         rescue Net::SSH::AuthenticationFailed => user
-          raise "Authentication failure for user #{user}.".inspect
+          fail "Authentication failure for user #{user}.".inspect
         rescue Exception => e
           puts e.message
         end
 
-        puts "Executing remote command ... Done"
-        { :exit_code => exit_code, :stdout => stdout }
+        puts 'Executing remote command ... Done'
+        { exit_code: exit_code, stdout: stdout }
       end
 
       def winrm_remote_execute(node_ip, login, password, cmds, endpoint_protocol, port)
         endpoint = "#{endpoint_protocol}://#{node_ip}:#{port}/wsman"
         winrm = WinRM::WinRMWebService.new(endpoint,
-          :plaintext,
-          :user => login,
-          :pass => password,
-          :basic_auth_only => true)
+                                           :plaintext,
+                                           user: login,
+                                           pass: password,
+                                           basic_auth_only: true)
         cmds.each do |cmd|
           puts "Executing command #{cmd}"
           winrm.cmd(cmd) do |stdout, stderr|
@@ -97,7 +96,6 @@ module Puppet
           end
         end
       end
-    
     end
   end
 end
