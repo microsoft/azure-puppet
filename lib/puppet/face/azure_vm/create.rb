@@ -1,3 +1,4 @@
+# encoding: UTF-8
 
 Puppet::Face.define :azure_vm, '1.0.0' do
   action :create do
@@ -45,7 +46,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
           else
             puts
             msg = <<-'EOT'
-              To Bootstrap windows node log into the VM and run these two commands:
+              To Bootstrap windows node log into the VM and run these commands:
               winrm set winrm/config/service @{AllowUnencrypted="true"}
               winrm set winrm/config/service/auth @{Basic="true"}
               And then run puppet bootstrap command on master.
@@ -57,11 +58,12 @@ Puppet::Face.define :azure_vm, '1.0.0' do
     end
 
     examples <<-'EOT'
-      $ puppet azure_vm create  --vm-name vmname --management-certificate path-to-azure-certificate \
-           --vm-user ranjan  --password Password!@12  --storage-account-name storageaccount1'\
-           --image  b4590d9e3ed742e4a1d46e5424aa335e__SUSE-Linux-Enterprise-Server-11-SP2-Agent13\
-           --cloud-service-name cloudname --subscription-id YOUR-SUBSCRIPTION-ID \
-           --location "Southeast Asia" --tcp-endpoints "80,3889:3889"
+      $ puppet azure_vm create --vm-name vmname --location "Southeast Asia" \
+        --management-certificate path-to-azure-certificate --vm-user ranjan \
+        --password Password!@12 --storage-account-name storageaccount1'\
+        --image  b446e5424aa335e__SUSE-Linux-Enterprise-Server-11-SP2-Agent13 \
+        --cloud-service-name cloudname --subscription-id YOUR-SUBSCRIPTION-ID \
+        --tcp-endpoints "80,3889:3889"
     EOT
   end
 end

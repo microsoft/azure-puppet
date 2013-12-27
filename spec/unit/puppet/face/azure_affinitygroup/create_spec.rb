@@ -73,6 +73,7 @@ describe Puppet::Face[:azure_affinitygroup, :current] do
         any_parameters
       )
     end
+
     describe '(description)' do
       it 'description should be optional' do
         @options.delete(:description)

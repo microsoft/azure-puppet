@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'puppet/azurepack/bootstrap'
 
 Puppet::Face.define :azure_vm, '1.0.0' do

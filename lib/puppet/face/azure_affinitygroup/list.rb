@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 Puppet::Face.define :azure_affinitygroup, '1.0.0' do
   action :list do
 
@@ -21,8 +23,10 @@ Puppet::Face.define :azure_affinitygroup, '1.0.0' do
     returns 'Array of affinity group objets.'
 
     examples <<-'EOT'
-      $ puppet affinity_group list  --management-certificate path-to-azure-certificate \
-        --azure-subscription-id YOUR-SUBSCRIPTION-ID --management-endpoint=https://management.core.windows.net
+      $ puppet affinity_group list \
+        --management-certificate path-to-azure-certificate \
+        --azure-subscription-id YOUR-SUBSCRIPTION-ID \
+        --management-endpoint=https://management.core.windows.net
 
       Listing affinity groups
 
@@ -40,6 +44,6 @@ Puppet::Face.define :azure_affinitygroup, '1.0.0' do
           Description         : My Description
           Capability          : PersistentVMRole, HighMemory
 
-        EOT
+    EOT
   end
 end

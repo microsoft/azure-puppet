@@ -1,3 +1,4 @@
+# encoding: UTF-8
 
 Puppet::Face.define :azure_affinitygroup, '1.0.0' do
   action :create do
@@ -19,7 +20,7 @@ Puppet::Face.define :azure_affinitygroup, '1.0.0' do
           options[:label],
           others
         )
-      rescue Exception => e
+      rescue => e
         puts e.message
       end
     end

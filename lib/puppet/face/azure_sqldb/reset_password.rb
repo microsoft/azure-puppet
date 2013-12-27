@@ -1,3 +1,4 @@
+# encoding: UTF-8
 
 Puppet::Face.define :azure_sqldb, '1.0.0' do
   action :reset_password do
@@ -22,7 +23,7 @@ Puppet::Face.define :azure_sqldb, '1.0.0' do
         --management-certificate path-to-azure-certificate \
         --azure-subscription-id=YOUR-SUBSCRIPTION-ID --server-name hc786mm0l8 \
         --management-endpoint=https://management.database.windows.net:8443/\
-        
+
     EOT
   end
 end

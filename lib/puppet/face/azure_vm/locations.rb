@@ -1,4 +1,4 @@
-require 'tilt'
+# encoding: UTF-8
 
 Puppet::Face.define :azure_vm, '1.0.0' do
   action :locations do
@@ -6,8 +6,8 @@ Puppet::Face.define :azure_vm, '1.0.0' do
     summary 'List Windows Azure locations'
 
     description <<-'EOT'
-      The locations action obtains a list of locatons from the cloud provider and
-      displays them on the console output.
+      The locations action obtains a list of locatons from the cloud provider
+      and displays them on the console output.
     EOT
 
     Puppet::VirtualMachine.add_default_options(self)
@@ -20,10 +20,14 @@ Puppet::Face.define :azure_vm, '1.0.0' do
       template.render(nil, locations:  locations)
     end
 
-    returns 'Array of attribute hashes containing information about each Azure locations.'
+    returns <<-'EOT'
+      Array of attribute hashes containing information about
+      Windows Azure locations.'
+    EOT
 
     examples <<-'EOT'
-      $ puppet azure_vm locations --publish-settings-file azuremanagement.publishsettings
+      $ puppet azure_vm locations --publish-settings-file azure-certificate-path
+        --azure-subscription-id YOUR-SUBSCRIPTION-ID
       Location Name         Available Service
 
       West US :  Compute, Storage, PersistentVMRole
