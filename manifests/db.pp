@@ -1,4 +1,4 @@
-define windowsazure::db (
+class windowsazure::db (
   $azure_management_certificate,
   $azure_subscription_id,
   $login,
@@ -8,7 +8,7 @@ define windowsazure::db (
 
     Exec { path => ['/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/'] }
 
-    $puppet_command = "puppet azure_sqldb create --login $login --management-certificate $azure_management_certificate --azure-subscription-id $azure_subscription_id --password $password --location '$location'"
+    $puppet_command = "puppet azure_sqldb create --login ${login} --management-certificate ${azure_management_certificate} --azure-subscription-id ${azure_subscription_id} --password ${password} --location '${location}'"
 
     if $azure_management_certificate == undef {
       fail('Specify azure management certificate path.')
@@ -30,7 +30,7 @@ define windowsazure::db (
       fail('No location specified for provisioning VM.')
     }
 
-   if !defined( Package['azure'] ) {
+    if !defined( Package['azure'] ) {
       package { 'azure':
         ensure   => '0.6.0',
         provider => 'gem',
@@ -38,7 +38,7 @@ define windowsazure::db (
     }
 
     exec {"SQL database ${title}":
-      command    => "$puppet_command",
+      command    => $puppet_command,
       logoutput  => true
     }
 

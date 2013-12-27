@@ -1,0 +1,34 @@
+<NetworkConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/ServiceHosting/2011/07/NetworkConfiguration">
+  <VirtualNetworkConfiguration>
+    <Dns>
+      <DnsServers>
+        <DnsServer name="dns1" IPAddress="1.2.3.4" />
+        <DnsServer name="dns2" IPAddress="2.3.4.5" />
+      </DnsServers>
+    </Dns>
+    <VirtualNetworkSites>
+      <VirtualNetworkSite name="vnet-AG" AffinityGroup="test">
+        <AddressSpace>
+          <AddressPrefix>172.16.0.0/12</AddressPrefix>
+          <AddressPrefix>10.0.0.0/8</AddressPrefix>
+          <AddressPrefix>192.168.0.0/24</AddressPrefix>
+        </AddressSpace>
+        <Subnets>
+          <Subnet name="Subnet-1">
+            <AddressPrefix>172.16.0.0/12</AddressPrefix>
+          </Subnet>
+          <Subnet name="Subnet-2">
+            <AddressPrefix>10.0.0.0/8</AddressPrefix>
+          </Subnet>
+          <Subnet name="Subnet-4">
+            <AddressPrefix>192.168.0.0/26</AddressPrefix>
+          </Subnet>
+        </Subnets>
+        <DnsServersRef>
+          <DnsServerRef name="dns1" />
+          <DnsServerRef name="dns2" />
+        </DnsServersRef>
+      </VirtualNetworkSite>
+    </VirtualNetworkSites>
+  </VirtualNetworkConfiguration>
+</NetworkConfiguration>

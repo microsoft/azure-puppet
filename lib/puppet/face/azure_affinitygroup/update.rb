@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 Puppet::Face.define :azure_affinitygroup, '1.0.0' do
   action :update do
 
@@ -12,18 +14,23 @@ Puppet::Face.define :azure_affinitygroup, '1.0.0' do
     when_invoked do |options|
       Puppet::AffinityGroup.initialize_env_variable(options)
       affinity_group_service = Azure::BaseManagementService.new
-      others = { :description => options[:description] }
+      others = { description:  options[:description] }
       begin
-        affinity_group_service.update_affinity_group(options[:affinity_group_name], options[:label], others)
-      rescue Exception => e
+        affinity_group_service.update_affinity_group(
+          options[:affinity_group_name],
+          options[:label],
+          others
+        )
+      rescue => e
         puts e.message
       end
     end
 
     examples <<-'EOT'
-      $ puppet azure_affinitygroup update --management-certificate path-to-azure-certificate \
+      $ puppet azure_affinitygroup update --description 'Some Description'
+        --management-certificate path-to-azure-certificate \
         --azure-subscription-id YOUR-SUBSCRIPTION-ID --label aglabel \
-        --affinity-group-name agname --description 'Some Description'
+        --affinity-group-name agname
     EOT
   end
 end

@@ -1,4 +1,4 @@
-define windowsazure::vnet (
+class windowsazure::vnet (
   $azure_management_certificate,
   $azure_subscription_id,
   $virtual_network_name,
@@ -45,8 +45,7 @@ define windowsazure::vnet (
 
     $puppet_command = "${cmd} ${dns} ${snet}"
 
-    exec {"Creating virtual network ${title}":
-      require    => Package['azure'],
+    exec {"Creating virtual network":
       command    => $puppet_command,
       logoutput  => true
     }

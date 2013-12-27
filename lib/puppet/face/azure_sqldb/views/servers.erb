@@ -1,9 +1,12 @@
 <%if db_servers.class == Azure::SqlDatabaseManagement::SqlDatabase%>
+
  <%="Server Name".fix(20)%>: <%=db_servers.name %>
  <%="Administrator login".fix(20)%>: <%=db_servers.administrator_login%>
  <%="Location".fix(20)%>: <%=db_servers.location %>
 <%else%>
-<%="Listing Servers".bold%><%index=1%>
+<%="Listing Servers".bold%>
+<%index=1%>
+
 <%db_servers.each do |server|%>
   <%="Server: #{index}".bold%>
     <%="Server Name".fix(20)%>: <%=server.name %>

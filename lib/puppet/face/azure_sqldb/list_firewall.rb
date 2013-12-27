@@ -1,4 +1,4 @@
-require 'tilt'
+# encoding: UTF-8
 
 Puppet::Face.define :azure_sqldb, '1.0.0' do
   action :list_firewall do
@@ -6,8 +6,8 @@ Puppet::Face.define :azure_sqldb, '1.0.0' do
     summary 'List firewall of SQL database servers.'
     arguments 'list'
     description <<-'EOT'
-      The list_firewall action retrieves a list of all the server-level firewall rules for a
-      SQL Database server that belongs to a subscription.
+      The list_firewall action retrieves a list of all the server-level
+      firewall rules for a SQL Database server that belongs to a subscription.
     EOT
 
     Puppet::SqlDatabase.add_delete_options(self)
@@ -16,14 +16,19 @@ Puppet::Face.define :azure_sqldb, '1.0.0' do
       Puppet::SqlDatabase.initialize_env_variable(options)
       db_server = Azure::SqlDatabaseManagementService.new
 
-      firewalls = db_server.list_sql_server_firewall_rules(options[:server_name])
-      puts Tilt.new(Puppet::SqlDatabase.views('server_firewalls.erb'), 1, :trim => '%').render(nil, :firewalls => firewalls)
+      firewalls = db_server.list_sql_server_firewall_rules(
+        options[:server_name]
+      )
+      template = Tilt.new(Puppet::SqlDatabase.views('server_firewalls.erb'))
+      template.render(nil, firewalls:  firewalls)
     end
 
     examples <<-'EOT'
-      $  puppet azure_sqldb list_firewall --management-certificate path-to-azure-certificate \
-         --azure-subscription-id=YOUR-SUBSCRIPTION-ID --management-endpoint=https://management.database.windows.net:8443/\
-         --server-name=g2jxhsbk0w
+      $  puppet azure_sqldb list_firewall --server-name=g2jxhsbk0w \
+         --management-certificate path-to-azure-certificate \
+         --azure-subscription-id=YOUR-SUBSCRIPTION-ID \
+         --management-endpoint=https://management.database.windows.net:8443/ \
+
         Listing Firewall
 
         Firewall: 1

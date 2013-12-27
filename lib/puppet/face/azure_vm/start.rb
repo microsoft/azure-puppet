@@ -1,3 +1,4 @@
+# encoding: UTF-8
 
 Puppet::Face.define :azure_vm, '1.0.0' do
   action :start do
@@ -13,15 +14,19 @@ Puppet::Face.define :azure_vm, '1.0.0' do
     when_invoked do |options|
       Puppet::VirtualMachine.initialize_env_variable(options)
       virtual_machine_service = Azure::VirtualMachineManagementService.new
-      virtual_machine_service.start_virtual_machine(options[:vm_name], options[:cloud_service_name])
+      virtual_machine_service.start_virtual_machine(
+        options[:vm_name],
+        options[:cloud_service_name]
+      )
       nil
     end
 
     returns 'NONE'
 
     examples <<-'EOT'
-      $ puppet azure_vm start --publish-settings-file azuremanagement.publishsettings \
-       --cloud-service-name service_name --vm-name name
+      $ puppet azure_vm start --cloud-service-name service_name \
+        --management-certificate path-to-azure-certificate \
+        --azure-subscription-id YOUR-SUBSCRIPTION-ID --vm-name name
 
     EOT
   end
