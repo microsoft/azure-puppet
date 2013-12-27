@@ -1,4 +1,6 @@
-<%="Listing Firewall".bold%><%index=1%>
+<%="Listing Firewall".bold%>
+<%index=1%>
+
 <%firewalls.each do |firewall|%>
   <%="Firewall: #{index}".bold%>
     <%="Rule Name".fix(20)%>: <%=firewall[:rule] %>
