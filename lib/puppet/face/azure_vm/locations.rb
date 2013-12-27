@@ -26,8 +26,8 @@ Puppet::Face.define :azure_vm, '1.0.0' do
     EOT
 
     examples <<-'EOT'
-      $ puppet azure_vm locations --publish-settings-file azure-certificate-path
-        --azure-subscription-id YOUR-SUBSCRIPTION-ID
+      $ puppet azure_vm locations --azure-subscription-id YOUR-SUBSCRIPTION-ID\
+        --management-certificate path-to-azure-certificate
       Location Name         Available Service
 
       West US :  Compute, Storage, PersistentVMRole

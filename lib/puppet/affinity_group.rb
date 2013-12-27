@@ -1,4 +1,3 @@
-require 'tilt'
 require 'puppet/application_config'
 include Puppet::ApplicationConfig
 

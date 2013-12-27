@@ -1,4 +1,5 @@
 # encoding: UTF-8
+require 'tilt'
 
 Puppet::Face.define :azure_sqldb, '1.0.0' do
   action :list do

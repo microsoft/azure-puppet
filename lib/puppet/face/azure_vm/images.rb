@@ -24,8 +24,8 @@ Puppet::Face.define :azure_vm, '1.0.0' do
 
     examples <<-'EOT'
       $ puppet azure_vm images --azure-subscription-id YOUR-SUBSCRIPTION-ID \
-        --management-certificate path-to-azure-certificate \
-        
+        --management-certificate path-to-azure-certificate
+
       Listing Virtual Machine Images
 
       OS Type    Category                  Name

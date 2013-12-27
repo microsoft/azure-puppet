@@ -14,7 +14,8 @@ Puppet::Face.define :azure_vm, '1.0.0' do
     when_invoked do |options|
       Puppet::VirtualMachine.initialize_env_variable(options)
       virtual_machine_service = Azure::VirtualMachineManagementService.new
-      virtual_machine_service.start_virtual_machine(options[:vm_name],
+      virtual_machine_service.start_virtual_machine(
+        options[:vm_name],
         options[:cloud_service_name]
       )
       nil

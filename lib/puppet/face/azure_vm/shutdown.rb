@@ -24,7 +24,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
       $ puppet azure_vm shutdown --cloud-service-name service_name \
        --publish-settings-file azure-certificate-path --vm-name name \
        --management-certificate path-to-azure-certificate
-        
+
     EOT
   end
 end

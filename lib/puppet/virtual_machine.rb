@@ -235,7 +235,8 @@ module Puppet::VirtualMachine
       action.option '--winrm-transport=' do
         summary 'Winrm authentication protocol. Valid choices are http or https or http,https'
         description <<-EOT
-          Winrm authentication protocol. Valid choices are http or https or http,https.
+          Winrm authentication protocol.
+          Valid choices are http or https or http,https.
         EOT
         before_action do |act, args, options|
           winrm_transport = options[:winrm_transport].split(',')
@@ -257,14 +258,14 @@ module Puppet::VirtualMachine
 
     def add_vm_size_option(action)
       action.option '--vm-size=' do
-        summary 'The instance size. valid choice are ExtraSmall, Small, Medium, Large, ExtraLarge'
+        role_sizes = %w(ExtraSmall Small Medium Large ExtraLarge A6 A7)
+        summary "The instance size. valid choice are #{role_sizes.join(', ')}"
         description <<-EOT
-          The instance size. valid choice are ExtraSmall, Small, Medium, Large, ExtraLarge
+          The instance size. valid choice are #{role_sizes.join(', ')}
         EOT
-        before_action do |act, args, options|
-          valid_role_sizes = %w(ExtraSmall Small Medium Large ExtraLarge A6 A7)
-          if options[:vm_size] && !valid_role_sizes.include?(options[:vm_size])
-            fail ArgumentError, 'The vm-size is not valid. Valid choice are ExtraSmall, Small, Medium, Large, ExtraLarge'
+        before_action do |act, args, options|          
+          if options[:vm_size] && !role_sizes.include?(options[:vm_size])
+            fail ArgumentError, "The vm-size is not valid. Valid choice are #{role_sizes.join(', ')}"
           end
         end
       end
