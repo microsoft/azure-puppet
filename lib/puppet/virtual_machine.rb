@@ -8,18 +8,14 @@ module Puppet::VirtualMachine
     end
 
     def add_shutdown_options(action)
-      add_deployment_options(action)
+      add_default_options(action)
+      add_cloud_service_name_option(action, false)
       add_vm_name_option(action, false)
     end
 
     def add_delete_options(action)
       add_default_options(action)
       add_vm_name_option(action, false)
-      add_cloud_service_name_option(action, false)
-    end
-
-    def add_deployment_options(action)
-      add_default_options(action)
       add_cloud_service_name_option(action, false)
     end
 
@@ -31,7 +27,6 @@ module Puppet::VirtualMachine
       add_winrm_user_option(action)
       add_winrm_port_option(action)
       add_puppet_master_ip_option(action, false)
-      add_certificate_file_option(action)
       add_private_key_file_option(action)
       add_bootstrap_winrm_transport_option(action)
     end
@@ -84,7 +79,9 @@ module Puppet::VirtualMachine
           else
             Puppet::VirtualMachine.initialize_env_variable(options)
             image_service = Azure::VirtualMachineImageManagementService.new
-            os_image = image_service.list_virtual_machine_images.select { |x| x.name == options[:image] }.first
+            os_image = image_service.list_virtual_machine_images.select {
+              |x| x.name == options[:image]
+            }.first
             fail ArgumentError, 'Source image name is invalid' unless os_image
             @os_type = os_image.os_type
           end
@@ -133,7 +130,8 @@ module Puppet::VirtualMachine
       action.option '--puppet-master-ip=' do
         summary 'The puppet master ip address.'
         description <<-EOT
-          The puppet master ip address. It mandatory incase of puppet node installation.
+          The puppet master ip address.
+          It mandatory incase of puppet node installation.
         EOT
         required unless optional
         before_action do |act, args, options|
@@ -174,7 +172,6 @@ module Puppet::VirtualMachine
       action.option '--tcp-endpoints=' do
         summary 'Tcp End Points. '
         description 'Add Tcp end points. example --tcp-endpoints="80,3889:3889"'
-
       end
     end
 
@@ -233,14 +230,16 @@ module Puppet::VirtualMachine
 
     def add_winrm_transport_option(action)
       action.option '--winrm-transport=' do
-        summary 'Winrm authentication protocol. Valid choices are http or https or http,https'
+        summary 'Winrm authentication protocol default is http.'
         description <<-EOT
           Winrm authentication protocol.
           Valid choices are http or https or http,https.
         EOT
         before_action do |act, args, options|
           winrm_transport = options[:winrm_transport].split(',')
-          winrm_transport_size = winrm_transport.select { |x| x.downcase == 'http' || x.downcase == 'https' }.size
+          winrm_transport_size = winrm_transport.select do
+            |x| x.downcase == 'http' || x.downcase == 'https'
+          end.size
           unless !winrm_transport.nil? && (winrm_transport_size > 0)
             fail ArgumentError, 'The winrm transport is not valid. Valid choices are http or https or http,https'
           end
@@ -263,7 +262,7 @@ module Puppet::VirtualMachine
         description <<-EOT
           The instance size. valid choice are #{role_sizes.join(', ')}
         EOT
-        before_action do |act, args, options|          
+        before_action do |act, args, options|
           if options[:vm_size] && !role_sizes.include?(options[:vm_size])
             fail ArgumentError, "The vm-size is not valid. Valid choice are #{role_sizes.join(', ')}"
           end

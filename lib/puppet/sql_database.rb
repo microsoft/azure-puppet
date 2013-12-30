@@ -5,7 +5,8 @@ include Puppet::ApplicationConfig
 module Puppet::SqlDatabase
   class << self
     def initialize_env_variable(options)
-      options[:management_endpoint] ||= 'https://management.database.windows.net:8443/'
+      sql_db_endpoint = 'https://management.database.windows.net:8443/'
+      options[:management_endpoint] ||= sql_db_endpoint
       ENV['azure_management_certificate'.upcase] = options[:management_certificate]
       ENV['azure_subscription_id'.upcase] = options[:azure_subscription_id]
       ENV['azure_management_endpoint'.upcase] = options[:management_endpoint]
@@ -51,9 +52,7 @@ module Puppet::SqlDatabase
     def add_login_option(action)
       action.option '--login=' do
         summary 'The login username for the Windows Azure sql database server.'
-        description <<-EOT
-          The login usernam for the Windows Azure sql database server.
-        EOT
+        description 'The login username of Windows Azure sql database server.'
         required
         before_action do |act, args, options|
           if options[:login].empty?
@@ -105,9 +104,7 @@ module Puppet::SqlDatabase
     def  add_start_ip_address_option(action)
       action.option '--start-ip-address=' do
         summary 'The start ip address for the sql database server firewall.'
-        description <<-EOT
-          The start ip address for the sql database server firewall.
-        EOT
+        description 'The start ip address of sql database server firewall.'
       end
     end
 
