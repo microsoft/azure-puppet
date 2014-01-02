@@ -25,12 +25,11 @@ module Puppet
       def ssh_remote_execute(server, login, ssh_opts, command)
         puts 'Executing remote command ...'
         puts "Command: #{command}"
-
         buffer = ''
         stdout = ''
         exit_code = nil
-
         begin
+          ssh_opts[:timeout] = 10
           Net::SSH.start(server, login, ssh_opts) do |session|
             session.open_channel do |channel|
 
@@ -67,6 +66,12 @@ module Puppet
             end
             session.loop
           end
+        rescue Timeout::Error
+          fail "Connection Timed out"
+        rescue Errno::EHOSTUNREACH
+          fail "Host unreachable"
+        rescue Errno::ECONNREFUSED
+          fail "Connection refused"
         rescue Net::SSH::HostKeyMismatch => e
           puts "remembering new key: #{e.fingerprint}"
           e.remember_host!
@@ -84,10 +89,10 @@ module Puppet
       def winrm_remote_execute(node_ip, login, password, cmds, endpoint_protocol, port)
         endpoint = "#{endpoint_protocol}://#{node_ip}:#{port}/wsman"
         winrm = WinRM::WinRMWebService.new(endpoint,
-                                           :plaintext,
-                                           user: login,
-                                           pass: password,
-                                           basic_auth_only: true)
+          :plaintext,
+          user: login,
+          pass: password,
+          basic_auth_only: true)
         cmds.each do |cmd|
           puts "Executing command #{cmd}"
           winrm.cmd(cmd) do |stdout, stderr|

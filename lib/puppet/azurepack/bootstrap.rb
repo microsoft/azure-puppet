@@ -10,7 +10,7 @@ module Puppet
     module BootStrap
       class << self
         def start(params)
-          puts "Installing puppet node on #{params[:node_ipaddress]}\n"
+          puts "Installing puppet on node #{params[:node_ipaddress]}\n"
           puts
           if params[:winrm_user]
             bootstrap_windows_node(params)
