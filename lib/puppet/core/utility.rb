@@ -1,16 +1,47 @@
+# encoding: UTF-8
 require 'highline/import'
 
 module Puppet
   module Core
+    module Loggerx
+      class << self
+        def info(msg)
+          puts msg.bold.white
+        end
+
+        def error_with_exit(msg)
+          puts  msg.bold.red
+          fail msg.bold.red
+        end
+
+        def warn(msg)
+          fail msg.yellow
+        end
+
+        def error(msg)
+          fail msg.bold.red
+        end
+
+        def exception_message(msg)
+          print msg.bold.red
+          fail msg.bold.red
+        end
+
+        def success(msg)
+          msg_with_new_line = msg + "\n"
+          print msg_with_new_line.green
+        end
+      end
+    end
+
     module Utility
       def random_string(str = 'azure', no_of_char = 5)
         str + (0...no_of_char).map { ('a'..'z').to_a[rand(26)] }.join
       end
 
       def validate_file(filepath, filename, extensions)
-        if filepath.empty?
-          fail ArgumentError, "#{filename} file is required"
-        end
+        fail ArgumentError, "#{filename} file is required" if filepath.empty?
+
         unless test 'f', filepath
           fail ArgumentError, "Could not find file '#{filepath}'"
         end
@@ -72,8 +103,7 @@ module Puppet
         tcp_socket = TCPSocket.new(fqdn, sshport)
         readable = IO.select([tcp_socket], nil, nil, 5)
         if readable
-          puts "\n"
-          Loggerx.info("sshd accepting connections on #{fqdn}, banner is #{tcp_socket.gets}")
+          Loggerx.info("Node #{fqdn} is accepting ssh connections.")
           yield
           true
         else
@@ -150,5 +180,26 @@ end
 class String
   def fix(size = 18, padstr = ' ')
     self[0...size].ljust(size, padstr)
+  end
+
+  { reset:  0,
+    bold:  1,
+    dark:  2,
+    underline:  4,
+    blink:  5,
+    orange:  6,
+    negative:  7,
+    black: 30,
+    red: 31,
+    green: 32,
+    yellow: 33,
+    blue: 34,
+    magenta: 35,
+    cyan: 36,
+    white: 37,
+  }.each do |key, value|
+    define_method key do
+      "\e[#{value}m" + self + "\e[0m"
+    end
   end
 end
