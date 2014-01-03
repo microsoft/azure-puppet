@@ -36,7 +36,7 @@ module Puppet
             winrm_port = params[:winrm_port] || 5985
             endpoint_protocol = 'http'
           end
-
+          test_winrm_connecton(node_ip, winrm_port)
           cmds = []
           cmds << 'mkdir C:\\puppet'
           wget_script.each_line do |line|
@@ -61,21 +61,23 @@ module Puppet
           end
           ssh_opts[:paranoid] = false
           ssh_opts[:port] = params[:ssh_port] || 22
+          ipaddress = params[:node_ipaddress]
+          wait_for_connection(ipaddress, ssh_opts[:port])
           options = { environment: 'production', puppet_master_ip: params[:puppet_master_ip] }
-          options[:tmp_dir] = File.join('/', 'tmp', random_string('puppet-tmp-location-', 10))
-          create_tmpdir_cmd = "bash -c 'umask 077; mkdir #{options[:tmp_dir]}'"
-          ssh_remote_execute(params[:node_ipaddress], login, ssh_opts, create_tmpdir_cmd)
-          tmp_script_file = compile_template(options)
-          remote_script_path = File.join(options[:tmp_dir], 'puppet_installation_script.sh')
-          scp_remote_upload(params[:node_ipaddress], login, ssh_opts, tmp_script_file.path, remote_script_path)
+          tmp_dir = File.join('/', 'tmp', random_string('puppet-tmp-location-', 10))
+          create_tmpdir_cmd = "bash -c 'umask 077; mkdir #{tmp_dir}'"
+          ssh_remote_execute(ipaddress, login, ssh_opts, create_tmpdir_cmd)
+          tmp_script_file = compile_template('puppet-agent-bootstrap', options)
+          remote_script_path = File.join(tmp_dir, 'puppet_installation_script.sh')
+          scp_remote_upload(ipaddress, login, ssh_opts, tmp_script_file.path, remote_script_path)
           cmd_prefix = login == 'root' ? '' : 'sudo '
           install_command = "#{cmd_prefix}bash -c 'chmod u+x #{remote_script_path};  sed -i 's/\r//' #{remote_script_path}; #{remote_script_path}'"
-          ssh_remote_execute(params[:node_ipaddress], login, ssh_opts, install_command)
+          ssh_remote_execute(ipaddress, login, ssh_opts, install_command)
         end
 
-        def compile_template(options)
+        def compile_template(template_name, options)
           puts 'Installing Puppet ...'
-          install_script = Installer.build_installer_template('puppet-agent-bootstrap', options)
+          install_script = Installer.build_installer_template(template_name, options)
           puts('Compiled installation script:')
           begin
             f = Tempfile.open('install_script')

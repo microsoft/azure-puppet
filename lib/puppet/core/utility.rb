@@ -72,34 +72,14 @@ module Puppet
         options
       end
 
-      def test_tcp_connection(server)
-        unless server && server.ipaddress
-          Loggerx.error_with_exit('Instance is not running.')
-          exit 1
-        end
-        puts("\n")
-        if server.os_type == 'Linux'
-          ip = server.ipaddress
-          port = server.tcp_endpoints.map { |x| x['PublicPort'] if x['Name'] == 'SSH' }.compact.first
-          Loggerx.info "Waiting for sshd on #{ip}:#{port}"
-
-          print('# ') until tcp_test_ssh(ip, port) do
-            sleep  10
-            Loggerx.info 'done'
-          end
-        elsif  server.os_type == 'Windows'
-          ip = server.ipaddress
-          port = 5985
-          Loggerx.info "Waiting for winrm on #{ip}:#{port}"
-
-          print('# ') until tcp_test_winrm(ip, port) do
-            sleep  10
-            Loggerx.success('done')
-          end
+      def wait_for_connection(ipaddress, port)
+        Loggerx.info "Waiting for sshd on #{ipaddress}:#{port}"
+        print('# ') until test_ssh_connecton(ipaddress, port) do
+          sleep 10
         end
       end
 
-      def tcp_test_ssh(fqdn, sshport)
+      def test_ssh_connecton(fqdn, sshport)
         tcp_socket = TCPSocket.new(fqdn, sshport)
         readable = IO.select([tcp_socket], nil, nil, 5)
         if readable
@@ -126,26 +106,25 @@ module Puppet
         tcp_socket && tcp_socket.close
       end
 
-      def tcp_test_winrm(ip_addr, port)
-        hostname = ip_addr
-        TCPSocket.new(hostname, port)
+      def test_winrm_connecton(fqdn, port)
+        Loggerx.info "Waiting for winrm on #{fqdn}:#{port}"
+        tcp_socket = TCPSocket.new(fqdn, port)
+        Loggerx.success 'done'
         return true
       rescue SocketError
-        sleep 2
-        false
+        raise 'Socket Error'
       rescue Errno::ETIMEDOUT
-        false
+        fail 'Connection timeout'
       rescue Errno::EPERM
-        false
+        fail 'Operation not permitted'
       rescue Errno::ECONNREFUSED
-        sleep 2
-        false
+        fail 'Connection Refused'
       rescue Errno::EHOSTUNREACH
-        sleep 2
-        false
+        fail 'Not Reachable'
       rescue Errno::ENETUNREACH
-        sleep 2
-        false
+        fail 'Not Reachable'
+      ensure
+        tcp_socket && tcp_socket.close
       end
 
       def wget_script
