@@ -40,7 +40,6 @@ Puppet::Face.define :azure_vm, '1.0.0' do
         options[:node_ipaddress] = server.ipaddress
         if options[:puppet_master_ip] && server
           if  server.os_type == 'Linux'
-            test_tcp_connection(server)
             options[:ssh_user] = params[:vm_user]
             Puppet::AzurePack::BootStrap.start(options)
           else

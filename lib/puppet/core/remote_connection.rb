@@ -1,4 +1,4 @@
-require 'rubygems'
+# encoding: UTF-8
 require 'net/ssh'
 require 'net/scp'
 require 'winrm'
@@ -16,31 +16,28 @@ module Puppet
           e.remember_host!
           retry
         rescue Net::SSH::AuthenticationFailed => user
-          fail "Authentication failure for user #{user}.".inspect
-        rescue Exception => e
-          fail e.message.inspect
+          fail "Authentication failure for user #{user}."
+        rescue => e
+          fail e.message
         end
       end
 
       def ssh_remote_execute(server, login, ssh_opts, command)
         puts 'Executing remote command ...'
         puts "Command: #{command}"
-
         buffer = ''
         stdout = ''
         exit_code = nil
-
         begin
+          ssh_opts[:timeout] = 10
           Net::SSH.start(server, login, ssh_opts) do |session|
             session.open_channel do |channel|
-
               channel.request_pty do |c, success|
                 fail 'could not request pty' unless success
                 channel.on_data do |ch, data|
                   if data =~ /\[sudo\]/ || data =~ /Password/i
                     channel.send_data "#{ssh_opts[:password]}\n"
                   end
-
                   buffer << data
                   stdout << data
                   if buffer =~ /\n/
@@ -53,9 +50,7 @@ module Puppet
                 end
                 channel.on_eof do |ch|
                   # Display anything remaining in the buffer
-                  unless buffer.empty?
-                    puts buffer
-                  end
+                  puts buffer unless buffer.empty?
                 end
                 channel.on_request('exit-status') do |ch, data|
                   exit_code = data.read_long
@@ -67,13 +62,19 @@ module Puppet
             end
             session.loop
           end
+        rescue Timeout::Error
+          raise 'Connection Timed out'
+        rescue Errno::EHOSTUNREACH
+          fail 'Host unreachable'
+        rescue Errno::ECONNREFUSED
+          fail 'Connection refused'
         rescue Net::SSH::HostKeyMismatch => e
           puts "remembering new key: #{e.fingerprint}"
           e.remember_host!
           retry
         rescue Net::SSH::AuthenticationFailed => user
-          fail "Authentication failure for user #{user}.".inspect
-        rescue Exception => e
+          fail "Authentication failure for user #{user}."
+        rescue => e
           puts e.message
         end
 
@@ -83,11 +84,13 @@ module Puppet
 
       def winrm_remote_execute(node_ip, login, password, cmds, endpoint_protocol, port)
         endpoint = "#{endpoint_protocol}://#{node_ip}:#{port}/wsman"
-        winrm = WinRM::WinRMWebService.new(endpoint,
-                                           :plaintext,
-                                           user: login,
-                                           pass: password,
-                                           basic_auth_only: true)
+        winrm = WinRM::WinRMWebService.new(
+          endpoint,
+          :plaintext,
+          user: login,
+          pass: password,
+          basic_auth_only: true
+        )
         cmds.each do |cmd|
           puts "Executing command #{cmd}"
           winrm.cmd(cmd) do |stdout, stderr|

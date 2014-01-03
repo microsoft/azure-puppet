@@ -1,16 +1,47 @@
+# encoding: UTF-8
 require 'highline/import'
 
 module Puppet
   module Core
+    module Loggerx
+      class << self
+        def info(msg)
+          puts msg.bold.white
+        end
+
+        def error_with_exit(msg)
+          puts  msg.bold.red
+          fail msg.bold.red
+        end
+
+        def warn(msg)
+          fail msg.yellow
+        end
+
+        def error(msg)
+          fail msg.bold.red
+        end
+
+        def exception_message(msg)
+          print msg.bold.red
+          fail msg.bold.red
+        end
+
+        def success(msg)
+          msg_with_new_line = msg + "\n"
+          print msg_with_new_line.green
+        end
+      end
+    end
+
     module Utility
       def random_string(str = 'azure', no_of_char = 5)
         str + (0...no_of_char).map { ('a'..'z').to_a[rand(26)] }.join
       end
 
       def validate_file(filepath, filename, extensions)
-        if filepath.empty?
-          fail ArgumentError, "#{filename} file is required"
-        end
+        fail ArgumentError, "#{filename} file is required" if filepath.empty?
+
         unless test 'f', filepath
           fail ArgumentError, "Could not find file '#{filepath}'"
         end
@@ -41,39 +72,18 @@ module Puppet
         options
       end
 
-      def test_tcp_connection(server)
-        unless server && server.ipaddress
-          Loggerx.error_with_exit('Instance is not running.')
-          exit 1
-        end
-        puts("\n")
-        if server.os_type == 'Linux'
-          ip = server.ipaddress
-          port = server.tcp_endpoints.map { |x| x['PublicPort'] if x['Name'] == 'SSH' }.compact.first
-          Loggerx.info "Waiting for sshd on #{ip}:#{port}"
-
-          print('# ') until tcp_test_ssh(ip, port) do
-            sleep  10
-            Loggerx.info 'done'
-          end
-        elsif  server.os_type == 'Windows'
-          ip = server.ipaddress
-          port = 5985
-          Loggerx.info "Waiting for winrm on #{ip}:#{port}"
-
-          print('# ') until tcp_test_winrm(ip, port) do
-            sleep  10
-            Loggerx.success('done')
-          end
+      def wait_for_connection(ipaddress, port)
+        Loggerx.info "Waiting for sshd on #{ipaddress}:#{port}"
+        print('# ') until test_ssh_connecton(ipaddress, port) do
+          sleep 10
         end
       end
 
-      def tcp_test_ssh(fqdn, sshport)
+      def test_ssh_connecton(fqdn, sshport)
         tcp_socket = TCPSocket.new(fqdn, sshport)
         readable = IO.select([tcp_socket], nil, nil, 5)
         if readable
-          puts "\n"
-          Loggerx.info("sshd accepting connections on #{fqdn}, banner is #{tcp_socket.gets}")
+          Loggerx.info("Node #{fqdn} is accepting ssh connections.")
           yield
           true
         else
@@ -96,26 +106,25 @@ module Puppet
         tcp_socket && tcp_socket.close
       end
 
-      def tcp_test_winrm(ip_addr, port)
-        hostname = ip_addr
-        TCPSocket.new(hostname, port)
+      def test_winrm_connecton(fqdn, port)
+        Loggerx.info "Waiting for winrm on #{fqdn}:#{port}"
+        tcp_socket = TCPSocket.new(fqdn, port)
+        Loggerx.success 'done'
         return true
       rescue SocketError
-        sleep 2
-        false
+        raise 'Socket Error'
       rescue Errno::ETIMEDOUT
-        false
+        fail 'Connection timeout'
       rescue Errno::EPERM
-        false
+        fail 'Operation not permitted'
       rescue Errno::ECONNREFUSED
-        sleep 2
-        false
+        fail 'Connection Refused'
       rescue Errno::EHOSTUNREACH
-        sleep 2
-        false
+        fail 'Not Reachable'
       rescue Errno::ENETUNREACH
-        sleep 2
-        false
+        fail 'Not Reachable'
+      ensure
+        tcp_socket && tcp_socket.close
       end
 
       def wget_script
@@ -150,5 +159,26 @@ end
 class String
   def fix(size = 18, padstr = ' ')
     self[0...size].ljust(size, padstr)
+  end
+
+  { reset:  0,
+    bold:  1,
+    dark:  2,
+    underline:  4,
+    blink:  5,
+    orange:  6,
+    negative:  7,
+    black: 30,
+    red: 31,
+    green: 32,
+    yellow: 33,
+    blue: 34,
+    magenta: 35,
+    cyan: 36,
+    white: 37,
+  }.each do |key, value|
+    define_method key do
+      "\e[#{value}m" + self + "\e[0m"
+    end
   end
 end
