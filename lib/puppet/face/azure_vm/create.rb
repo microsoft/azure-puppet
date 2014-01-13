@@ -35,7 +35,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
         affinity_group_name:  options[:affinity_group_name]
       }
       others.merge!(winrm_transport:  options[:winrm_transport]) unless options[:winrm_transport].nil?
-      server = virtual_machine_service.create_virtual_machine(params, others)
+      server = virtual_machine_service.create_virtual_machine(params, others, options[:add_role])
       unless server.class == String
         options[:node_ipaddress] = server.ipaddress
         if options[:puppet_master_ip] && server
