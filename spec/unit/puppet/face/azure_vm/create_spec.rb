@@ -53,6 +53,7 @@ describe Puppet::Face[:azure_vm, :current] do
     end
     vm_service.any_instance.stubs(:create_virtual_machine).with(
       anything,
+      anything,
       anything
     ).returns(virtual_machine_obj)
     image_service.any_instance.expects(
@@ -120,6 +121,38 @@ describe Puppet::Face[:azure_vm, :current] do
   end
 
   describe 'optional parameter validation' do
+
+    describe '(add_role)' do
+      it 'add_role should be optional' do
+        @options.delete(:add_role)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+
+      it 'storage account and cloud service should be optional if add role is empty' do
+        @options.delete(:add_role)
+        @options.delete(:storage_account_name)
+        @options.delete(:cloud_service_name)
+        expect { subject.create(@options) }.to_not raise_error
+      end
+
+      it 'should validate the storage_account_name' do
+        @options[:add_role] = 'true'
+        @options.delete(:storage_account_name)
+        expect { subject.create(@options) }.to raise_error(
+          ArgumentError,
+          /The storage account name is required/
+        )
+      end
+
+      it 'should validate the cloud_service_name' do
+        @options[:add_role] = 'true'
+        @options.delete(:cloud_service_name)
+        expect { subject.create(@options) }.to raise_error(
+          ArgumentError,
+          /The cloud service name is required/
+        )
+      end
+    end
 
     describe '(vm_size)' do
       it 'vm_size should be optional' do
