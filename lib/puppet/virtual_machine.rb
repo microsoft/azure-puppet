@@ -53,6 +53,7 @@ module Puppet
         add_virtual_network_option(action)
         add_subnet_option(action)
         add_affinity_group_option(action)
+        add_role_option(action)
       end
 
       def add_vm_name_option(action, optional = true)
@@ -180,7 +181,6 @@ module Puppet
         action.option '--node-ipaddress=' do
           summary 'Node Ip address. '
           description 'The ip address where puppet need to install.'
-
           required
           before_action do |act, args, options|
             validate_bootstrap_options(options)
@@ -269,7 +269,6 @@ module Puppet
         action.option '--virtual-network-name=' do
           summary 'The virtual network name.'
           description 'The name of virtual network.'
-
         end
       end
 
@@ -277,7 +276,6 @@ module Puppet
         action.option '--virtual-network-subnet=' do
           summary 'The virtual network subnet.'
           description 'The subnet of virtual network.'
-
         end
       end
 
@@ -336,10 +334,30 @@ module Puppet
             unless ['http', 'https', nil].include?(winrm_transport)
               fail ArgumentError, 'The winrm transport is not valid. Valid choices are http or https'
             end
-
           end
         end
       end
+
+      def add_role_option(action)
+        action.option '--add-role=' do
+          summary 'create multiple roles under the same cloud service'
+          description 'create multiple roles under the same cloud service'
+          before_action do |act, args, options|
+            options[:add_role] = options[:add_role] == 'true' ? true : false
+            unless [true, false, nil].include?(options[:add_role])
+              fail ArgumentError, 'Add role is not valid. Valid choices are true or false'
+            end
+            if  options[:add_role]
+              if options[:storage_account_name].nil?
+                fail ArgumentError, 'The storage account name is required'
+              elsif options[:cloud_service_name].nil?
+                fail ArgumentError, 'The cloud service name is required'
+              end
+            end
+          end
+        end
+      end
+
     end
   end
 end

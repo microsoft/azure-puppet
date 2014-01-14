@@ -12,7 +12,8 @@ class windowsazure::vm (
   $certificate_file = undef ,
   $storage_account_name = undef,
   $cloud_service_name = undef,
-  $password = undef
+  $password = undef,
+  $add_role = 'false'
 ) {
 
     Exec { path => ['/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/'] }
