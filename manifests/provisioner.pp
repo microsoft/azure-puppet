@@ -18,6 +18,7 @@ class windowsazure::provisioner (
   $virtual_network_name         = undef,
   $vm_size                      = 'Small',
   $affinity_group_name          = undef,
+  $add_role                     = 'false',
   # Require for SQL database create
   $create_sqldb                 = true,
   $db_login                     = undef,
@@ -60,7 +61,8 @@ class windowsazure::provisioner (
       certificate_file             => $certificate_file,
       storage_account_name         => $storage_account_name,
       cloud_service_name           => $cloud_service_name,
-      password                     => $password
+      password                     => $password,
+      add_role                     => $add_role
     }
   }
 
