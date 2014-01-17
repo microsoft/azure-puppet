@@ -37,9 +37,9 @@ Puppet::Face.define :azure_vm, '1.0.0' do
       others.merge!(winrm_transport:  options[:winrm_transport]) unless options[:winrm_transport].nil?
       server = virtual_machine_service.create_virtual_machine(params, others, options[:add_role])
       unless server.class == String
-        options[:node_ipaddress] = server.ipaddress
         if options[:puppet_master_ip] && server
           if  server.os_type == 'Linux'
+            options[:node_ipaddress] = server.ipaddress
             options[:ssh_user] = params[:vm_user]
             Puppet::AzurePack::BootStrap.start(options)
           else

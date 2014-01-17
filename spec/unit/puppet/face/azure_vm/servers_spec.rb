@@ -42,7 +42,6 @@ describe Puppet::Face[:azure_vm, :current] do
 
       it 'should print server details' do
         servers = subject.servers(@options)
-        expect(servers).to match(/Service           : #{vm_name}-service-/)
         expect(servers).to match(/Role              : #{vm_name}/)
         expect(servers).to match(/IP Address        : #{ip_address}/)
       end
