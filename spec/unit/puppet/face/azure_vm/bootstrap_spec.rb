@@ -106,6 +106,18 @@ describe Puppet::Face[:azure_vm, :current] do
           end
         end
 
+        describe '(agent_environment)' do
+          it 'should validate the agent_environment' do
+            @options.delete(:agent_environment)
+            expect { subject.bootstrap(@options) }.to_not raise_error
+          end
+
+          it 'should validate the agent_environment' do
+            @options[:agent_environment] = 'development'
+            expect { subject.bootstrap(@options) }.to_not raise_error
+          end
+        end
+
         describe '(private_key_file)' do
           it 'should be optional' do
             @options.delete(:private_key_file)

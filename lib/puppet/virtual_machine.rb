@@ -31,6 +31,7 @@ module Puppet
         add_puppet_master_ip_option(action, false)
         add_private_key_file_option(action)
         add_bootstrap_winrm_transport_option(action)
+        add_agent_environment_options(action)
       end
 
       def add_create_options(action)
@@ -336,10 +337,17 @@ module Puppet
             unless ['http', 'https', nil].include?(winrm_transport)
               fail ArgumentError, 'The winrm transport is not valid. Valid choices are http or https'
             end
-
           end
         end
       end
+
+      def add_agent_environment_options(action)
+        action.option '--agent-environment=' do
+          summary 'Pupppet agent environment. default is production'
+          description 'Pupppet agent environment. default is production'
+        end
+      end
+      
     end
   end
 end
