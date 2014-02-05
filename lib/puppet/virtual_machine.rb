@@ -341,8 +341,12 @@ module Puppet
 
       def add_role_option(action)
         action.option '--add-role=' do
-          summary 'create multiple roles under the same cloud service'
-          description 'create multiple roles under the same cloud service'
+          summary 'it creates multiple roles under the same cloud service. add-role expects true or false.'
+          description <<-EOT
+          add_role is used as a flag to create multiple roles under the same cloud service. 
+          This parameter is false by default. Atleast a single deployment should be created 
+          under a hosted service prior to setting this flag.
+          EOT
           before_action do |act, args, options|
             options[:add_role] = options[:add_role] == 'true' ? true : false
             unless [true, false, nil].include?(options[:add_role])
