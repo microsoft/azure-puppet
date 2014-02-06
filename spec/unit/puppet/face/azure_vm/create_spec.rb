@@ -45,7 +45,8 @@ describe Puppet::Face[:azure_vm, :current] do
       virtual_network_name: 'vnet',
       virtual_network_subnet: 'Subnet-1',
       winrm_transport: 'http',
-      vm_size: 'Small'
+      vm_size: 'Small',
+      availability_set: 'availabiity-set-name'
     }
     Azure.configure do |config|
       config.management_certificate = @options[:management_certificate]
@@ -166,6 +167,13 @@ describe Puppet::Face[:azure_vm, :current] do
           ArgumentError,
           /The vm-size is not valid/
         )
+      end
+    end
+
+    describe '(availability_set)' do
+      it 'availability_set should be optional' do
+        @options.delete(:availability_set)
+        expect { subject.create(@options) }.to_not raise_error
       end
     end
 

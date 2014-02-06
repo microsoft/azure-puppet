@@ -16,8 +16,8 @@ Puppet::Face.define :azure_vm, '1.0.0' do
 
     examples <<-'EOT'
       $ puppet azure_vm bootstrap --node-ip-address=domain.cloudapp.net \
-       --vm-user username --puppet-master-ip 152.56.161.48 --password Abcd123
-
+       --vm-user username --puppet-master-ip 152.56.161.48 --password Abcd123 \
+       --agent-environment development
     EOT
   end
 end
