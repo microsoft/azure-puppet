@@ -55,6 +55,7 @@ module Puppet
         add_subnet_option(action)
         add_affinity_group_option(action)
         add_role_option(action)
+        add_availability_set_options(action)
       end
 
       def add_vm_name_option(action, optional = true)
@@ -369,7 +370,14 @@ module Puppet
           description 'Pupppet agent environment. default is production'
         end
       end
-      
+
+      def add_availability_set_options(action)
+        action.option '--availability-set=' do
+          summary 'Availability set name of virtual machine'
+          description 'Availability set name of virtual machine'
+        end
+      end
+
     end
   end
 end
