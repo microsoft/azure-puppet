@@ -31,6 +31,7 @@ module Puppet
         add_puppet_master_ip_option(action, false)
         add_private_key_file_option(action)
         add_bootstrap_winrm_transport_option(action)
+        add_agent_environment_options(action)
       end
 
       def add_create_options(action)
@@ -54,6 +55,7 @@ module Puppet
         add_subnet_option(action)
         add_affinity_group_option(action)
         add_role_option(action)
+        add_availability_set_options(action)
       end
 
       def add_vm_name_option(action, optional = true)
@@ -340,8 +342,12 @@ module Puppet
 
       def add_role_option(action)
         action.option '--add-role=' do
-          summary 'create multiple roles under the same cloud service'
-          description 'create multiple roles under the same cloud service'
+          summary 'it creates multiple roles under the same cloud service. add-role expects true or false.'
+          description <<-EOT
+          add_role is used as a flag to create multiple roles under the same cloud service. 
+          This parameter is false by default. Atleast a single deployment should be created 
+          under a hosted service prior to setting this flag.
+          EOT
           before_action do |act, args, options|
             options[:add_role] = options[:add_role] == 'true' ? true : false
             unless [true, false, nil].include?(options[:add_role])
@@ -355,6 +361,20 @@ module Puppet
               end
             end
           end
+        end
+      end
+
+      def add_agent_environment_options(action)
+        action.option '--agent-environment=' do
+          summary 'Pupppet agent environment. default is production'
+          description 'Pupppet agent environment. default is production'
+        end
+      end
+
+      def add_availability_set_options(action)
+        action.option '--availability-set=' do
+          summary 'Availability set name of virtual machine'
+          description 'Availability set name of virtual machine'
         end
       end
 

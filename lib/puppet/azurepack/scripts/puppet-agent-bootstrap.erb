@@ -63,7 +63,7 @@ function configure_puppet() {
   report = true
   runinterval = 120
   server = puppet
-  environment = <%= options[:environment] %>
+  environment = <%= options[:agent_environment] %>
 
 EOFPUPPETCONF
 

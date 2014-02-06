@@ -12,6 +12,7 @@ module Puppet
         def start(params)
           puts "Installing puppet on node #{params[:node_ipaddress]}\n"
           puts
+          params[:agent_environment] ||= 'production'
           if params[:winrm_user]
             bootstrap_windows_node(params)
           elsif params[:ssh_user]
@@ -29,6 +30,7 @@ module Puppet
           master_ip = params[:puppet_master_ip]
           login = params[:winrm_user]
           password = params[:password]
+          env = params[:agent_environment]
           if params[:winrm_transport] == 'https'
             winrm_port = params[:winrm_port] || 5986
             endpoint_protocol = 'https'
@@ -45,7 +47,7 @@ module Puppet
           end
           cmds << 'cscript /nologo C:\\puppet\\wget.vbs https://downloads.puppetlabs.com/windows/puppet-3.3.2.msi %TEMP%\\puppet.msi'
           cmds << 'copy %TEMP%\\puppet.msi C:\\puppet\\puppet.msi'
-          cmds << "msiexec /qn /i c:\\puppet\\puppet.msi PUPPET_MASTER_SERVER=#{master_ip}"
+          cmds << "msiexec /qn /i c:\\puppet\\puppet.msi PUPPET_MASTER_SERVER=#{master_ip} PUPPET_AGENT_ENVIRONMENT=#{env}"
           cmds << 'sc config puppet start= demand'
           cmds << 'rmdir C:\\puppet /s /q'
           winrm_remote_execute(node_ip, login, password, cmds, endpoint_protocol, winrm_port)
@@ -63,7 +65,7 @@ module Puppet
           ssh_opts[:port] = params[:ssh_port] || 22
           ipaddress = params[:node_ipaddress]
           wait_for_connection(ipaddress, ssh_opts[:port])
-          options = { environment: 'production', puppet_master_ip: params[:puppet_master_ip] }
+          options = { agent_environment: params[:agent_environment], puppet_master_ip: params[:puppet_master_ip] }
           tmp_dir = File.join('/', 'tmp', random_string('puppet-tmp-location-', 10))
           create_tmpdir_cmd = "bash -c 'umask 077; mkdir #{tmp_dir}'"
           ssh_remote_execute(ipaddress, login, ssh_opts, create_tmpdir_cmd)
