@@ -32,7 +32,8 @@ Puppet::Face.define :azure_vm, '1.0.0' do
         vm_size:  options[:vm_size],
         virtual_network_name:  options[:virtual_network_name],
         subnet_name:  options[:virtual_network_subnet],
-        affinity_group_name:  options[:affinity_group_name]
+        affinity_group_name:  options[:affinity_group_name],
+        availability_set_name: options[:availability_set_name]
       }
       others.merge!(winrm_transport:  options[:winrm_transport]) unless options[:winrm_transport].nil?
       server = virtual_machine_service.create_virtual_machine(params, others, options[:add_role])

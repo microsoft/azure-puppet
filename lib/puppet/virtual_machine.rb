@@ -372,7 +372,7 @@ module Puppet
       end
 
       def add_availability_set_options(action)
-        action.option '--availability-set=' do
+        action.option '--availability-set-name=' do
           summary 'Availability set name of virtual machine'
           description 'Availability set name of virtual machine'
         end
