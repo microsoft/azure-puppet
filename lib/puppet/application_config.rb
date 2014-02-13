@@ -49,7 +49,7 @@ module Puppet
       end
     end
 
-    def add_location_option(action)
+    def add_location_option(action, optional = false)
       action.option '--location=' do
         summary 'The location identifier for the Windows Azure portal.'
         description <<-EOT
@@ -57,7 +57,7 @@ module Puppet
           valid choices are ('West US', 'East US', 'Southeast Asia',
           'North Europe', 'West Europe', 'East Asia' ...).
         EOT
-        required
+        required unless optional
         before_action do |act, args, options|
           if options[:location].empty?
             fail ArgumentError, 'Location is required'
@@ -66,11 +66,11 @@ module Puppet
       end
     end
 
-    def add_affinity_group_name_option(action)
+    def add_affinity_group_name_option(action, optional = false)
       action.option '--affinity-group-name=' do
         summary 'The affinity group name.'
         description 'The affinity group name.'
-        required
+        required unless optional
         before_action do |act, args, options|
           if options[:affinity_group_name].empty?
             fail ArgumentError, 'Affinity group name is required'
