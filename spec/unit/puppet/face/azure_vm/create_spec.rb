@@ -46,7 +46,7 @@ describe Puppet::Face[:azure_vm, :current] do
       virtual_network_subnet: 'Subnet-1',
       winrm_transport: 'http',
       vm_size: 'Small',
-      availability_set: 'availabiity-set-name'
+      availability_set_name: 'availabiity-set-name'
     }
     Azure.configure do |config|
       config.management_certificate = @options[:management_certificate]
@@ -172,7 +172,7 @@ describe Puppet::Face[:azure_vm, :current] do
 
     describe '(availability_set)' do
       it 'availability_set should be optional' do
-        @options.delete(:availability_set)
+        @options.delete(:availability_set_name)
         expect { subject.create(@options) }.to_not raise_error
       end
     end
