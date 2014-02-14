@@ -1,0 +1,11 @@
+<%="Listing cloud services".bold%>
+<%index=1%>
+
+<%cloud_services.each do |cs|%>
+  <%="Cloud Service: #{index}".bold%>
+    <%="Name".fix(20)%>: <%=cs.name %>
+    <%="Locaton".fix(20)%>: <%=cs.location%>
+    <%="Status".fix(20)%>: <%=cs.status%>
+    <%="Extended Properties".fix(20)%>: <%=cs.extended_properties%>
+    <%="Winrm Thumbprint".fix(20)%>: <%=cs.default_winrm_certificate_thumbprint%><%index+=1%>
+<%end%>
