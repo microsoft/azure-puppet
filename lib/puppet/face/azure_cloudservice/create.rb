@@ -31,7 +31,8 @@ Puppet::Face.define :azure_cloudservice, '1.0.0' do
       $ puppet azure_cloudservice create  --label aglabel \
         --azure-subscription-id YOUR-SUBSCRIPTION-ID --location 'West Us' \
         --affinity-group-name agname --description 'Some Description' \
-        --management-certificate path-to-azure-certificate
+        --management-certificate path-to-azure-certificate \
+        --cloud-service-name cloudservice1
     EOT
   end
 end

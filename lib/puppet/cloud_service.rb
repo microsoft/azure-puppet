@@ -17,6 +17,11 @@ module Puppet::CloudService
       add_label_option(action)
     end
 
+    def add_delete_options(action)
+      add_default_options(action)
+      add_cloud_service_name_option(action)
+    end
+
     def add_description_option(action)
       action.option '--description=' do
         summary 'Description of cloud service'
@@ -37,7 +42,7 @@ module Puppet::CloudService
         description 'The name of the cloud service.'
         required
         before_action do |act, args, options|
-          if options[:location].nil? && options[:affinity_group_name].nil?
+          if act.name == :create && options[:location].nil? && options[:affinity_group_name].nil?
             fail ArgumentError, 'affinity group name or location is required.'
           end
           if options[:cloud_service_name].empty?
