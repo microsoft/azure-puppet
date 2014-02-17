@@ -141,3 +141,21 @@ $create_sqldb,   #true or false
 $login,
 $password,
 $location</code></pre>
+
+<p><strong>Creating a cloud service</strong><br />
+cloudservice.pp allows you to create a new cloud service. When using the class, the reference will be,
+
+<pre><code>windowsazure::cloudservice</code></pre>
+
+This manifest takes the following parameters.</p>
+
+<pre><code>
+$azure_management_certificate,
+$azure_subscription_id,
+$cloud_service_name,
+$affinity_group_name,
+$location,
+$label = undef,
+$description = undef
+</code></pre>
+
