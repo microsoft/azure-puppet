@@ -9,7 +9,7 @@ describe Puppet::Face[:azure_cloudservice, :current] do
       cs.location = 'West US'
     end
   end
-  
+
   before :each do
     mgmtcertfile = File.expand_path('spec/fixtures/management_certificate.pem')
     @options = {
@@ -29,7 +29,7 @@ describe Puppet::Face[:azure_cloudservice, :current] do
         :list_cloud_services
       ).returns([cloud_service_obj])
     end
-    
+
     describe 'valid options' do
       it 'should not raise any exception' do
         expect { subject.list(@options) }.to_not raise_error
@@ -40,7 +40,7 @@ describe Puppet::Face[:azure_cloudservice, :current] do
         name = "#{'Name'.fix(20)}: #{cloud_service_obj.name}"
         location = "#{'Locaton'.fix(20)}: #{cloud_service_obj.location}"
         expect(cs_services).to match(/#{name}/)
-        expect(cs_services).to match(/#{location}/)        
+        expect(cs_services).to match(/#{location}/)
       end
     end
 

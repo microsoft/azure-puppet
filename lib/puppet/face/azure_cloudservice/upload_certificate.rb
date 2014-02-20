@@ -5,7 +5,9 @@ Puppet::Face.define :azure_cloudservice, '1.0.0' do
 
     summary 'adds a certificate to a hosted service.'
 
-    description 'The upload_certificate action adds a certificate to a hosted service.'
+    description <<-'EOT'
+    The upload_certificate action adds a certificate to a hosted service.
+    EOT
 
     Puppet::CloudService.add_certificate_options(self)
 
@@ -13,9 +15,12 @@ Puppet::Face.define :azure_cloudservice, '1.0.0' do
       Puppet::CloudService.initialize_env_variable(options)
       cloud_service = Azure::CloudServiceManagementService.new
       certificate = {}
-      certificate[:key] = OpenSSL::PKey.read File.read(options[:private_key_file])
-      certificate[:cert] = OpenSSL::X509::Certificate.new File.read(options[:certificate_file])
-      cloud_service.upload_certificate(options[:cloud_service_name], certificate)
+      cert_file = File.read(options[:certificate_file])
+      key_file = File.read(options[:private_key_file])
+      csn = options[:cloud_service_name]
+      certificate[:key] = OpenSSL::PKey.read key_file
+      certificate[:cert] = OpenSSL::X509::Certificate.new cert_file
+      cloud_service.upload_certificate(csn, certificate)
       nil
     end
 
