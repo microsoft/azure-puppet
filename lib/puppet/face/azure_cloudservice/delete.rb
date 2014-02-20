@@ -11,7 +11,7 @@ Puppet::Face.define :azure_cloudservice, '1.0.0' do
 
     when_invoked do |options|
       Puppet::CloudService.initialize_env_variable(options)
-      cloud_service = Azure::CloudServiceManagementService.new            
+      cloud_service = Azure::CloudServiceManagementService.new
       begin
         cloud_service.delete_cloud_service(options[:cloud_service_name])
       rescue

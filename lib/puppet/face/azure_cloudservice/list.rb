@@ -5,7 +5,7 @@ Puppet::Face.define :azure_cloudservice, '1.0.0' do
   action :list do
 
     summary 'List cloud services.'
-    
+
     description <<-'EOT'
       The list action obtains a list of cloud services and
       displays them on the console output.
@@ -14,7 +14,7 @@ Puppet::Face.define :azure_cloudservice, '1.0.0' do
     Puppet::CloudService.add_default_options(self)
 
     when_invoked do |options|
-       Puppet::CloudService.initialize_env_variable(options)
+      Puppet::CloudService.initialize_env_variable(options)
       cloud_service = Azure::CloudServiceManagementService.new
 
       cloud_services = cloud_service.list_cloud_services
