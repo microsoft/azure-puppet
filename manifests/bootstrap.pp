@@ -65,7 +65,7 @@ class windowsazure::bootstrap (
 
     if !defined( Package['azure'] ) {
       package { 'azure':
-        ensure   => '0.6.0',
+        ensure   => '0.6.1',
         provider => 'gem',
       }
     }

@@ -6,7 +6,7 @@
 
 <p>The required gems and version are listed here.</p>
 
-<p><li>azure (>= 0.6.0)</li>
+<p><li>azure (>= 0.6.1)</li>
 <li>net-ssh (>= 2.1.4)</li>
 <li>net-scp (>= 1.0.4)</li>
 </p>
