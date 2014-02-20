@@ -37,9 +37,10 @@ class windowsazure::db (
       }
     }
 
-    exec {"SQL database ${title}":
+    exec {"SQL database":
       command    => $puppet_command,
       logoutput  => true
     }
 
+    Package['azure'] -> Exec['SQL database']
 }

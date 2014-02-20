@@ -63,13 +63,6 @@ class windowsazure::bootstrap (
 
     $puppet_command = "${export_home_dir} ${cmd} ${passwd} ${pkf} ${wp} ${ssp} ${wrmtp} ${winrmu} ${sshu}"
 
-    if !defined( Package['azure'] ) {
-      package { 'azure':
-        ensure   => '0.6.1',
-        provider => 'gem',
-      }
-    }
-
     exec {"Provisioning VM ${title}":
       command    => "/bin/bash -c \"${puppet_command}\"",
       logoutput  => true,

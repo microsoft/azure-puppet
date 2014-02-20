@@ -53,9 +53,11 @@ class windowsazure::cloudservice (
       }
     }
 
-    exec {"Cloud service ${title}":
+    exec {"Cloud service":
       command    => $puppet_command,
-      logoutput  => true
+      logoutput  => true,
     }
+
+    Package['azure'] -> Exec['Cloud service']
 
 }

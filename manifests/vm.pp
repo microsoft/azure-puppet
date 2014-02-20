@@ -12,13 +12,14 @@ class windowsazure::vm (
   $certificate_file = undef ,
   $storage_account_name = undef,
   $cloud_service_name = undef,
+  $availability_set_name = undef,
   $password = undef,
   $add_role = 'false'
 ) {
 
     Exec { path => ['/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/'] }
 
-    $cmd = "puppet azure_vm create --vm-user ${vm_user} --management-certificate ${azure_management_certificate} --azure-subscription-id ${azure_subscription_id} --image ${image} --vm-name ${vm_name} --location '${location}'"
+    $cmd = "puppet azure_vm create --vm-user ${vm_user} --management-certificate ${azure_management_certificate} --azure-subscription-id ${azure_subscription_id} --image ${image} --vm-name ${vm_name} --location '${location}' --add-role ${add_role}"
 
     if $vm_name == undef {
       fail('No vm_name specified for provisioning VM.')
@@ -74,7 +75,11 @@ class windowsazure::vm (
       $csn = "--cloud-service-name ${cloud_service_name}"
     }
 
-    $puppet_command = "${export_home_dir} ${cmd} ${pmi} ${passwd} ${san} ${crtf} ${pkf} ${csn}"
+    if $availability_set_name != undef {
+      $asn = "--availability-set-name ${availability_set_name}"
+    }
+
+    $puppet_command = "${export_home_dir} ${cmd} ${pmi} ${passwd} ${san} ${crtf} ${pkf} ${csn} ${asn}"
 
     if !defined( Package['azure'] ) {
       package { 'azure':
@@ -83,10 +88,11 @@ class windowsazure::vm (
       }
     }
 
-    exec {"Provisioning VM ${title}":
+    exec {"Provisioning VM":
       command    => "/bin/bash -c \"${puppet_command}\"",
       logoutput  => true,
       timeout    => 900
     }
 
+   Package['azure'] -> Exec['Provisioning VM']
 }

@@ -49,4 +49,6 @@ class windowsazure::vnet (
       command    => $puppet_command,
       logoutput  => true
     }
+
+    Package['azure'] -> Exec['Creating virtual network']
 }
