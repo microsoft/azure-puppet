@@ -48,7 +48,7 @@ class windowsazure::cloudservice (
 
     if !defined( Package['azure'] ) {
       package { 'azure':
-        ensure   => '0.6.1',
+        ensure   => '0.6.3',
         provider => 'gem',
       }
     }
