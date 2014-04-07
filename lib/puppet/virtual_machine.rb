@@ -9,6 +9,17 @@ module Puppet
         File.join(File.dirname(__FILE__), 'face/azure_vm/views', name)
       end
 
+      def add_data_disk_options(action)
+        add_default_options(action)
+        add_cloud_service_name_option(action, false)
+        add_vm_name_option(action, false)
+        add_lun_option(action)
+        add_disk_name_option(action)
+        add_disk_import_option(action)
+        add_disk_size_option(action)
+        add_disk_label_option(action)
+      end
+
       def add_shutdown_options(action)
         add_default_options(action)
         add_cloud_service_name_option(action, false)
@@ -378,6 +389,71 @@ module Puppet
         end
       end
 
+      def add_lun_option(action)
+        action.option '--lun=' do
+          summary 'Specifies the Logical Unit Number (LUN) for the disk. Valid LUN values are 0 through 15.'
+          description <<-EOT
+          Specifies the Logical Unit Number (LUN) for the disk.
+          Valid LUN values are 0 through 15.
+          EOT
+          required
+          before_action do |act, args, options|
+            if options[:lun].empty?
+              fail ArgumentError, 'Logical Unit Number (LUN) is required.'
+            end
+          end
+        end
+
+        def add_disk_name_option(action)
+          action.option '--disk-name=' do
+            summary 'Specifies the name of the disk'
+            description <<-EOT
+            Specifies the name of the disk. Reqruied if import is set to true.
+            EOT
+
+            before_action do |act, args, options|
+              if options[:disk_name].empty?
+                fail ArgumentError, 'Specifies the name of the disk.'
+              end
+            end
+          end
+        end
+
+        def add_disk_import_option(action)
+          action.option '--import=' do
+            summary 'if true, then allows to use an existing disk by disk name. if false, then create and attach new data disk.'
+            description <<-EOT
+            if true, then allows to use an existing disk by disk name.
+            if false, then create and attach new data disk.
+            EOT
+            before_action do |act, args, options|
+              options[:import] = options[:import] == 'true' ? true : false
+              unless [true, false, nil].include?(options[:import])
+                fail ArgumentError, 'Disk import option is not valid. Valid choices are true or false'
+              end
+            end
+          end
+        end
+
+        def add_disk_size_option(action)
+          action.option '--disk-size=' do
+            summary 'Specifies the size of disk in GB'
+            description <<-EOT
+            Specifies the size of disk in GB
+            EOT
+          end
+        end
+
+        def add_disk_label_option(action)
+          action.option '--disk-label=' do
+            summary 'Specifies the label of the data disk.'
+            description <<-EOT
+            Specifies the description of the data disk.
+            EOT
+          end
+        end
+        
+      end
     end
   end
 end
