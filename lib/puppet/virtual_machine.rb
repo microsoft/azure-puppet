@@ -20,6 +20,28 @@ module Puppet
         add_disk_label_option(action)
       end
 
+      def update_endpoint_options(action)
+        add_default_options(action)
+        add_cloud_service_name_option(action, false)
+        add_vm_name_option(action, false)
+        add_endpoint_name_option(action)
+        add_public_port_option(action)
+        add_local_port_option(action)
+        add_protocol_option(action)
+        add_load_balancer_name_option(action)
+        add_direct_server_return_option(action)
+        add_load_balancer_port_option(action)
+        add_load_balancer_protocol_option(action)
+        add_load_balancer_path_option(action)
+      end
+
+      def delete_endpoint_options(action)
+        add_default_options(action)
+        add_cloud_service_name_option(action, false)
+        add_vm_name_option(action, false)
+        add_endpoint_name_option(action)
+      end
+
       def add_shutdown_options(action)
         add_default_options(action)
         add_cloud_service_name_option(action, false)
@@ -355,8 +377,8 @@ module Puppet
         action.option '--add-role=' do
           summary 'it creates multiple roles under the same cloud service. add-role expects true or false.'
           description <<-EOT
-          add_role is used as a flag to create multiple roles under the same cloud service. 
-          This parameter is false by default. Atleast a single deployment should be created 
+          add_role is used as a flag to create multiple roles under the same cloud service.
+          This parameter is false by default. Atleast a single deployment should be created
           under a hosted service prior to setting this flag.
           EOT
           before_action do |act, args, options|
@@ -403,56 +425,150 @@ module Puppet
             end
           end
         end
+      end
 
-        def add_disk_name_option(action)
-          action.option '--disk-name=' do
-            summary 'Specifies the name of the disk'
-            description <<-EOT
+      def add_disk_name_option(action)
+        action.option '--disk-name=' do
+          summary 'Specifies the name of the disk'
+          description <<-EOT
             Specifies the name of the disk. Reqruied if import is set to true.
-            EOT
+          EOT
 
-            before_action do |act, args, options|
-              if options[:disk_name].empty?
-                fail ArgumentError, 'Specifies the name of the disk.'
-              end
+          before_action do |act, args, options|
+            if options[:disk_name].empty?
+              fail ArgumentError, 'Specifies the name of the disk.'
             end
           end
         end
+      end
 
-        def add_disk_import_option(action)
-          action.option '--import=' do
-            summary 'if true, then allows to use an existing disk by disk name. if false, then create and attach new data disk.'
-            description <<-EOT
+      def add_disk_import_option(action)
+        action.option '--import=' do
+          summary 'if true, then allows to use an existing disk by disk name. if false, then create and attach new data disk.'
+          description <<-EOT
             if true, then allows to use an existing disk by disk name.
             if false, then create and attach new data disk.
-            EOT
-            before_action do |act, args, options|
-              options[:import] = options[:import] == 'true' ? true : false
-              unless [true, false, nil].include?(options[:import])
-                fail ArgumentError, 'Disk import option is not valid. Valid choices are true or false'
-              end
+          EOT
+          before_action do |act, args, options|
+            options[:import] = options[:import] == 'true' ? true : false
+            unless [true, false, nil].include?(options[:import])
+              fail ArgumentError, 'Disk import option is not valid. Valid choices are true or false'
             end
           end
         end
+      end
 
-        def add_disk_size_option(action)
-          action.option '--disk-size=' do
-            summary 'Specifies the size of disk in GB'
-            description <<-EOT
+      def add_disk_size_option(action)
+        action.option '--disk-size=' do
+          summary 'Specifies the size of disk in GB'
+          description <<-EOT
             Specifies the size of disk in GB
-            EOT
-          end
+          EOT
         end
+      end
 
-        def add_disk_label_option(action)
-          action.option '--disk-label=' do
-            summary 'Specifies the label of the data disk.'
-            description <<-EOT
+      def add_disk_label_option(action)
+        action.option '--disk-label=' do
+          summary 'Specifies the label of the data disk.'
+          description <<-EOT
             Specifies the description of the data disk.
-            EOT
+          EOT
+        end
+      end
+
+      def add_endpoint_name_option(action)
+        action.option '--endpoint-name=' do
+          summary 'Name of endpoint.'
+          description 'Name of endpoint'
+          required
+          before_action do |act, args, options|
+            if options[:endpoint_name].empty?
+              fail ArgumentError, 'Endpoint name is required.'
+            end
           end
         end
-        
+      end
+
+      def add_public_port_option(action)
+        action.option '--public-port=' do
+          summary 'Specifies the external port to use for the endpoint.'
+          description 'Specifies the external port to use for the endpoint.'
+          required
+          before_action do |act, args, options|
+            if options[:public_port].empty?
+              fail ArgumentError, 'Public port is required.'
+            end
+          end
+        end
+      end
+
+      def add_local_port_option(action)
+        action.option '--local-port=' do
+          summary 'Specifies the internal port on which the Virtual Machine is listening.'
+          description 'Specifies the internal port on which the Virtual Machine is listening.'
+          required
+          before_action do |act, args, options|
+            if options[:local_port].empty?
+              fail ArgumentError, 'Local port is required.'
+            end
+          end
+        end
+      end
+
+      def add_protocol_option(action)
+        action.option '--protocol=' do
+          summary 'pecifies the transport protocol for the endpoint.'
+          description <<-EOT
+            Specifies the transport protocol for the endpoint.
+            Possible values are: TCP, UDP. Default is TCP
+          EOT
+        end
+      end
+
+      def add_load_balancer_name_option(action)
+        action.option '--load-balancer-name=' do
+          summary 'Specifies a name for a load-balanced endpoint.'
+          description 'Specifies a name for a load-balanced endpoint.'
+        end
+      end
+
+      def add_direct_server_return_option(action)
+        action.option '--direct-server-return=' do
+          summary 'Specifies whether the endpoint uses Direct Server Return'
+          description <<-EOT
+          Specifies whether the endpoint uses Direct Server Return.
+          Possible values are: true, false. Default is false.
+          EOT
+        end
+      end
+
+      def add_load_balancer_port_option(action)
+        action.option '--load-balancer-port=' do
+          summary 'Specifies the internal port on which the Virtual Machine is listening.'
+          description <<-EOT
+          Specifies the internal port on which the Virtual Machine is listening.
+          EOT
+        end
+      end
+
+      def add_load_balancer_protocol_option(action)
+        action.option '--load-balancer-protocol=' do
+          summary 'Possible values are: HTTP TCP. Default is TCP.'
+          description <<-EOT
+          Specifies the protocol to use to inspect the availability status of the Virtual Machine.
+          Possible values are: HTTP TCP. Default is TCP.
+          EOT
+        end
+      end
+
+      def add_load_balancer_path_option(action)
+        action.option '--load-balancer-path=' do
+          summary 'Specifies the relative path to determine the availability status'
+          description <<-EOT
+          Specifies the relative path to inspect to determine the availability status of the Virtual Machine.
+          If Protocol is set to TCP, this value must be NULL.
+          EOT
+        end
       end
     end
   end

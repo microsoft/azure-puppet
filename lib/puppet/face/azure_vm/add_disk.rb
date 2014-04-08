@@ -15,12 +15,12 @@ Puppet::Face.define :azure_vm, '1.0.0' do
       Puppet::VirtualMachine.initialize_env_variable(options)
       virtual_machine_service = Azure::VirtualMachineManagementService.new
       others = {
-        :import => options[:import],
-        :disk_label => options[:disk_label],
-        :disk_size => options[:disk_size],
-        :disk_name => options[:disk_name]
+        import: options[:import],
+        disk_label: options[:disk_label],
+        disk_size: options[:disk_size],
+        disk_name: options[:disk_name]
       }
-      #others[:lun] = options[:lun] if options[:lun]
+      # others[:lun] = options[:lun] if options[:lun]
       virtual_machine_service.add_data_disk(
         options[:vm_name],
         options[:cloud_service_name],
