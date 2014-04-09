@@ -14,8 +14,8 @@ module Puppet
         add_cloud_service_name_option(action, false)
         add_vm_name_option(action, false)
         add_lun_option(action)
-        add_disk_name_option(action)
         add_disk_import_option(action)
+        add_disk_name_option(action)
         add_disk_size_option(action)
         add_disk_label_option(action)
       end
@@ -433,12 +433,6 @@ module Puppet
           description <<-EOT
             Specifies the name of the disk. Reqruied if import is set to true.
           EOT
-
-          before_action do |act, args, options|
-            if options[:disk_name].empty?
-              fail ArgumentError, 'Specifies the name of the disk.'
-            end
-          end
         end
       end
 
@@ -450,9 +444,12 @@ module Puppet
             if false, then create and attach new data disk.
           EOT
           before_action do |act, args, options|
-            options[:import] = options[:import] == 'true' ? true : false
-            unless [true, false, nil].include?(options[:import])
+            options[:import] ||=  'false'
+            unless ['true', 'false', nil].include?(options[:import])
               fail ArgumentError, 'Disk import option is not valid. Valid choices are true or false'
+            end
+            if options[:disk_name].nil? && options[:import] == 'true'
+              fail ArgumentError, 'Disk name is required when import is true.'
             end
           end
         end
