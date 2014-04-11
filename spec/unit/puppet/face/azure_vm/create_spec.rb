@@ -46,7 +46,9 @@ describe Puppet::Face[:azure_vm, :current] do
       virtual_network_subnet: 'Subnet-1',
       winrm_transport: 'http',
       vm_size: 'Small',
-      availability_set_name: 'availabiity-set-name'
+      availability_set_name: 'availabiity-set-name',
+      winrm_http_port:  '5985',
+      winrm_https_port:  '5986'
     }
     Azure.configure do |config|
       config.management_certificate = @options[:management_certificate]
@@ -387,4 +389,17 @@ describe Puppet::Face[:azure_vm, :current] do
     end
   end
 
+  describe '(winrm_http_port)' do
+    it 'winrm_http_port should be optional' do
+      @options.delete(:winrm_http_port)
+      expect { subject.create(@options) }.to_not raise_error
+    end
+  end
+
+  describe '(winrm_https_port)' do
+    it 'winrm_https_port should be optional' do
+      @options.delete(:winrm_https_port)
+      expect { subject.create(@options) }.to_not raise_error
+    end
+  end
 end

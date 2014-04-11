@@ -81,6 +81,8 @@ module Puppet
         add_location_option(action)
         add_vm_size_option(action)
         add_ssh_port_option(action)
+        add_winrm_http_port_option(action)
+        add_winrm_https_port_option(action)
         add_certificate_file_option(action)
         add_private_key_file_option(action)
         add_winrm_transport_option(action)
@@ -584,6 +586,20 @@ module Puppet
           Specifies the relative path to inspect to determine the availability status of the Virtual Machine.
           If Protocol is set to TCP, this value must be NULL.
           EOT
+        end
+      end
+
+      def add_winrm_http_port_option(action)
+        action.option '--winrm-http-port=' do
+          summary 'Specifies the WinRM HTTP port number.'
+          description 'Specifies the WinRM HTTP port number.'
+        end
+      end
+
+      def add_winrm_https_port_option(action)
+        action.option '--winrm-https-port=' do
+          summary 'Specifies the WinRM HTTPS port number.'
+          description 'Specifies the WinRM HTTPS port number.'
         end
       end
     end
