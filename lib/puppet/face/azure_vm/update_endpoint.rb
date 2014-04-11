@@ -15,13 +15,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
       Puppet::VirtualMachine.initialize_env_variable(options)
       virtual_machine_service = Azure::VirtualMachineManagementService.new
       options[:protocol] ||= 'TCP'
-      unless ['tcp','udp'].include?(options[:protocol].downcase)
-        fail 'Protocol is invalid. Allowed values are tcp,udp'
-      end
       options[:direct_server_return] ||= 'false'
-      unless ['true','false'].include?(options[:direct_server_return].downcase)
-        fail 'direct_server_return is invalid. Allowed values are true,false'
-      end
       ep = {
         name: options[:endpoint_name],
         public_port: options[:public_port],

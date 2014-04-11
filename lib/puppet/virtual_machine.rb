@@ -519,6 +519,11 @@ module Puppet
             Specifies the transport protocol for the endpoint.
             Possible values are: TCP, UDP. Default is TCP
           EOT
+          before_action do |act, args, options|
+            unless %w(tcp udp).include?(options[:protocol].downcase)
+              fail 'Protocol is invalid. Allowed values are tcp,udp'
+            end
+          end
         end
       end
 
@@ -536,6 +541,11 @@ module Puppet
           Specifies whether the endpoint uses Direct Server Return.
           Possible values are: true, false. Default is false.
           EOT
+          before_action do |act, args, options|
+            unless %w(true false).include?(options[:direct_server_return].downcase)
+              fail 'direct_server_return is invalid. Allowed values are true,false'
+            end
+          end
         end
       end
 
@@ -555,6 +565,15 @@ module Puppet
           Specifies the protocol to use to inspect the availability status of the Virtual Machine.
           Possible values are: HTTP TCP. Default is TCP.
           EOT
+          before_action do |act, args, options|
+            lbp = options[:load_balancer_protocol].downcase
+            unless %w(http tcp).include?(lbp)
+              fail 'Load balancer protocol is invalid. Allowed values are http,tcp'
+            end
+            if lbp == 'http' && options[:load_balancer_path].nil?
+              fail 'Load balancer path is required if load balancer protocol is http.'
+            end
+          end
         end
       end
 

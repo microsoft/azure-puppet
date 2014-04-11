@@ -66,14 +66,18 @@ describe Puppet::Face[:azure_vm, :current] do
       end
     end
 
-    it 'should validate the disk_size' do
-      @options.delete(:disk_size)
-      expect { subject.add_disk(@options) }.to_not raise_error
+    describe '(disk_size)' do
+      it 'should validate the disk_size' do
+        @options.delete(:disk_size)
+        expect { subject.add_disk(@options) }.to_not raise_error
+      end
     end
 
-    it 'should validate disk_label' do
-      @options.delete(:disk_label)
-      expect { subject.add_disk(@options) }.to_not raise_error
+    describe '(disk_label)' do
+      it 'should validate disk_label' do
+        @options.delete(:disk_label)
+        expect { subject.add_disk(@options) }.to_not raise_error
+      end
     end
 
     describe '(disk_name)' do
