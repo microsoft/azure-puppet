@@ -9,6 +9,11 @@ module Puppet
         File.join(File.dirname(__FILE__), 'face/azure_vm/views', name)
       end
 
+      def add_list_images_options(action)
+         add_default_options(action)
+         add_location_option(action, true)
+      end
+
       def add_data_disk_options(action)
         add_default_options(action)
         add_cloud_service_name_option(action, false)

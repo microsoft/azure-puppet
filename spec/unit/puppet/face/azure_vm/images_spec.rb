@@ -8,6 +8,7 @@ describe Puppet::Face[:azure_vm, :current] do
       image.os_type = 'Windows'
       image.name = 'SQL-Server-2014CTP2-CU1-12.0.1736.0-ENU-WS2012R2-CY13SU12'
       image.category = ' Microsoft SQL Server'
+      image.locations = 'West US'
     end
   end
 
@@ -16,7 +17,8 @@ describe Puppet::Face[:azure_vm, :current] do
     @options = {
       management_certificate: mgmtcertfile,
       management_endpoint: 'management.core.windows.net',
-      azure_subscription_id: 'Subscription-id'
+      azure_subscription_id: 'Subscription-id',
+      location: 'west us'
     }
     Azure.configure do |config|
       config.management_certificate = @options[:management_certificate]
@@ -31,6 +33,7 @@ describe Puppet::Face[:azure_vm, :current] do
         :list_virtual_machine_images
       ).returns([image])
     end
+    
     describe 'valid options' do
       it 'should not raise any exception' do
         expect { subject.images(@options) }.to_not raise_error
@@ -44,6 +47,15 @@ describe Puppet::Face[:azure_vm, :current] do
       end
     end
 
+    describe 'optional parameter validation' do
+      describe '(location)' do
+        it 'location should be optional' do
+          @options.delete(:location)
+          expect { subject.images(@options) }.to_not raise_error
+        end
+      end
+    end
+    
     it_behaves_like 'validate authentication credential', :images
 
   end

@@ -10,12 +10,14 @@ Puppet::Face.define :azure_vm, '1.0.0' do
       displays them on the console output.
     EOT
 
-    Puppet::VirtualMachine.add_default_options(self)
+    Puppet::VirtualMachine.add_list_images_options(self)
 
     when_invoked do |options|
       Puppet::VirtualMachine.initialize_env_variable(options)
       image_service = Azure::VirtualMachineImageManagementService.new
       images = image_service.list_virtual_machine_images
+      location = options[:location]
+      images = images.select { |x| x.locations =~ /#{location}/i } if location
       template = Tilt.new(Puppet::VirtualMachine.views('images.erb'))
       template.render(nil, images:  images)
     end
