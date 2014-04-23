@@ -33,7 +33,7 @@ describe Puppet::Face[:azure_vm, :current] do
         :list_virtual_machine_images
       ).returns([image])
     end
-    
+
     describe 'valid options' do
       it 'should not raise any exception' do
         expect { subject.images(@options) }.to_not raise_error
@@ -55,7 +55,7 @@ describe Puppet::Face[:azure_vm, :current] do
         end
       end
     end
-    
+
     it_behaves_like 'validate authentication credential', :images
 
   end

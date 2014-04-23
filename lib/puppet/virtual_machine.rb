@@ -10,8 +10,8 @@ module Puppet
       end
 
       def add_list_images_options(action)
-         add_default_options(action)
-         add_location_option(action, true)
+        add_default_options(action)
+        add_location_option(action, true)
       end
 
       def add_data_disk_options(action)
@@ -72,18 +72,22 @@ module Puppet
         add_agent_environment_options(action)
       end
 
-      def add_create_options(action)
+      def add_create_options(action, add_role = false)
         add_default_options(action)
+        if add_role
+          add_cloud_service_name_option(action, false)
+        else
+          add_cloud_service_name_option(action)
+          add_deployment_name_option(action)
+          add_location_option(action)
+        end
         add_image_option(action)
         add_vm_name_option(action, false)
         add_storage_account_option(action)
-        add_cloud_service_name_option(action)
-        add_deployment_name_option(action)
         add_vm_user_option(action, false)
         add_password_option(action)
         add_puppet_master_ip_option(action)
         add_end_points_option(action)
-        add_location_option(action)
         add_vm_size_option(action)
         add_ssh_port_option(action)
         add_winrm_http_port_option(action)
@@ -94,7 +98,6 @@ module Puppet
         add_virtual_network_option(action)
         add_subnet_option(action)
         add_affinity_group_option(action)
-        add_role_option(action)
         add_availability_set_options(action)
       end
 
@@ -294,7 +297,7 @@ module Puppet
 
       def add_vm_size_option(action)
         action.option '--vm-size=' do
-          role_sizes = %w(ExtraSmall Small Medium Large ExtraLarge A6 A7)
+          role_sizes = %w(ExtraSmall Small Medium Large ExtraLarge A5 A6 A7 Basic_A0 Basic_A1 Basic_A2 Basic_A3 Basic_A4)
           summary "The instance size. valid choice are #{role_sizes.join(', ')}"
           description <<-EOT
           The instance size. valid choice are #{role_sizes.join(', ')}
@@ -380,30 +383,6 @@ module Puppet
         end
       end
 
-      def add_role_option(action)
-        action.option '--add-role=' do
-          summary 'it creates multiple roles under the same cloud service. add-role expects true or false.'
-          description <<-EOT
-          add_role is used as a flag to create multiple roles under the same cloud service.
-          This parameter is false by default. Atleast a single deployment should be created
-          under a hosted service prior to setting this flag.
-          EOT
-          before_action do |act, args, options|
-            options[:add_role] = options[:add_role] == 'true' ? true : false
-            unless [true, false, nil].include?(options[:add_role])
-              fail ArgumentError, 'Add role is not valid. Valid choices are true or false'
-            end
-            if  options[:add_role]
-              if options[:storage_account_name].nil?
-                fail ArgumentError, 'The storage account name is required'
-              elsif options[:cloud_service_name].nil?
-                fail ArgumentError, 'The cloud service name is required'
-              end
-            end
-          end
-        end
-      end
-
       def add_agent_environment_options(action)
         action.option '--agent-environment=' do
           summary 'Pupppet agent environment. default is production'
@@ -425,7 +404,6 @@ module Puppet
           Specifies the Logical Unit Number (LUN) for the disk.
           Valid LUN values are 0 through 15.
           EOT
-          required
           before_action do |act, args, options|
             if options[:lun].empty?
               fail ArgumentError, 'Logical Unit Number (LUN) is required.'

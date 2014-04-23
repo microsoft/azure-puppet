@@ -1,15 +1,16 @@
 # encoding: UTF-8
 
 Puppet::Face.define :azure_vm, '1.0.0' do
-  action :create do
+  action :add_role do
 
-    summary 'Create Windows Azure VM'
+    summary 'Create multiple roles under the same cloud service'
 
     description <<-'EOT'
-      The create action create a storage account, cloud service and virtula machine.
+      The add_role action create multiple roles under the same cloud service.
+      Atleast a single deployment should be created under a hosted service.
     EOT
 
-    Puppet::VirtualMachine.add_create_options(self)
+    Puppet::VirtualMachine.add_create_options(self, true)
 
     when_invoked do |options|
       options = ask_for_password(options, @os_type)
@@ -19,12 +20,11 @@ Puppet::Face.define :azure_vm, '1.0.0' do
         vm_user:  options[:vm_user],
         image:  options[:image],
         password:  options[:password],
-        location:  options[:location]
+        cloud_service_name:  options[:cloud_service_name],
       }
+
       others = {
         storage_account_name:  options[:storage_account_name],
-        cloud_service_name:  options[:cloud_service_name],
-        deployment_name:  options[:deployment_name],
         tcp_endpoints:  options[:tcp_endpoints],
         private_key_file:  options[:private_key_file] ,
         certificate_file:  options[:certificate_file],
@@ -37,8 +37,9 @@ Puppet::Face.define :azure_vm, '1.0.0' do
         winrm_http_port:  options[:winrm_http_port],
         winrm_https_port:  options[:winrm_https_port],
       }
-      others.merge!(winrm_transport:  options[:winrm_transport]) unless options[:winrm_transport].nil?
-      server = virtual_machine_service.create_virtual_machine(params, others)
+      winrm_tp = options[:winrm_transport]
+      others.merge!(winrm_transport:  winrm_tp) unless winrm_tp.nil?
+      server = virtual_machine_service.add_role(params, others)
       unless server.class == String
         if options[:puppet_master_ip] && server
           if  server.os_type == 'Linux'
@@ -60,7 +61,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
     end
 
     examples <<-'EOT'
-      $ puppet azure_vm create --vm-name vmname --location "Southeast Asia" \
+      $ puppet azure_vm add_role --vm-name vmname --location "Southeast Asia" \
         --management-certificate path-to-azure-certificate --vm-user ranjan \
         --password Password!@12 --storage-account-name storageaccount1'\
         --image  b446e5424aa335e__SUSE-Linux-Enterprise-Server-11-SP2-Agent13 \

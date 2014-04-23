@@ -24,7 +24,6 @@ describe Puppet::Face[:azure_vm, :current] do
     vms.any_instance.stubs(:add_data_disk).with(
       anything,
       anything,
-      anything,
       anything
     )
   end
@@ -57,12 +56,9 @@ describe Puppet::Face[:azure_vm, :current] do
     end
 
     describe '(lun)' do
-      it 'should require data disk lun' do
+      it 'lun should be optional' do
         @options.delete(:lun)
-        expect { subject.add_disk(@options) }.to raise_error(
-          ArgumentError,
-          /required: lun/
-        )
+        expect { subject.add_disk(@options) }.to_not raise_error
       end
     end
 

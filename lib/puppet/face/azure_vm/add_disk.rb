@@ -20,11 +20,10 @@ Puppet::Face.define :azure_vm, '1.0.0' do
         disk_size: options[:disk_size],
         disk_name: options[:disk_name]
       }
-      # others[:lun] = options[:lun] if options[:lun]
+      others[:lun] = options[:lun] if options[:lun]
       virtual_machine_service.add_data_disk(
         options[:vm_name],
         options[:cloud_service_name],
-        options[:lun],
         others
       )
       nil
