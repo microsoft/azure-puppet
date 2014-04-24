@@ -20,7 +20,6 @@ Puppet::Face.define :azure_vm, '1.0.0' do
         disk_size: options[:disk_size],
         disk_name: options[:disk_name]
       }
-      others[:lun] = options[:lun] if options[:lun]
       virtual_machine_service.add_data_disk(
         options[:vm_name],
         options[:cloud_service_name],
@@ -32,12 +31,12 @@ Puppet::Face.define :azure_vm, '1.0.0' do
     returns 'NONE'
 
     examples <<-'EOT'
-      $ puppet azure_vm add_disk --vm-name vmname --lun 5 --import true \
+      $ puppet azure_vm add_disk --vm-name vmname --import true \
       --cloud-service-name cloudname --disk-name disk_name \
       --management-certificate path-to-azure-certificate \
       --subscription-id YOUR-SUBSCRIPTION-ID \
 
-      $ puppet azure_vm add_disk --cloud-service-name cloud_name --lun 5 \
+      $ puppet azure_vm add_disk --cloud-service-name cloud_name \
       --management-certificate path-to-azure-certificate --vm-name vmname \
       --subscription-id YOUR-SUBSCRIPTION-ID
 

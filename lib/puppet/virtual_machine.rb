@@ -18,7 +18,6 @@ module Puppet
         add_default_options(action)
         add_cloud_service_name_option(action, false)
         add_vm_name_option(action, false)
-        add_lun_option(action)
         add_disk_import_option(action)
         add_disk_name_option(action)
         add_disk_size_option(action)
@@ -394,21 +393,6 @@ module Puppet
         action.option '--availability-set-name=' do
           summary 'Availability set name of virtual machine'
           description 'Availability set name of virtual machine'
-        end
-      end
-
-      def add_lun_option(action)
-        action.option '--lun=' do
-          summary 'Specifies the Logical Unit Number (LUN) for the disk. Valid LUN values are 0 through 15.'
-          description <<-EOT
-          Specifies the Logical Unit Number (LUN) for the disk.
-          Valid LUN values are 0 through 15.
-          EOT
-          before_action do |act, args, options|
-            if options[:lun].empty?
-              fail ArgumentError, 'Logical Unit Number (LUN) is required.'
-            end
-          end
         end
       end
 

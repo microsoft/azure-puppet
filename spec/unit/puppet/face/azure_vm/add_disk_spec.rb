@@ -11,7 +11,6 @@ describe Puppet::Face[:azure_vm, :current] do
       azure_subscription_id: 'Subscription-id',
       vm_name: 'test-vm',
       cloud_service_name: 'cloud-name',
-      lun: '5',
       import: 'false',
       disk_size: '100',
       disk_label: 'Disk_label',
@@ -52,13 +51,6 @@ describe Puppet::Face[:azure_vm, :current] do
           ArgumentError,
           /required: cloud_service_name/
         )
-      end
-    end
-
-    describe '(lun)' do
-      it 'lun should be optional' do
-        @options.delete(:lun)
-        expect { subject.add_disk(@options) }.to_not raise_error
       end
     end
 
