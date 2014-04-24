@@ -3,10 +3,10 @@
 Puppet::Face.define :azure_vm, '1.0.0' do
   action :update_endpoint do
 
-    summary 'adds a data disk to a virtual machine.'
+    summary 'update existing endpoint of a virtual machine.'
 
     description <<-'EOT'
-      The add_disk action adds a data disk to a windows azure node instances.
+      The update_endpoint action update existing endpoint of a virtual machine..
     EOT
 
     Puppet::VirtualMachine.update_endpoint_options(self)
