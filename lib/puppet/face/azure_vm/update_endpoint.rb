@@ -6,7 +6,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
     summary 'update existing endpoint of a virtual machine.'
 
     description <<-'EOT'
-      The update_endpoint action update existing endpoint of a virtual machine..
+      The update_endpoint action update existing endpoint of a virtual machine.
     EOT
 
     Puppet::VirtualMachine.update_endpoint_options(self)

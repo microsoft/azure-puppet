@@ -1,0 +1,12 @@
+
+<%="Listing storage accounts".bold%>
+
+<%index=1%>
+
+<%storage_accounts.each do |sa|%>
+  <%="Storage Account: #{index}".bold%>
+    <%="Name".fix(20)%>: <%=sa.name %>
+    <%="Locaton".fix(20)%>: <%=sa.location%>
+    <%="Status".fix(20)%>: <%=sa.status%>
+    <%="Extended Properties".fix(20)%>: <%=sa.extended_properties%><%index+=1%>
+<%end%>
