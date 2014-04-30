@@ -50,15 +50,18 @@ Once launched, you should be able to SSH to the new system using the username an
 
 Other avaliable actions are
 
-  
-    bootstrap    Install puppet node on  Windows Azure VM
-    create       Create Windows Azure VM
-    delete       Delete Windows Azure node instances
-    images       List Windows Azure images
-    locations    List Windows Azure locations
-    servers      List Windows Azure node instances
-    shutdown     Shutdown Windows Azure node instances
-    start        starts Windows Azure node instances
+    bootstrap         Install puppet node on  Windows Azure VM
+    create            Create Windows Azure VM
+    delete            Delete Windows Azure node instances
+    images            List Windows Azure images
+    locations         List Windows Azure locations
+    servers           List Windows Azure node instances
+    shutdown          Shutdown Windows Azure node instances
+    start             Starts Windows Azure node instances
+    update_endpoint   update existing endpoint of a virtual machine
+    delete_endpoint   Delete endpoint of virtual machine.
+    add_disk          Adds a data disk to a virtual machine.
+    add_role          Create multiple roles under the same cloud service
 
 To list all options for any action
 
@@ -71,7 +74,7 @@ Creating virtual network
 
     $puppet azure_vnet set --management-certificate pem-or-pfx-file-path --azure-subscription-id=your-subscription-id
     --virtual-network-name vnetname --affinity-group-name ag-name --address-space '172.16.0.0/12,192.168.0.0/16'
-    --dns-servers 'dns1-1:10.10.8.8,dns2:172.8.4.4' --subnets 'subnet-1:172.16.0.0:12,subnet-2:192.168.0.0:29'
+    --dns-servers 'dns-1:10.10.8.8,dns-2:172.8.4.4' --subnets 'subnet-1:172.16.0.0:12,subnet-2:192.168.0.0:29'
 
 Other avaliable actions are
 
@@ -97,6 +100,36 @@ Other avaliable actions are
     list_firewall      List firewall of SQL database servers.
     reset_password     Reset password of sql database server.
 
+Manage Cloud service
+========================
+
+Creating cloud service
+
+    $ puppet azure_cloudservice create  --label aglabel --azure-subscription-id your-subscription-id
+    --location 'West Us' --affinity-group-name agname --description 'Some Description' \
+    --management-certificate path-to-azure-certificate --cloud-service-name cloudservice1
+
+Other avaliable actions are
+    delete                Delete cloud service.
+    delete_deployment     deletes the specified deployment of hosted service.
+    list                  List cloud services.
+    upload_certificate    adds a certificate to a hosted service.
+    create                Create cloud service.
+
+Manage Storage account
+========================
+
+Creating storage account
+
+    $ puppet azure_storage create --azure-subscription-id=your-subscription-id
+    --management-certificate path-to-azure-certificate --storage-account-name storageaccount
+    --location 'west us' --extended-properties 'key-1:value-1,key-2:value-2'
+
+Other avaliable actions are
+    create    Create storage service.
+    delete    Delete storage account.
+    list      List storage accounts.
+    update    Update storage service.
 
 # Certificate Management
 

@@ -1,3 +1,8 @@
+Fri May 2 2014 MSOpenTech 1.2.0
+ * Implemented azure_cloudservice action to manage cloud services
+ * Implemented azure_storage action to manage storage accounts.
+ * Implemented add_disk action for virtual machine.
+ * Implemented add_role action for virtual machine.
 Fri Dec 20 2013 MSOpenTech 1.1.1
  * updated example for puppet command
  * Updated reporting issues url in readme

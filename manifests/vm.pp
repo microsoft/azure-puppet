@@ -18,9 +18,11 @@ class windowsazure::vm (
 ) {
 
     Exec { path => ['/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/'] }
-
-    $cmd = "puppet azure_vm create --vm-user ${vm_user} --management-certificate ${azure_management_certificate} --azure-subscription-id ${azure_subscription_id} --image ${image} --vm-name ${vm_name} --location '${location}' --add-role ${add_role}"
-
+    if $add_role == 'true' {
+      $cmd = "puppet azure_vm add_role --vm-user ${vm_user} --management-certificate ${azure_management_certificate} --azure-subscription-id ${azure_subscription_id} --image ${image} --vm-name ${vm_name}"
+    }else{
+      $cmd = "puppet azure_vm create --vm-user ${vm_user} --management-certificate ${azure_management_certificate} --azure-subscription-id ${azure_subscription_id} --image ${image} --vm-name ${vm_name} --location '${location}'"
+    }
     if $vm_name == undef {
       fail('No vm_name specified for provisioning VM.')
     }
@@ -35,6 +37,10 @@ class windowsazure::vm (
 
     if $location == undef {
       fail('No location specified for provisioning VM.')
+    }
+
+    if ($cloud_service_name == undef) and ($add_role == 'true') {
+      fail('No cloud service name specified for add role.')
     }
 
     if ($homedir == undef) and ($puppet_master_ip != undef) {
