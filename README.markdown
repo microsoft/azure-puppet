@@ -31,7 +31,7 @@ Getting Started
 Required Gems
 =============
 
- * azure (0.6.3)
+ * azure (0.6.4)
  * net-ssh (>= 2.1.4)
  * net-scp (>= 1.0.4)
  * winrm (>= 1.1.3)

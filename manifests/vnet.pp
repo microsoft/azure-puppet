@@ -12,7 +12,7 @@ class windowsazure::vnet (
 
     if !defined( Package['azure'] ) {
       package { 'azure':
-        ensure   => '0.6.3',
+        ensure   => '0.6.4',
         provider => 'gem',
       }
     }
