@@ -21,9 +21,14 @@ This module requires Puppet 2.7.2 or later.
     	* via xml file
     	
 * SQL Database Server Management
-	* list, create, list sqldb servers & password reset for a sqldb server
-	* list, set, delete firewall rules for a sqldb server
+    * list, create, list sqldb servers & password reset for a sqldb server
+    * list, set, delete firewall rules for a sqldb server
 
+* Storage Account Management
+    * create, delete, update and list storage accounts.
+
+* Cloud Service Management
+    * create, delete, upload_certificate and list cloud services
 
 Getting Started
 ===============
