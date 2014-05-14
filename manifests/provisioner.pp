@@ -3,7 +3,7 @@
 # All Rights Reserved. Licensed under the Apache 2.0 License.
 #--------------------------------------------------------------------------
 
-class windowsazure::provisioner (
+class microsoftazure::provisioner (
   # For windows azure authentication
   $azure_management_certificate,
   $azure_subscription_id,
@@ -51,7 +51,7 @@ class windowsazure::provisioner (
   }
 
   if ($create_vm){
-    class { 'windowsazure::vm':
+    class { 'microsoftazure::vm':
       stage                        => final,
       azure_management_certificate => $azure_management_certificate,
       azure_subscription_id        => $azure_subscription_id,
@@ -72,7 +72,7 @@ class windowsazure::provisioner (
   }
 
   if ($create_vnet){
-    class { 'windowsazure::vnet':
+    class { 'microsoftazure::vnet':
       stage                        => prereqs,
       azure_management_certificate => $azure_management_certificate,
       azure_subscription_id        => $azure_subscription_id,
@@ -85,7 +85,7 @@ class windowsazure::provisioner (
   }
 
   if ($create_sqldb){
-   class { 'windowsazure::db':
+   class { 'microsoftazure::db':
       stage                        => middle,
       azure_management_certificate => $azure_management_certificate,
       azure_subscription_id        => $azure_subscription_id,

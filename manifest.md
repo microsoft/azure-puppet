@@ -37,7 +37,7 @@ There are provided manifest files which are listed below, the parameters they us
 <p><strong>Enabling the puppet agent</strong><br />
 Bootstrap.pp allows you to create a new instance with Puppet already installed and configured. When using the class, the reference will be,
 
-<pre><code>windowsazure::bootstrap</code></pre>
+<pre><code>microsoftazure::bootstrap</code></pre>
 
 This manifest takes the following parameters.</p>
 
@@ -56,7 +56,7 @@ $winrm_transport = 'http'</code></pre>
 <p><strong>Creating a database</strong><br />
 db.pp allows you to create a new instance of SQL server. When using the class, the reference will be,
 
-<pre><code>windowsazure::db</code></pre>
+<pre><code>microsoftazure::db</code></pre>
 
 This manifest takes the following parameters.</p>
 
@@ -70,7 +70,7 @@ $location</code></pre>
 <p><strong>Creating a vm</strong><br />
 vm.pp allows you to create a new virtual machine instance. When using the class, the reference will be,
 
-<pre><code>windowsazure::VM</code></pre>
+<pre><code>microsoftazure::VM</code></pre>
 
 This manifest takes the following parameters.</p>
 
@@ -93,7 +93,7 @@ $password = undef</code></pre>
 <p><strong>Creating a virtual network</strong><br />
 vnet.pp allows you to create a new virtual network instance. When using the class, the reference will be,
 
-<pre><code>windowsazure::vnet</code></pre>
+<pre><code>microsoftazure::vnet</code></pre>
 
 This manifest takes the following parameters.</p>
 
@@ -109,7 +109,7 @@ $dns_servers = undef</code></pre>
 <p><strong>Creating a virtual network, sql db and virtual machine</strong><br />
 provisioner.pp allows you to create a new virtual network instance, sql db and virtual network. When using the class, the reference will be,
 
-<pre><code>windowsazure::provisioner</code></pre>
+<pre><code>microsoftazure::provisioner</code></pre>
 
 This manifest takes the following parameters.</p>
 
@@ -145,7 +145,7 @@ $location</code></pre>
 <p><strong>Creating a cloud service</strong><br />
 cloudservice.pp allows you to create a new cloud service. When using the class, the reference will be,
 
-<pre><code>windowsazure::cloudservice</code></pre>
+<pre><code>microsoftazure::cloudservice</code></pre>
 
 This manifest takes the following parameters.</p>
 

@@ -3,7 +3,7 @@
 # All Rights Reserved. Licensed under the Apache 2.0 License.
 #--------------------------------------------------------------------------
 
-class windowsazure::vm (
+class microsoftazure::vm (
   $vm_name,
   $vm_user,
   $image,

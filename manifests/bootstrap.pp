@@ -3,7 +3,7 @@
 # All Rights Reserved. Licensed under the Apache 2.0 License.
 #--------------------------------------------------------------------------
 
-class windowsazure::bootstrap (
+class microsoftazure::bootstrap (
   $puppet_master_ip,
   $node_ipaddress,
   $homedir = undef,

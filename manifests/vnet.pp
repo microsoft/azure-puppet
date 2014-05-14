@@ -3,7 +3,7 @@
 # All Rights Reserved. Licensed under the Apache 2.0 License.
 #--------------------------------------------------------------------------
 
-class windowsazure::vnet (
+class microsoftazure::vnet (
   $azure_management_certificate,
   $azure_subscription_id,
   $virtual_network_name,

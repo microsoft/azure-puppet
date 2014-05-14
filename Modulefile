@@ -1,4 +1,4 @@
-name    'msopentech-windowsazure'
+name    'msopentech-microsoftazure'
 version '1.2.0'
 source 'https://github.com/MSOpenTech/azure-puppet.git'
 author 'msopentech'

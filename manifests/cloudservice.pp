@@ -3,7 +3,7 @@
 # All Rights Reserved. Licensed under the Apache 2.0 License.
 #--------------------------------------------------------------------------
 
-class windowsazure::cloudservice (
+class microsoftazure::cloudservice (
   $azure_management_certificate,
   $azure_subscription_id,
   $cloud_service_name,
