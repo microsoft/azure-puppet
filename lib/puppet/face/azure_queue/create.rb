@@ -1,8 +1,8 @@
 # encoding: UTF-8
 require 'tilt'
 
-Puppet::Face.define :azure_servicebus, '1.0.0' do
-  action :create_queue do
+Puppet::Face.define :azure_queue, '1.0.0' do
+  action :create do
 
     summary 'List SQL database servers.'
     arguments 'list'
@@ -11,12 +11,12 @@ Puppet::Face.define :azure_servicebus, '1.0.0' do
       displays them on the console output.
     EOT
 
-    Puppet::ServiceBus.add_servicebus_options(self)
+    Puppet::ServiceBus.add_create_queue_options(self)
 
     when_invoked do |options|
       Puppet::ServiceBus.initialize_env_variable(options)
-      azure_service_bus = Azure::ServiceBusService.new
-      azure_service_bus.create_queue(options[:queue_name])
+      azure_queue_service = Azure::QueueService.new
+      azure_queue_service.create_queue(options[:queue_name])
     end
 
     returns 'Array of database server objets.'
