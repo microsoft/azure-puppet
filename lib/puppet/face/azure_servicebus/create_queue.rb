@@ -11,7 +11,7 @@ Puppet::Face.define :azure_servicebus, '1.0.0' do
       displays them on the console output.
     EOT
 
-    Puppet::ServiceBus.add_create_queue_options(self)
+    Puppet::ServiceBus.add_servicebus_options(self)
 
     when_invoked do |options|
       Puppet::ServiceBus.initialize_env_variable(options)
