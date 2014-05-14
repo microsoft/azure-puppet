@@ -1,3 +1,8 @@
+#-------------------------------------------------------------------------
+# Copyright (c) Microsoft Open Technologies, Inc.
+# All Rights Reserved. Licensed under the Apache 2.0 License.
+#--------------------------------------------------------------------------
+
 require 'puppet/virtual_machine'
 
 Puppet::Face.define(:azure_vm, '1.0.0') do

@@ -1,3 +1,8 @@
+#-------------------------------------------------------------------------
+# Copyright (c) Microsoft Open Technologies, Inc.
+# All Rights Reserved. Licensed under the Apache 2.0 License.
+#--------------------------------------------------------------------------
+
 require 'puppet/core/remote_connection'
 require 'puppet/core/utility'
 require 'puppet/azurepack/installer'

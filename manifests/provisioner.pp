@@ -1,3 +1,8 @@
+#-------------------------------------------------------------------------
+# Copyright (c) Microsoft Open Technologies, Inc.
+# All Rights Reserved. Licensed under the Apache 2.0 License.
+#--------------------------------------------------------------------------
+
 class windowsazure::provisioner (
   # For windows azure authentication
   $azure_management_certificate,

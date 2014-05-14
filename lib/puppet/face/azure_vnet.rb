@@ -1,3 +1,8 @@
+#-------------------------------------------------------------------------
+# Copyright (c) Microsoft Open Technologies, Inc.
+# All Rights Reserved. Licensed under the Apache 2.0 License.
+#--------------------------------------------------------------------------
+
 require 'puppet/virtual_network'
 
 Puppet::Face.define(:azure_vnet, '1.0.0') do

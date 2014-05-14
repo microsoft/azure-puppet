@@ -1,3 +1,7 @@
+#-------------------------------------------------------------------------
+# Copyright (c) Microsoft Open Technologies, Inc.
+# All Rights Reserved. Licensed under the Apache 2.0 License.
+#--------------------------------------------------------------------------
 
 Puppet::Face.define :azure_vnet, '1.0.0' do
   action :set_xml_schema do

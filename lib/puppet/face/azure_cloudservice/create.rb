@@ -1,3 +1,8 @@
+#-------------------------------------------------------------------------
+# Copyright (c) Microsoft Open Technologies, Inc.
+# All Rights Reserved. Licensed under the Apache 2.0 License.
+#--------------------------------------------------------------------------
+
 # encoding: UTF-8
 
 Puppet::Face.define :azure_cloudservice, '1.0.0' do

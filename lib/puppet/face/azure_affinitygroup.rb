@@ -1,3 +1,8 @@
+#-------------------------------------------------------------------------
+# Copyright (c) Microsoft Open Technologies, Inc.
+# All Rights Reserved. Licensed under the Apache 2.0 License.
+#--------------------------------------------------------------------------
+
 require 'puppet/affinity_group'
 
 Puppet::Face.define(:azure_affinitygroup, '1.0.0') do
