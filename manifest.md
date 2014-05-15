@@ -25,7 +25,7 @@ $ winrm set winrm/config/service/auth @{Basic="true"}
 
 To provision a puppet agent on the Windows Azure platform, run the following command.
 
-<pre><code>puppet module install msopentech/windowsazure --version 1.1.0</code></pre>
+<pre><code>puppet module install msopentech/microsoftazure --version 1.2.1</code></pre>
 
 For more information on Windows Azure, <a href="http://www.windowsazure.com/en-us/solutions/infrastructure/" tartget="_blank">visit the Windows Azure website</a>.
 
@@ -153,6 +153,23 @@ This manifest takes the following parameters.</p>
 $azure_management_certificate,
 $azure_subscription_id,
 $cloud_service_name,
+$affinity_group_name,
+$location,
+$label = undef,
+$description = undef
+</code></pre>
+
+<p><strong>Creating a storage account</strong><br />
+storage.pp allows you to create a new storage account. When using the class, the reference will be,
+
+<pre><code>microsoftazure::storage</code></pre>
+
+This manifest takes the following parameters.</p>
+
+<pre><code>
+$azure_management_certificate,
+$azure_subscription_id,
+$storage_account_name,
 $affinity_group_name,
 $location,
 $label = undef,
