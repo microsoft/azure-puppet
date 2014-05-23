@@ -1,18 +1,19 @@
-# encoding: UTF-8
-require 'tilt'
+#-------------------------------------------------------------------------
+# Copyright (c) Microsoft Open Technologies, Inc.
+# All Rights Reserved. Licensed under the Apache 2.0 License.
+#--------------------------------------------------------------------------
 
+# encoding: UTF-8
 Puppet::Face.define :azure_queue, '1.0.0' do
   action :create_message do
 
-    summary 'List SQL database servers.'
+    summary 'Creates a message in the specified queue.'
     arguments 'list'
     description <<-'EOT'
-      The list action obtains a list of sql database servers and
-      displays them on the console output.
+      Creates a message in the specified queue.
     EOT
 
     Puppet::ServiceBus.add_create_message_options(self)
-
     when_invoked do |options|
       Puppet::ServiceBus.initialize_env_variable(options)
       azure_queue_service = Azure::QueueService.new
@@ -20,29 +21,12 @@ Puppet::Face.define :azure_queue, '1.0.0' do
       azure_queue_service.create_message(options[:queue_name], options[:queue_message])
     end
 
-    returns 'Array of database server objets.'
+    returns 'NONE'
 
     examples <<-'EOT'
-      $ puppet azure_sqldb list --azure-subscription-id=YOUR-SUBSCRIPTION-ID \
-        --management-certificate azure-certificate-path \
-        --management-endpoint=https://management.database.windows.net:8443/
-
-    Listing Servers
-
-      Server: 1
-        Server Name         : esinlp9bav
-        Administrator login : puppet3
-        Location            : West US
-
-      Server: 2
-        Server Name         : estkonosnv
-        Administrator login : puppet
-        Location            : West US
-
-      Server: 3
-        Server Name         : ezprthvj9w
-        Administrator login : puppet
-        Location            : West US
+      $  puppet azure_queue create_message --storage-account-name mystorageacc \
+         --storage-access-key 'hLlPCq751UBzcfn9AR3YWHXJu4m+A=='
+         --queue-name queuename  --queue-message 'Text Message'
 
     EOT
   end

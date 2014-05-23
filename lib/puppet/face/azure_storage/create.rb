@@ -4,7 +4,6 @@
 #--------------------------------------------------------------------------
 
 # encoding: UTF-8
-
 Puppet::Face.define :azure_storage, '1.0.0' do
   action :create do
 

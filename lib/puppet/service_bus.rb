@@ -1,3 +1,8 @@
+#-------------------------------------------------------------------------
+# Copyright (c) Microsoft Open Technologies, Inc.
+# All Rights Reserved. Licensed under the Apache 2.0 License.
+#--------------------------------------------------------------------------
+
 module Puppet::ServiceBus
 
   class << self
@@ -20,11 +25,16 @@ module Puppet::ServiceBus
       add_storage_access_key_option(action)
     end
 
-    def add_servicebus_options(action)
+    def add_servicebus_queue_options(action)
       add_default_options(action)
       add_queue_name_option(action)
     end
-  
+
+    def add_servicebus_topic_options(action)
+      add_default_options(action)
+      add_topic_name_option(action)
+    end
+
     def add_create_queue_options(action)
       add_queue_default_options(action)
       add_queue_name_option(action)
@@ -38,48 +48,55 @@ module Puppet::ServiceBus
 
     def add_sb_namespace_option(action)
       action.option '--sb-namespace=' do
-        summary 'The subscription identifier for the Windows Azure portal.'
-        description 'The subscription identifier for the Windows Azure portal.'
+        summary 'The azure service bus namespace.'
+        description 'azure service bus namespace.'
         required        
       end
     end
 
     def add_sb_access_key_option(action)
       action.option '--sb-access-key=' do
-        summary 'The subscription identifier for the Windows Azure portal.'
-        description 'The subscription identifier for the Windows Azure portal.'
+        summary 'The azure service bus access key.'
+        description 'The azure service bus access key.'
         required       
       end
     end
 
     def add_queue_name_option(action)
       action.option '--queue-name=' do
-        summary 'The subscription identifier for the Windows Azure portal.'
-        description 'The subscription identifier for the Windows Azure portal.'
+        summary 'Name of azure queue.'
+        description 'Name of azure queue.'
+        required
+      end
+    end
+
+    def add_topic_name_option(action)
+      action.option '--topic-name=' do
+        summary 'Name of azure topic.'
+        description 'Name of azure topic.'
         required
       end
     end
 
     def add_queue_message_option(action)
       action.option '--queue-message=' do
-        summary 'The subscription identifier for the Windows Azure portal.'
-        description 'The subscription identifier for the Windows Azure portal.'
+        summary 'Queue message'
         required
       end
     end
 
     def add_storage_account_name_option(action)
       action.option '--storage-account-name=' do
-        summary 'The subscription identifier for the Windows Azure portal.'
-        description 'The subscription identifier for the Windows Azure portal.'
+        summary 'The storage account name of Windows Azure portal.'
+        description 'The storage account name of Windows Azure portal.'
         required
       end
     end
 
     def add_storage_access_key_option(action)
       action.option '--storage-access-key=' do
-        summary 'The subscription identifier for the Windows Azure portal.'
-        description 'The subscription identifier for the Windows Azure portal.'
+        summary 'The access key of storage account.'
+        description 'The access key of storage account.'
         required       
       end
     end

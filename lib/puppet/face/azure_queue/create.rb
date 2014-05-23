@@ -1,14 +1,16 @@
-# encoding: UTF-8
-require 'tilt'
+#-------------------------------------------------------------------------
+# Copyright (c) Microsoft Open Technologies, Inc.
+# All Rights Reserved. Licensed under the Apache 2.0 License.
+#--------------------------------------------------------------------------
 
+# encoding: UTF-8
 Puppet::Face.define :azure_queue, '1.0.0' do
   action :create do
 
-    summary 'List SQL database servers.'
+    summary 'Creates a queue with a valid name.'
     arguments 'list'
     description <<-'EOT'
-      The list action obtains a list of sql database servers and
-      displays them on the console output.
+      The create action creates a queue under the given account.
     EOT
 
     Puppet::ServiceBus.add_create_queue_options(self)
@@ -19,30 +21,13 @@ Puppet::Face.define :azure_queue, '1.0.0' do
       azure_queue_service.create_queue(options[:queue_name])
     end
 
-    returns 'Array of database server objets.'
+    returns 'NONE'
 
     examples <<-'EOT'
-      $ puppet azure_sqldb list --azure-subscription-id=YOUR-SUBSCRIPTION-ID \
-        --management-certificate azure-certificate-path \
-        --management-endpoint=https://management.database.windows.net:8443/
-
-    Listing Servers
-
-      Server: 1
-        Server Name         : esinlp9bav
-        Administrator login : puppet3
-        Location            : West US
-
-      Server: 2
-        Server Name         : estkonosnv
-        Administrator login : puppet
-        Location            : West US
-
-      Server: 3
-        Server Name         : ezprthvj9w
-        Administrator login : puppet
-        Location            : West US
-
+      $  puppet azure_queue create --storage-account-name mystorageacc \
+         --storage-access-key 'hLlPCq751UBzcfn9AR3YWHXJu4m+A=='
+         --queue-name queuename
     EOT
+
   end
 end
