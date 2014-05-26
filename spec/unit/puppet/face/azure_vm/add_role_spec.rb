@@ -233,7 +233,7 @@ describe Puppet::Face[:azure_vm, :current] do
     describe '(cloud_service_name)' do
       it 'cloud_service_name should be optional' do
         @options.delete(:cloud_service_name)
-         expect { subject.add_role(@options) }.to raise_error(
+        expect { subject.add_role(@options) }.to raise_error(
           ArgumentError,
           /required: cloud_service_name/
         )

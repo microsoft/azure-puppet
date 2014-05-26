@@ -25,8 +25,8 @@ Puppet::Face.define :azure_servicebus, '1.0.0' do
     returns 'NONE'
 
     examples <<-'EOT'
-      $ puppet azure_servicebus create_topic --sb-namespace busname \
-      --topic-name topicname  --sb-access-key dnD/E49P4SJG8UVEpABOeZRc=
+      $ puppet azure_servicebus create_queue --sb-namespace busname \
+      --queue-name queuename  --sb-access-key dnD/E49P4SJG8UVEpABOeZRc=
 
     EOT
   end
