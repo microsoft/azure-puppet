@@ -8,7 +8,7 @@
 Puppet::Face.define :azure_vm, '1.0.0' do
   action :restart do
 
-    summary 'Restarts Windows Azure node instance'
+    summary 'Restarts Microsoft Azure node instance'
 
     description <<-'EOT'
       The restart action restarts windows azure node instance.

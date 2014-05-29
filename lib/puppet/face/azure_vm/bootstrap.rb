@@ -9,8 +9,8 @@ require 'puppet/azurepack/bootstrap'
 Puppet::Face.define :azure_vm, '1.0.0' do
   action :bootstrap do
 
-    summary 'Install puppet node on  Windows Azure VM'
-    description 'Install puppet node on Windows Azure Virtual Machine.'
+    summary 'Install puppet node on  Microsoft Azure VM'
+    description 'Install puppet node on Microsoft Azure Virtual Machine.'
 
     Puppet::VirtualMachine.add_bootstrap_options(self)
 

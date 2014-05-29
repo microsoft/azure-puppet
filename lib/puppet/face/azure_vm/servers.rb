@@ -9,7 +9,7 @@ require 'tilt'
 Puppet::Face.define :azure_vm, '1.0.0' do
   action :servers do
 
-    summary 'List Windows Azure node instances'
+    summary 'List Microsoft Azure node instances'
     arguments 'list'
     description <<-'EOT'
       The list action obtains a list of instances from the cloud provider and

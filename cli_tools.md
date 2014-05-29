@@ -1,6 +1,6 @@
-<h1>Windows Azure Cloud Provisioner</h1>
+<h1>Microsoft Azure Cloud Provisioner</h1>
               
-<p>Microsoft Open Technologies and Puppet Enterprise provide support for working with virtual machine instances using Windows Azure. Using actions of the <code>puppet azure_vm</code> sub-command, you can launch and manage Microsoft Windows Azure services like virtual machines, virtual networks and SQL database services.</p>
+<p>Microsoft Open Technologies and Puppet Enterprise provide support for working with virtual machine instances using Microsoft Azure. Using actions of the <code>puppet azure_vm</code> sub-command, you can launch and manage Microsoft Microsoft Azure services like virtual machines, virtual networks and SQL database services.</p>
 
 <h2>Required gems</h2>
 
@@ -21,7 +21,7 @@
   <li><code>puppet azure_vm terminate</code> for destroying no longer needed instances</li>
 </ul>
 
-<p>If you are new to Windows Azure, we recommend reading the <a href="http://www.windowsazure.com">Getting Started documentation</a>.</p>
+<p>If you are new to Microsoft Azure, we recommend reading the <a href="http://www.windowsazure.com">Getting Started documentation</a>.</p>
 
 <p>Here is a quick look at some of the basic operations. For comprehensive information, see <a href="#getting-more-help">Getting More Help</a> below.</p>
 
@@ -108,7 +108,7 @@ by running <code>puppet help azure_vm create</code>.</p>
 
 <h2 id="sql-database">Creating and managing a SQL database server</h2>
 
-<p><a href="http://www.windowsazure.com/en-us/services/sql-database/" target="_blank">Windows Azure SQL Database</a> is a fully managed relational database service that delivers flexible manageability, includes built-in high availability, offers predictable performance, and supports massive scale-out.</p>
+<p><a href="http://www.windowsazure.com/en-us/services/sql-database/" target="_blank">Microsoft Azure SQL Database</a> is a fully managed relational database service that delivers flexible manageability, includes built-in high availability, offers predictable performance, and supports massive scale-out.</p>
 
 <p>You can create and manage a SQL server as in the following example.</p>
 
@@ -120,7 +120,7 @@ by running <code>puppet help azure_vm create</code>.</p>
 
 <h2 id="cert-management">Certificate Management</h2>
 
-<p>A <a href="http://msdn.microsoft.com/en-us/library/windowsazure/gg981929.aspx" target="_blank">management certificate</a> is needed when you want to use the Service Management API to interact with the Windows Azure image platform. Stored at the subscription level, these certificates are independent of any hosted service or deployment.
+<p>A <a href="http://msdn.microsoft.com/en-us/library/windowsazure/gg981929.aspx" target="_blank">management certificate</a> is needed when you want to use the Service Management API to interact with the Microsoft Azure image platform. Stored at the subscription level, these certificates are independent of any hosted service or deployment.
 
 <p>Currently the sdk supports *.pem or *.pfx (passwordless pfx) for service management operations. 
 The following are the steps to obtain and extract you management certificates.</p>
@@ -143,7 +143,7 @@ The following are the steps to obtain and extract you management certificates.</
 
 <pre><code>$ puppet help azure_vm &lt;action&gt;
 
-This subcommand provides a command line interface to work with Windows Azure virtual
+This subcommand provides a command line interface to work with Microsoft Azure virtual
 machine instances. The goal of these actions are to easily create new
 machines, install Puppet onto them, and tear them down when they're no longer
 required.
@@ -155,12 +155,12 @@ OPTIONS:
   --debug                        - Whether to log debug information.
 
 ACTIONS:
-  bootstrap        Install puppet node on a Windows Azure VM
-  create           Create a Windows Azure VM
-  delete           Delete a Windows Azure node instance
-  servers          List Windows Azure node instances
-  shutdown         Shutdown Windows Azure node instance
-  start            Starts Windows Azure node instance
+  bootstrap        Install puppet node on a Microsoft Azure VM
+  create           Create a Microsoft Azure VM
+  delete           Delete a Microsoft Azure node instance
+  servers          List Microsoft Azure node instances
+  shutdown         Shutdown Microsoft Azure node instance
+  start            Starts Microsoft Azure node instance
 
 See 'puppet help azure_vm' or 'help puppet-azure_vm' for full help.
 </code></pre>

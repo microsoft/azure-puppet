@@ -1,6 +1,6 @@
 <h1>Microsoft Open Technologies manifest files for Puppet</h1>
               
-<p>Microsoft Open Technologies is providing a Windows Azure Cloud Provisioner Module for Puppet that streamlines provisioning Windows Azure services like, virtual machines, virtual networks and SQL database services.
+<p>Microsoft Open Technologies is providing a Microsoft Azure Cloud Provisioner Module for Puppet that streamlines provisioning Microsoft Azure services like, virtual machines, virtual networks and SQL database services.
 </p>
 
 <h2>Requirements</h2>
@@ -21,13 +21,13 @@ $ winrm set winrm/config/service/auth @{Basic="true"}
 <li>net-scp (>= 1.0.4)</li>
 </p>
 
-<h2>Windows Azure</h2>
+<h2>Microsoft Azure</h2>
 
-To provision a puppet agent on the Windows Azure platform, run the following command.
+To provision a puppet agent on the Microsoft Azure platform, run the following command.
 
 <pre><code>puppet module install msopentech/microsoftazure --version 1.2.1</code></pre>
 
-For more information on Windows Azure, <a href="http://www.windowsazure.com/en-us/solutions/infrastructure/" tartget="_blank">visit the Windows Azure website</a>.
+For more information on Microsoft Azure, <a href="http://www.windowsazure.com/en-us/solutions/infrastructure/" tartget="_blank">visit the Microsoft Azure website</a>.
 
 <h2>Manifest files</h2>
 

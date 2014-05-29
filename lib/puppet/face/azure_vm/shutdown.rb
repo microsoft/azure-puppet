@@ -8,7 +8,7 @@
 Puppet::Face.define :azure_vm, '1.0.0' do
   action :shutdown do
 
-    summary 'Shutdown Windows Azure node instances'
+    summary 'Shutdown Microsoft Azure node instances'
     description 'The shutdown action stops windows azure node instances.'
 
     Puppet::VirtualMachine.add_shutdown_options(self)

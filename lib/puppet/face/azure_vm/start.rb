@@ -8,7 +8,7 @@
 Puppet::Face.define :azure_vm, '1.0.0' do
   action :start do
 
-    summary 'starts Windows Azure node instances'
+    summary 'starts Microsoft Azure node instances'
 
     description <<-'EOT'
       The start action starts windows azure node instances.

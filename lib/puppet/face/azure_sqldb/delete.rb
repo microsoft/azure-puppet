@@ -8,7 +8,7 @@
 Puppet::Face.define :azure_sqldb, '1.0.0' do
   action :delete do
 
-    summary 'Delete Windows Azure sql database server'
+    summary 'Delete Microsoft Azure sql database server'
 
     description <<-'EOT'
       The delete action delete windows azure sql server.

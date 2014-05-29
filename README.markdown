@@ -1,7 +1,7 @@
-Windows Azure Cloud Provisioner
+Microsoft Azure Cloud Provisioner
 ========================
 
-Puppet Module to launch and manage Microsoft Windows Azure Services like Virtual Machines, Virtual Network and SQL Database services.
+Puppet Module to launch and manage Microsoft Microsoft Azure Services like Virtual Machines, Virtual Network and SQL Database services.
 
 This module requires Puppet 2.7.2 or later.
 
@@ -55,14 +55,14 @@ Once launched, you should be able to SSH to the new system using the username an
 
 Other avaliable actions are
 
-    bootstrap         Install puppet node on  Windows Azure VM
-    create            Create Windows Azure VM
-    delete            Delete Windows Azure node instances
-    images            List Windows Azure images
-    locations         List Windows Azure locations
-    servers           List Windows Azure node instances
-    shutdown          Shutdown Windows Azure node instances
-    start             Starts Windows Azure node instances
+    bootstrap         Install puppet node on Microsoft Azure VM
+    create            Create Microsoft Azure VM
+    delete            Delete Microsoft Azure node instances
+    images            List Microsoft Azure images
+    locations         List Microsoft Azure locations
+    servers           List Microsoft Azure node instances
+    shutdown          Shutdown Microsoft Azure node instances
+    start             Starts Microsoft Azure node instances
     update_endpoint   update existing endpoint of a virtual machine
     delete_endpoint   Delete endpoint of virtual machine.
     add_disk          Adds a data disk to a virtual machine.
@@ -99,8 +99,8 @@ Other avaliable actions are
 
     create             Create SQL database server.
     create_firewall    Create SQL database firewall rule on a server.
-    delete             Delete Windows Azure sql database server
-    delete_firewall    Delete Windows Azure sql database firewall rule on a server.
+    delete             Delete Microsoft Azure sql database server
+    delete_firewall    Delete Microsoft Azure sql database firewall rule on a server.
     list               List SQL database servers.
     list_firewall      List firewall of SQL database servers.
     reset_password     Reset password of sql database server.
@@ -159,9 +159,9 @@ Other avaliable actions are
 	
 # Reporting Issues
 
-  Please report any problems you have with the Windows Azure Cloud Provisioner module in issue tracker at
+  Please report any problems you have with the Microsoft Azure Cloud Provisioner module in issue tracker at
   
-  * [Windows Azure Cloud Provisioner Issues](https://github.com/MSOpenTech/azure-puppet/issues)
+  * [Microsoft Azure Cloud Provisioner Issues](https://github.com/MSOpenTech/azure-puppet/issues)
 
 Puppet Installation
 ===================

@@ -9,7 +9,7 @@ Puppet::Face.define(:azure_cloudservice, '1.0.0') do
 
   summary 'View and manage Window Azure cloud service.'
   description <<-'EOT'
-  This subcommand provides a command line interface to work with Windows Azure
+  This subcommand provides a command line interface to work with Microsoft Azure
   cloud services. The goal of these actions are to easily manage cloud service.
   EOT
 

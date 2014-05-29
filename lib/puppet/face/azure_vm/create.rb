@@ -8,7 +8,7 @@
 Puppet::Face.define :azure_vm, '1.0.0' do
   action :create do
 
-    summary 'Create Windows Azure VM'
+    summary 'Create Microsoft Azure VM'
 
     description <<-'EOT'
       The create action create a storage account, cloud service and virtula machine.

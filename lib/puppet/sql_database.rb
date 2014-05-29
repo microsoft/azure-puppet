@@ -56,8 +56,8 @@ module Puppet::SqlDatabase
 
     def add_login_option(action)
       action.option '--login=' do
-        summary 'The login username for the Windows Azure sql database server.'
-        description 'The login username of Windows Azure sql database server.'
+        summary 'The login username for the Microsoft Azure sql database server.'
+        description 'The login username of Microsoft Azure sql database server.'
         required
         before_action do |act, args, options|
           if options[:login].empty?
@@ -69,8 +69,8 @@ module Puppet::SqlDatabase
 
     def add_password_option(action)
       action.option '--password=' do
-        summary 'The pasword for the Windows Azure sql database server.'
-        description 'The password for the Windows Azure sql database server.'
+        summary 'The pasword for the Microsoft Azure sql database server.'
+        description 'The password for the Microsoft Azure sql database server.'
         required
         before_action do |act, args, options|
           if options[:password].empty?
@@ -82,8 +82,8 @@ module Puppet::SqlDatabase
 
     def add_server_name_option(action)
       action.option '--server-name=' do
-        summary 'The server name for the Windows Azure sql database server.'
-        description 'The server name for the Windows Azure sql database server.'
+        summary 'The server name for the Microsoft Azure sql database server.'
+        description 'The server name for the Microsoft Azure sql database server.'
         required
         before_action do |act, args, options|
           if options[:server_name].empty?

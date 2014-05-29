@@ -8,7 +8,7 @@
 Puppet::Face.define :azure_vm, '1.0.0' do
   action :images do
 
-    summary 'List Windows Azure images'
+    summary 'List Microsoft Azure images'
 
     description <<-'EOT'
       The images action obtains a list of images from the cloud provider and

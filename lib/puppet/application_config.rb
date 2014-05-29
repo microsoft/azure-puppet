@@ -24,8 +24,8 @@ module Puppet
 
     def add_management_certificate_option(action)
       action.option '--management-certificate=' do
-        summary 'The subscription identifier for the Windows Azure portal.'
-        description 'The subscription identifier for the Windows Azure portal.'
+        summary 'The subscription identifier for the Microsoft Azure portal.'
+        description 'The subscription identifier for the Microsoft Azure portal.'
         required
         before_action do |act, args, options|
           file = options[:management_certificate]
@@ -36,8 +36,8 @@ module Puppet
 
     def add_subscription_id_option(action)
       action.option '--azure-subscription-id=' do
-        summary 'The subscription identifier for the Windows Azure portal.'
-        description 'The subscription identifier for the Windows Azure portal.'
+        summary 'The subscription identifier for the Microsoft Azure portal.'
+        description 'The subscription identifier for the Microsoft Azure portal.'
         required
         before_action do |act, args, options|
           if options[:azure_subscription_id].empty?
@@ -49,17 +49,17 @@ module Puppet
 
     def add_management_endpoint_option(action)
       action.option '--management-endpoint=' do
-        summary 'The management endpoint for the Windows Azure portal.'
-        description 'The management endpoint for the Windows Azure portal.'
+        summary 'The management endpoint for the Microsoft Azure portal.'
+        description 'The management endpoint for the Microsoft Azure portal.'
 
       end
     end
 
     def add_location_option(action, optional = false)
       action.option '--location=' do
-        summary 'The location identifier for the Windows Azure portal.'
+        summary 'The location identifier for the Microsoft Azure portal.'
         description <<-EOT
-          The location identifier for the Windows Azure portal.
+          The location identifier for the Microsoft Azure portal.
           valid choices are ('West US', 'East US', 'Southeast Asia',
           'North Europe', 'West Europe', 'East Asia' ...).
         EOT

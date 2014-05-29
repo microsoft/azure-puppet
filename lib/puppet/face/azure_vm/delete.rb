@@ -8,7 +8,7 @@
 Puppet::Face.define :azure_vm, '1.0.0' do
   action :delete do
 
-    summary 'Delete Windows Azure node instances'
+    summary 'Delete Microsoft Azure node instances'
     description 'The delete action delete windows azure node instances.'
 
     Puppet::VirtualMachine.add_delete_options(self)

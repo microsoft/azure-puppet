@@ -8,7 +8,7 @@
 Puppet::Face.define :azure_vm, '1.0.0' do
   action :locations do
 
-    summary 'List Windows Azure locations'
+    summary 'List Microsoft Azure locations'
 
     description <<-'EOT'
       The locations action obtains a list of locatons from the cloud provider
@@ -27,7 +27,7 @@ Puppet::Face.define :azure_vm, '1.0.0' do
 
     returns <<-'EOT'
       Array of attribute hashes containing information about
-      Windows Azure locations.'
+      Microsoft Azure locations.'
     EOT
 
     examples <<-'EOT'
