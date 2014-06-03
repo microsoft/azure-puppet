@@ -4,28 +4,29 @@
 #--------------------------------------------------------------------------
 
 # encoding: UTF-8
-Puppet::Face.define :azure_servicebus, '1.0.0' do
-  action :create_topic   do
 
-    summary 'Create topic with service bus object.'
+Puppet::Face.define :azure_servicebus, '1.0.0' do
+  action :delete_queue do
+
+    summary 'Delete a queue using service bus object.'
 
     description <<-'EOT'
-      Create topic with service bus object.
+      Delete a queue using service bus object.
     EOT
 
-    Puppet::ServiceBus.add_servicebus_topic_options(self)
+    Puppet::ServiceBus.add_servicebus_queue_options(self)
 
     when_invoked do |options|
       Puppet::ServiceBus.initialize_env_variable(options)
       azure_service_bus = Azure::ServiceBusService.new
-      azure_service_bus.create_topic(options[:topic_name]).inspect
+      azure_service_bus.delete_queue(options[:queue_name])
     end
 
     returns 'NONE'
 
     examples <<-'EOT'
-      $ puppet azure_servicebus create_topic --sb-namespace busname \
-      --topic-name topicname --sb-access-key 4XJib8UcKEu8VG8UVEpABOeZRc=
+      $ puppet azure_servicebus delete_queue --sb-namespace busname \
+      --queue-name queuename  --sb-access-key dnD/E49P4SJG8UVEpABOeZRc=
 
     EOT
   end

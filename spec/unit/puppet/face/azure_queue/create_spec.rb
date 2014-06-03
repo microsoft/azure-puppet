@@ -19,7 +19,7 @@ describe Puppet::Face[:azure_queue, :current] do
       config.storage_account_name  = @options[:storage_account_name]
       config.storage_access_key = @options[:storage_access_key]
     end
-    
+
     queue_service.any_instance.stubs(:create_queue).with(any_parameters)
   end
 
