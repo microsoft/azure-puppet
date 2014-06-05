@@ -15,6 +15,10 @@ module Puppet::ServiceBus
       require 'azure'
     end
 
+    def views(name)
+      File.join(File.dirname(__FILE__), 'face/azure_servicebus/views', name)
+    end
+
     def add_default_options(action)
       add_sb_namespace_option(action)
       add_sb_access_key_option(action)

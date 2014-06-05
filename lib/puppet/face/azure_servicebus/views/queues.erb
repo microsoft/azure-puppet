@@ -1,0 +1,8 @@
+
+<%="Listing queues".bold%><%index=1%>
+<%queues.each do |cs|%>
+  <%="Queues: #{index}".bold%>
+    <%="Name".fix(20)%>: <%=cs.name %>
+    <%="URL".fix(20)%>: <%=cs.id%>
+    <%="Author Name".fix(20)%>: <%=cs.author_name%><%index+=1%>
+<%end%>

@@ -1,0 +1,8 @@
+
+<%="Listing topics".bold%><%index=1%>
+<%topics.each do |tp|%>
+  <%="Queues: #{index}".bold%>
+    <%="Name".fix(20)%>: <%=tp.name %>
+    <%="URL".fix(20)%>: <%=tp.id%>
+    <%="Author Name".fix(20)%>: <%=tp.author_name%><%index+=1%>
+<%end%>
