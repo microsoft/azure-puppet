@@ -30,6 +30,9 @@ This module requires Puppet 2.7.2 or later.
 * Cloud Service Management
     * create, delete, upload_certificate and list cloud services
 
+* Service Bus Management
+    * create_queue, create_topic, list_topics, list_queues, delete_topic and delete_queue
+
 Getting Started
 ===============
 
@@ -135,6 +138,22 @@ Other avaliable actions are
     delete    Delete storage account.
     list      List storage accounts.
     update    Update storage service.
+
+Manage Service Bus
+========================
+
+Creating queue using service bus
+
+    $ puppet azure_servicebus create_queue --sb-namespace busname
+      --queue-name queuename  --sb-access-key dnD/E49P4SJG8UVEpABOeZRc=
+
+Other avaliable actions are
+      create_queue    Creates queue with service bus object.
+      create_topic    Create topic with service bus object.
+      delete_queue    Delete a queue using service bus object.
+      delete_topic    Delete a topic using service bus object.
+      list_queues     List queues.
+      list_topics     List topics.
 
 # Certificate Management
 
