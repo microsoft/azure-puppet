@@ -118,6 +118,7 @@ Creating cloud service
     --management-certificate path-to-azure-certificate --cloud-service-name cloudservice1
 
 Other avaliable actions are
+
     delete                Delete cloud service.
     delete_deployment     deletes the specified deployment of hosted service.
     list                  List cloud services.
@@ -134,6 +135,7 @@ Creating storage account
     --location 'west us' --extended-properties 'key-1:value-1,key-2:value-2'
 
 Other avaliable actions are
+
     create    Create storage service.
     delete    Delete storage account.
     list      List storage accounts.
@@ -148,6 +150,7 @@ Creating queue using service bus
       --queue-name queuename  --sb-access-key dnD/E49P4SJG8UVEpABOeZRc=
 
 Other avaliable actions are
+
       create_queue    Creates queue with service bus object.
       create_topic    Create topic with service bus object.
       delete_queue    Delete a queue using service bus object.
