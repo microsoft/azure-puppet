@@ -1,5 +1,7 @@
+Fri June 6 2014 MSOpenTech 1.2.3
+ * Implemented azure_servicebus action.
 Fri May 30 2014 MSOpenTech 1.2.2
-* Text changes from 'Windows Azure' to 'Microsoft Azure'
+ * Text changes from 'Windows Azure' to 'Microsoft Azure'
 Fri May 16 2014 MSOpenTech 1.2.1
  * Text changes from windowsazure to microsoftazure
  * Added License text
