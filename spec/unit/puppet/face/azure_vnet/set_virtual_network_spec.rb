@@ -15,7 +15,7 @@ describe Puppet::Face[:azure_vnet, :current] do
       azure_subscription_id: 'Subscription-id',
       management_endpoint: 'management.core.windows.net',
       virtual_network_name: 'login-name',
-      affinity_group_name: 'AG1',
+      location: 'West US',
       address_space: '172.16.0.0/12,10.0.0.0/8,192.168.0.0/24',
       dns_servers: 'dns-1:8.8.8.8,dns-2:8.8.4.4',
       subnets: 'subnet-1:172.16.0.0:12'
@@ -48,12 +48,12 @@ describe Puppet::Face[:azure_vnet, :current] do
       end
     end
 
-    describe '(affinity_group_name)' do
-      it 'should validate the affinity group name' do
-        @options.delete(:affinity_group_name)
+    describe '(location)' do
+      it 'should validate the location' do
+        @options.delete(:location)
         expect { subject.set(@options) }.to raise_error(
           ArgumentError,
-          /required: affinity_group_name/
+          /required: location/
         )
       end
     end
@@ -72,11 +72,6 @@ describe Puppet::Face[:azure_vnet, :current] do
   end
 
   describe 'optional parameter validation' do
-    before :each do
-      vnet_service.any_instance.stubs(:create_affinity_group).with(
-        any_parameters
-      )
-    end
 
     describe '(subnets)' do
       it 'subnets should be optional' do

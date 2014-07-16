@@ -16,7 +16,7 @@ module Puppet::VirtualNetwork
     def add_set_virtual_network_options(action)
       add_default_options(action)
       add_virtual_network_name_option(action)
-      add_affinity_group_name_option(action)
+      add_location_option(action)
       add_address_space_option(action)
       add_subnet_option(action)
       add_dns_server_option(action)

@@ -39,7 +39,7 @@ Puppet::Face.define :azure_vnet, '1.0.0' do
       end
       virtual_network_service.set_network_configuration(
         options[:virtual_network_name],
-        options[:affinity_group_name],
+        options[:location],
         address_space,
         optional
       )
@@ -53,8 +53,7 @@ Puppet::Face.define :azure_vnet, '1.0.0' do
         --azure-subscription-id=YOUR-SUBSCRIPTION-ID \
         --dns-servers 'google-1:8.8.8.8,google-2:8.8.4.4' \
         --subnets 'subnet-1:172.16.0.0:12,subnet-2:192.168.0.0:29' \
-        --management-endpoint=https://management.database.windows.net:8443/ \
-        --virtual-network-name v-net --affinity-group-name test \
+        --virtual-network-name v-net --location 'West US' \
         --address-space '172.16.0.0/12,192.168.0.0/16'
 
     EOT
