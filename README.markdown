@@ -81,7 +81,7 @@ Manage Virtual Network
 Creating virtual network
 
     $puppet azure_vnet set --management-certificate pem-or-pfx-file-path --azure-subscription-id=your-subscription-id
-    --virtual-network-name vnetname --affinity-group-name ag-name --address-space '172.16.0.0/12,192.168.0.0/16'
+    --virtual-network-name vnetname --location 'West US' --address-space '172.16.0.0/12,192.168.0.0/16'
     --dns-servers 'dns-1:10.10.8.8,dns-2:172.8.4.4' --subnets 'subnet-1:172.16.0.0:12,subnet-2:192.168.0.0:29'
 
 Other avaliable actions are
