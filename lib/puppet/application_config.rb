@@ -12,7 +12,7 @@ module Puppet
       ENV['azure_management_certificate'.upcase] = options[:management_certificate]
       ENV['azure_subscription_id'.upcase] = options[:azure_subscription_id]
       ENV['azure_management_endpoint'.upcase] = options[:management_endpoint]
-      gem "azure", '=0.6.4'
+      gem "azure", '=0.6.5'
       require 'azure'
     end
 

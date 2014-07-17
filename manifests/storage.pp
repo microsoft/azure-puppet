@@ -53,7 +53,7 @@ class microsoftazure::storage (
 
     if !defined( Package['azure'] ) {
       package { 'azure':
-        ensure   => '0.6.4',
+        ensure   => '0.6.5',
         provider => 'gem',
       }
     }

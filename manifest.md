@@ -16,7 +16,7 @@ $ winrm set winrm/config/service/auth @{Basic="true"}
 
 <p>The following gems are also required.</p>
 
-<p><li>azure (>= 0.6.4)</li>
+<p><li>azure (>= 0.6.5)</li>
 <li>net-ssh (>= 2.1.4)</li>
 <li>net-scp (>= 1.0.4)</li>
 </p>

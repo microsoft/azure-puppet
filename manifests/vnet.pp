@@ -7,7 +7,7 @@ class microsoftazure::vnet (
   $azure_management_certificate,
   $azure_subscription_id,
   $virtual_network_name,
-  $affinity_group_name,
+  $location,
   $address_space,
   $subnets = undef,
   $dns_servers = undef
@@ -17,7 +17,7 @@ class microsoftazure::vnet (
 
     if !defined( Package['azure'] ) {
       package { 'azure':
-        ensure   => '0.6.4',
+        ensure   => '0.6.5',
         provider => 'gem',
       }
     }
@@ -26,8 +26,8 @@ class microsoftazure::vnet (
       fail('No virtual network name specified for virtual network.')
     }
 
-    if $affinity_group_name == undef {
-      fail('No affinity group name specified for virtual network.')
+    if $location == undef {
+      fail('No location specified for virtual network.')
     }
 
     if $address_space == undef {
@@ -46,7 +46,7 @@ class microsoftazure::vnet (
       $dns = "--dns-servers '${dns_values}'"
     }
 
-    $cmd = "puppet azure_vnet set --virtual-network-name ${virtual_network_name} --management-certificate ${azure_management_certificate} --azure-subscription-id ${azure_subscription_id} --affinity-group-name ${affinity_group_name} --address-space '${addr_spc_val}' "
+    $cmd = "puppet azure_vnet set --virtual-network-name ${virtual_network_name} --management-certificate ${azure_management_certificate} --azure-subscription-id ${azure_subscription_id} --location ${location} --address-space '${addr_spc_val}' "
 
     $puppet_command = "${cmd} ${dns} ${snet}"
 

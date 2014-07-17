@@ -1,5 +1,5 @@
 name 'msopentech-microsoftazure'
-version '1.2.3'
+version '1.2.4'
 source 'https://github.com/MSOpenTech/azure-puppet.git'
 author 'msopentech'
 summary 'Microsoft Azure cloud provisioning module'

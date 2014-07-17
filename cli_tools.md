@@ -6,7 +6,7 @@
 
 <p>The required gems and version are listed here.</p>
 
-<p><li>azure (>= 0.6.4)</li>
+<p><li>azure (>= 0.6.5)</li>
 <li>net-ssh (>= 2.1.4)</li>
 <li>net-scp (>= 1.0.4)</li>
 </p>
@@ -96,7 +96,7 @@ by running <code>puppet help azure_vm create</code>.</p>
 <p>You can create and manage a virtual network from the command line. Using the virtual_network set action as in this example.</p>
 
 <pre><code>$ puppet azure_vnet set --management-certificate pem-or-pfx-file-path --azure-subscription-id=your-subscription-id
---virtual-network-name vnetname --affinity-group-name ag-name --address-space '172.16.0.0/12,192.168.0.0/16'
+--virtual-network-name vnetname --location 'West US' --address-space '172.16.0.0/12,192.168.0.0/16'
 --dns-servers 'dns1-1:10.10.8.8,dns2:172.8.4.4' --subnets 'subnet-1:172.16.0.0:12,subnet-2:192.168.0.0:29'
 </code></pre>
 

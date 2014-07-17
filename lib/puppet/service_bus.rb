@@ -11,7 +11,7 @@ module Puppet::ServiceBus
       ENV['AZURE_SERVICEBUS_ACCESS_KEY'] = options[:sb_access_key]
       ENV["AZURE_STORAGE_ACCOUNT"] = options[:storage_account_name]
       ENV["AZURE_STORAGE_ACCESS_KEY"] = options[:storage_access_key]
-      gem "azure", '=0.6.4'
+      gem "azure", '=0.6.5'
       require 'azure'
     end
 
