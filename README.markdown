@@ -44,6 +44,7 @@ Required Gems
  * net-scp (>= 1.0.4)
  * winrm (>= 1.1.3)
  * highline
+ * tilt
 
 Manage Virtual machine
 ========================
