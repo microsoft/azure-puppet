@@ -1,7 +1,7 @@
 Microsoft Azure Cloud Provisioner
 ========================
 
-Puppet Module to launch and manage Microsoft Microsoft Azure Services like Virtual Machines, Virtual Network and SQL Database services.
+Puppet Module to launch and manage Microsoft Azure Services like Virtual Machines, Virtual Network and SQL Database services.
 
 This module requires Puppet 2.7.2 or later.
 
