@@ -1,7 +1,7 @@
 Microsoft Azure Cloud Provisioner
 ========================
 
-Puppet Module to launch and manage Microsoft Microsoft Azure Services like Virtual Machines, Virtual Network and SQL Database services.
+Puppet Module to launch and manage Microsoft Azure Services like Virtual Machines, Virtual Network and SQL Database services.
 
 This module requires Puppet 2.7.2 or later.
 
@@ -57,7 +57,7 @@ You may launch a new instance and install puppet agent with this module installe
 
 Once launched, you should be able to SSH to the new system using the username and password.
 
-Other avaliable actions are
+Other available actions are
 
     bootstrap         Install puppet node on Microsoft Azure VM
     create            Create Microsoft Azure VM
@@ -85,7 +85,7 @@ Creating virtual network
     --virtual-network-name vnetname --location 'West US' --address-space '172.16.0.0/12,192.168.0.0/16'
     --dns-servers 'dns-1:10.10.8.8,dns-2:172.8.4.4' --subnets 'subnet-1:172.16.0.0:12,subnet-2:192.168.0.0:29'
 
-Other avaliable actions are
+Other available actions are
 
     list              List virtual networks.
     set               Set Network configures the virtual network
@@ -99,7 +99,7 @@ Creating SQL database server
     $puppet azure_sqldb create --management-certificate pem-or-pfx-file-path --azure-subscription-id=your-subscription-id \
     --management-endpoint=https://management.database.windows.net:8443/ --login loginname --password ComplexPassword --location 'West Us'
 
-Other avaliable actions are
+Other available actions are
 
     create             Create SQL database server.
     create_firewall    Create SQL database firewall rule on a server.
@@ -118,7 +118,7 @@ Creating cloud service
     --location 'West Us' --affinity-group-name agname --description 'Some Description' \
     --management-certificate path-to-azure-certificate --cloud-service-name cloudservice1
 
-Other avaliable actions are
+Other available actions are
 
     delete                Delete cloud service.
     delete_deployment     deletes the specified deployment of hosted service.
@@ -135,7 +135,7 @@ Creating storage account
     --management-certificate path-to-azure-certificate --storage-account-name storageaccount
     --location 'west us' --extended-properties 'key-1:value-1,key-2:value-2'
 
-Other avaliable actions are
+Other available actions are
 
     create    Create storage service.
     delete    Delete storage account.
@@ -150,7 +150,7 @@ Creating queue using service bus
     $ puppet azure_servicebus create_queue --sb-namespace busname
       --queue-name queuename  --sb-access-key dnD/E49P4SJG8UVEpABOeZRc=
 
-Other avaliable actions are
+Other available actions are
 
       create_queue    Creates queue with service bus object.
       create_topic    Create topic with service bus object.
