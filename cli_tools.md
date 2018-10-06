@@ -1,6 +1,6 @@
 <h1>Microsoft Azure Cloud Provisioner</h1>
               
-<p>Microsoft Open Technologies and Puppet Enterprise provide support for working with virtual machine instances using Microsoft Azure. Using actions of the <code>puppet azure_vm</code> sub-command, you can launch and manage Microsoft Microsoft Azure services like virtual machines, virtual networks and SQL database services.</p>
+<p>Microsoft Open Technologies and Puppet Enterprise provide support for working with virtual machine instances using Microsoft Azure. Using actions of the <code>puppet azure_vm</code> sub-command, you can launch and manage Microsoft Azure services like virtual machines, virtual networks and SQL database services.</p>
 
 <h2>Required gems</h2>
 
@@ -27,7 +27,7 @@
 
 <h2 id="viewing-existing-instances">Viewing existing virtual machines</h2>
 
-<p><a href="http://www.windowsazure.com/en-us/services/virtual-machines/" target="_blank">Virtual Machines</a> are on-demand, scalable compute platforms that allow your business to meet its growing needs. Simply choose your compute configuration and system image and give your systems full obility by transferring your virtual hard disks between on-premises and the cloud.</p>
+<p><a href="http://www.windowsazure.com/en-us/services/virtual-machines/" target="_blank">Virtual Machines</a> are on-demand, scalable compute platforms that allow your business to meet its growing needs. Simply choose your compute configuration and system image and give your systems full ability by transferring your virtual hard disks between on-premises and the cloud.</p>
 
 <p>Let's start by finding out about the currently running virtual machine instances.  You do this by running the <code>puppet azure_vm list</code> command.</p>
 
@@ -91,7 +91,7 @@ by running <code>puppet help azure_vm create</code>.</p>
 
 <h2 id="virtual-network">Creating and managing a virtual network</h2>
 
-<p><a href="http://www.windowsazure.com/en-us/services/virtual-network/" target="_blank">Virtual Networks</a> are logicaly isolated sections in the cloud that you can then securly connect to your on-premises data center. Virtual networks make it easy to extend your data center and manage it like your on-premises infrastructure.</p>
+<p><a href="http://www.windowsazure.com/en-us/services/virtual-network/" target="_blank">Virtual Networks</a> are logically isolated sections in the cloud that you can then securely connect to your on-premises data center. Virtual networks make it easy to extend your data center and manage it like your on-premises infrastructure.</p>
 
 <p>You can create and manage a virtual network from the command line. Using the virtual_network set action as in this example.</p>
 
